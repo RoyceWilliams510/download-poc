@@ -16,33 +16,33 @@
           {
             "group": "Getting started",
             "pages": [
-              "index",
-              "quickstart",
-              "development"
+              "docs/index",
+              "docs/quickstart",
+              "docs/development"
             ]
           },
           {
             "group": "Customization",
             "pages": [
-              "essentials/settings",
-              "essentials/navigation"
+              "docs/essentials/settings",
+              "docs/essentials/navigation"
             ]
           },
           {
             "group": "Writing content",
             "pages": [
-              "essentials/markdown",
-              "essentials/code",
-              "essentials/images",
-              "essentials/reusable-snippets"
+              "docs/essentials/markdown",
+              "docs/essentials/code",
+              "docs/essentials/images",
+              "docs/essentials/reusable-snippets"
             ]
           },
           {
             "group": "AI tools",
             "pages": [
-              "ai-tools/cursor",
-              "ai-tools/claude-code",
-              "ai-tools/windsurf"
+              "docs/ai-tools/cursor",
+              "docs/ai-tools/claude-code",
+              "docs/ai-tools/windsurf"
             ]
           }
         ]
@@ -53,16 +53,16 @@
           {
             "group": "API documentation",
             "pages": [
-              "api-reference/introduction"
+              "docs/api-reference/introduction"
             ]
           },
           {
             "group": "Endpoint examples",
             "pages": [
-              "api-reference/endpoint/get",
-              "api-reference/endpoint/create",
-              "api-reference/endpoint/delete",
-              "api-reference/endpoint/webhook"
+              "docs/api-reference/endpoint/get",
+              "docs/api-reference/endpoint/create",
+              "docs/api-reference/endpoint/delete",
+              "docs/api-reference/endpoint/webhook"
             ]
           }
         ]
@@ -84,8 +84,8 @@
     }
   },
   "logo": {
-    "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg"
+    "light": "/docs/logo/light.svg",
+    "dark": "/docs/logo/dark.svg"
   },
   "navbar": {
     "links": [
