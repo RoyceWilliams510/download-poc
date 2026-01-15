@@ -112,6 +112,12 @@
      "vscode"
    ]
   },
+  "integrations": {
+    "intercom":{
+      "appId": "intercom-app-id",
+      "apiBase":"https://api-iam.eu.intercom.io"
+    }
+  },
   "footer": {
     "socials": {
       "x": "https://x.com/mintlify",
