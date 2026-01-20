@@ -68,8 +68,8 @@
         ]
       },
       {
-        "tab": "API ref",
-        "openapi": "cheqi.json"
+        "tab": "API external",
+        "openapi": "https://test.api.cheqi.io/v3/api-docs"
       }
     ],
     "global": {
