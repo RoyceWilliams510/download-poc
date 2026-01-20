@@ -66,6 +66,10 @@
             ]
           }
         ]
+      },
+      {
+        "tab": "API ref",
+        "openapi": "cheqi.json"
       }
     ],
     "global": {

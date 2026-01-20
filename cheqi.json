@@ -1,0 +1,3287 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+      "title": "Cheqi API",
+      "description": "Cheqi provides APIs for creating receipts and reading receipts for customers",
+      "version": "v1"
+    },
+    "servers": [
+      {
+        "url": "https://test.api.cheqi.io",
+        "description": "Generated server url"
+      }
+    ],
+    "security": [
+      {
+        "cheqi_oauth": []
+      }
+    ],
+    "tags": [
+      {
+        "name": "Client Application Management",
+        "description": "Endpoints for managing OAuth2 client applications, including registration, secret management, and public key configuration"
+      },
+      {
+        "name": "Credit Note Management",
+        "description": "Endpoints for creating, managing, and retrieving credit notes (refund receipts)"
+      },
+      {
+        "name": "Receipt Management",
+        "description": "Endpoints for creating and managing purchase receipts with end-to-end encryption"
+      },
+      {
+        "name": "Webhook Management",
+        "description": "Endpoints for managing webhook subscriptions to receive real-time event notifications"
+      }
+    ],
+    "paths": {
+      "/webhook/subscription": {
+        "post": {
+          "tags": [
+            "Webhook Management"
+          ],
+          "summary": "Create webhook subscription",
+          "description": "Creates a webhook subscription to receive real-time notifications for receipt and credit note events. The webhook URL will be called when events occur for the authenticated company or client application.\n\n**Accessible for:** Company, Client Application",
+          "operationId": "handleWebhook",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WebhookRequestBody"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "400": {
+              "description": "Invalid webhook request data",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/WebhookResponse"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Duplicate webhook subscription already exists",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/WebhookResponse"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Insufficient permissions - requires read_receipts scope",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/WebhookResponse"
+                  }
+                }
+              }
+            },
+            "200": {
+              "description": "Webhook subscription created successfully",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/WebhookResponse"
+                  }
+                }
+              }
+            }
+          },
+          "security": [
+            {
+              "cheqi_oauth": [
+                "read_receipts"
+              ]
+            }
+          ],
+          "x-accessible-for": "Company, Client Application"
+        }
+      },
+      "/receipt/template": {
+        "post": {
+          "tags": [
+            "Receipt Management"
+          ],
+          "summary": "Generate receipt template",
+          "description": "Generates a UBL-compliant purchase receipt template without customer personal data. The template can be used by the SDK to inject customer information and encrypt the receipt. Requires write_receipts OAuth scope.\n\n**Accessible for:** Company, Client Application",
+          "operationId": "createReceiptTemplate",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReceiptTemplateRequest"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "201": {
+              "description": "Receipt template created successfully",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/PurchaseReceipt"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid template request data",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/PurchaseReceipt"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Insufficient permissions - requires write_receipts scope",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/PurchaseReceipt"
+                  }
+                }
+              }
+            }
+          },
+          "security": [
+            {
+              "cheqi_oauth": [
+                "write_receipts"
+              ]
+            }
+          ],
+          "x-accessible-for": "Company, Client Application"
+        }
+      },
+      "/receipt/encrypted": {
+        "post": {
+          "tags": [
+            "Receipt Management"
+          ],
+          "summary": "Submit encrypted receipt",
+          "description": "Submits an encrypted purchase receipt to the queue for delivery to customer devices. The receipt is encrypted with customer device keys for end-to-end privacy. Requires write_receipts OAuth scope.\n\n**Accessible for:** Company, Client Application",
+          "operationId": "submitEncryptedReceipt",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EncryptedReceiptsRequest"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "201": {
+              "description": "Encrypted receipt queued successfully",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ReceiptCreatedResponse"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Insufficient permissions - requires write_receipts scope",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ReceiptCreatedResponse"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid encrypted receipt data",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ReceiptCreatedResponse"
+                  }
+                }
+              }
+            }
+          },
+          "security": [
+            {
+              "cheqi_oauth": [
+                "write_receipts"
+              ]
+            }
+          ],
+          "x-accessible-for": "Company, Client Application"
+        }
+      },
+      "/receipt/email": {
+        "post": {
+          "tags": [
+            "Receipt Management"
+          ],
+          "summary": "Send receipt via email",
+          "description": "Sends a purchase receipt directly to a customer via email. The receipt is delivered as a PDF attachment. Requires write_receipts OAuth scope.\n\n**Accessible for:** Company, Client Application",
+          "operationId": "submitReceiptWithEmail",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmailReceiptRequest"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "403": {
+              "description": "Insufficient permissions - requires write_receipts scope"
+            },
+            "400": {
+              "description": "Invalid email receipt request data"
+            },
+            "201": {
+              "description": "Receipt sent successfully via email"
+            }
+          },
+          "security": [
+            {
+              "cheqi_oauth": [
+                "write_receipts"
+              ]
+            }
+          ],
+          "x-accessible-for": "Company, Client Application"
+        }
+      },
+      "/credit-note/template": {
+        "post": {
+          "tags": [
+            "Credit Note Management"
+          ],
+          "summary": "Generate credit note template",
+          "description": "Generates a UBL-compliant credit note template without customer personal data. The template can be used by the SDK to inject customer information and encrypt the credit note. Requires write_receipts OAuth scope.\n\n**Accessible for:** Company, Client Application",
+          "operationId": "createReceiptTemplate_1",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreditNoteTemplateRequest"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "400": {
+              "description": "Invalid template request data",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/CreditNote"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Insufficient permissions - requires write_receipts scope",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/CreditNote"
+                  }
+                }
+              }
+            },
+            "201": {
+              "description": "Credit note template created successfully",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/CreditNote"
+                  }
+                }
+              }
+            }
+          },
+          "security": [
+            {
+              "cheqi_oauth": [
+                "write_receipts"
+              ]
+            }
+          ],
+          "x-accessible-for": "Company, Client Application"
+        }
+      },
+      "/credit-note/encrypted": {
+        "post": {
+          "tags": [
+            "Credit Note Management"
+          ],
+          "summary": "Submit encrypted credit note",
+          "description": "Submits an encrypted credit note to the queue for delivery to customer devices. The credit note is encrypted with customer device keys for end-to-end privacy.\n\n**Accessible for:** Company, Client Application",
+          "operationId": "submitEncryptedReceipt_1",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EncryptedCreditNotesRequest"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "400": {
+              "description": "Invalid encrypted credit note data",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/CreditNoteCreatedResponse"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Insufficient permissions - requires write_receipts scope",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/CreditNoteCreatedResponse"
+                  }
+                }
+              }
+            },
+            "201": {
+              "description": "Encrypted credit note queued successfully",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/CreditNoteCreatedResponse"
+                  }
+                }
+              }
+            }
+          },
+          "security": [
+            {
+              "cheqi_oauth": [
+                "write_receipts"
+              ]
+            }
+          ],
+          "x-accessible-for": "Company, Client Application"
+        }
+      },
+      "/client-application/{clientApplicationId}/public-key": {
+        "get": {
+          "tags": [
+            "Client Application Management"
+          ],
+          "summary": "Get client application public key",
+          "description": "Retrieves the public key information for a client application, including the key data, algorithm, and upload timestamp. This key is used to verify signatures from the client application.\n\n**Accessible for:** Company, User",
+          "operationId": "getClientApplicationPublicKey",
+          "parameters": [
+            {
+              "name": "clientApplicationId",
+              "in": "path",
+              "description": "Client application ID",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          ],
+          "responses": {
+            "404": {
+              "description": "Client application not found or public key not configured",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/PublicKeyResponse"
+                  }
+                }
+              }
+            },
+            "200": {
+              "description": "Public key retrieved successfully",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/PublicKeyResponse"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Not authorized to access this client application's public key",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/PublicKeyResponse"
+                  }
+                }
+              }
+            }
+          },
+          "x-accessible-for": "Company, User"
+        },
+        "post": {
+          "tags": [
+            "Client Application Management"
+          ],
+          "summary": "Upload client application public key",
+          "description": "Uploads a public key for the client application. This key is used to verify signatures from the client application when it signs receipts or other data. Can be called by company admins or using company API key authentication.\n\n**Accessible for:** Company, User",
+          "operationId": "uploadClientApplicationPublicKey",
+          "parameters": [
+            {
+              "name": "clientApplicationId",
+              "in": "path",
+              "description": "Client application ID",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UploadPublicKeyRequest"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "Public key uploaded successfully"
+            },
+            "403": {
+              "description": "Not authorized to manage keys for this client application"
+            },
+            "400": {
+              "description": "Invalid public key format or algorithm"
+            },
+            "404": {
+              "description": "Client application not found"
+            }
+          },
+          "x-accessible-for": "Company, User"
+        }
+      },
+      "/credit-note": {
+        "get": {
+          "tags": [
+            "Credit Note Management"
+          ],
+          "summary": "Get all outstanding credit note initiation requests",
+          "description": "Retrieves all outstanding credit note initiation requests for the authenticated company or client application. These are customer-initiated refund requests that are pending processing.\n\n**Accessible for:** Company, Client Application",
+          "operationId": "getAllCreditNotes",
+          "responses": {
+            "200": {
+              "description": "Credit notes retrieved successfully",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/EncryptedCreditNoteDto"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Not authorized to access credit notes",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/EncryptedCreditNoteDto"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x-accessible-for": "Company, Client Application"
+        }
+      },
+      "/credit-note/{cheqiReceiptId}/issuer-key": {
+        "get": {
+          "tags": [
+            "Credit Note Management"
+          ],
+          "summary": "Get issuer public key",
+          "description": "Returns the issuer's public key for verifying the credit note signature. The device must be a valid recipient of this credit note to access the key.",
+          "operationId": "getIssuerKey",
+          "parameters": [
+            {
+              "name": "cheqiReceiptId",
+              "in": "path",
+              "description": "Cheqi receipt ID of the credit note",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "X-Device-ID",
+              "in": "header",
+              "description": "Device ID requesting the issuer key",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          ],
+          "responses": {
+            "403": {
+              "description": "Device is not a recipient of this credit note",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/IssuerKeyResponse"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Credit note not found",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/IssuerKeyResponse"
+                  }
+                }
+              }
+            },
+            "200": {
+              "description": "Issuer public key retrieved successfully",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/IssuerKeyResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "WebhookRequestBody": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "events": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "RECEIPT_CREATED",
+                  "RETURN_REQUESTED",
+                  "CREDIT_NOTE_CREATED"
+                ]
+              }
+            },
+            "receiptFormat": {
+              "type": "string",
+              "enum": [
+                "JSON",
+                "XML"
+              ]
+            },
+            "notificationUrl": {
+              "type": "string"
+            }
+          },
+          "description": "Webhook subscription request with URL and event types"
+        },
+        "WebhookDTO": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "notificationUrl": {
+              "type": "string"
+            },
+            "event": {
+              "type": "string"
+            },
+            "clientApplicationId": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "userId": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "companyId": {
+              "type": "string"
+            }
+          }
+        },
+        "WebhookResponse": {
+          "type": "object",
+          "properties": {
+            "createdWebhooks": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/WebhookDTO"
+              }
+            },
+            "failedEvents": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "Charge": {
+          "type": "object",
+          "properties": {
+            "amount": {
+              "type": "number"
+            },
+            "percentage": {
+              "type": "number",
+              "format": "double"
+            },
+            "label": {
+              "type": "string"
+            }
+          }
+        },
+        "Discount": {
+          "type": "object",
+          "properties": {
+            "amount": {
+              "type": "number"
+            },
+            "percentage": {
+              "type": "number",
+              "format": "double"
+            },
+            "label": {
+              "type": "string"
+            }
+          }
+        },
+        "Identifier": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "string"
+            },
+            "schemeAgencyID": {
+              "type": "string"
+            },
+            "schemeAgencyName": {
+              "type": "string"
+            },
+            "schemeDataURI": {
+              "type": "string"
+            },
+            "schemeID": {
+              "type": "string"
+            },
+            "schemeName": {
+              "type": "string"
+            },
+            "schemeURI": {
+              "type": "string"
+            },
+            "schemeVersionID": {
+              "type": "string"
+            }
+          }
+        },
+        "Period": {
+          "type": "object",
+          "properties": {
+            "startDate": {
+              "type": "string"
+            },
+            "startTime": {
+              "type": "string"
+            },
+            "endDate": {
+              "type": "string"
+            },
+            "endTime": {
+              "type": "string"
+            },
+            "durationMeasure": {
+              "$ref": "#/components/schemas/Measure"
+            },
+            "descriptionCode": {
+              "$ref": "#/components/schemas/Code"
+            },
+            "description": {
+              "type": "string"
+            }
+          }
+        },
+        "Product": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "identifier": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "brand": {
+              "type": "string"
+            },
+            "quantity": {
+              "type": "number",
+              "format": "double"
+            },
+            "baseQuantity": {
+              "type": "number",
+              "format": "double"
+            },
+            "period": {
+              "$ref": "#/components/schemas/Period"
+            },
+            "unitCode": {
+              "type": "string",
+              "enum": [
+                "C62",
+                "EA",
+                "KGM",
+                "GRM",
+                "MGM",
+                "TNE",
+                "LBR",
+                "ONZ",
+                "LTR",
+                "MLT",
+                "CLT",
+                "HLT",
+                "MTQ",
+                "CMQ",
+                "GLL",
+                "GLI",
+                "MTR",
+                "CMT",
+                "MMT",
+                "KMT",
+                "INH",
+                "FOT",
+                "YRD",
+                "SMI",
+                "MTK",
+                "CMK",
+                "FTK",
+                "INK",
+                "SEC",
+                "MIN",
+                "HUR",
+                "DAY",
+                "WEE",
+                "MON",
+                "ANN",
+                "SET",
+                "PR",
+                "DZN",
+                "NMP",
+                "XPK",
+                "BX",
+                "CT",
+                "CS",
+                "PK",
+                "PF",
+                "BO",
+                "CA",
+                "BG",
+                "E48",
+                "ACT",
+                "E51",
+                "AD",
+                "2P",
+                "4L"
+              ]
+            },
+            "unitPrice": {
+              "type": "number"
+            },
+            "discounts": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Discount"
+              }
+            },
+            "charges": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Charge"
+              }
+            },
+            "taxes": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Tax"
+              }
+            },
+            "subtotal": {
+              "type": "number"
+            },
+            "total": {
+              "type": "number"
+            }
+          }
+        },
+        "ReceiptTemplateRequest": {
+          "type": "object",
+          "properties": {
+            "additionalProperties": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "object"
+              }
+            },
+            "documentNumber": {
+              "type": "string"
+            },
+            "identifiers": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Identifier"
+              }
+            },
+            "issueDate": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "currency": {
+              "type": "string"
+            },
+            "invoiceSubtotal": {
+              "type": "number"
+            },
+            "totalBeforeTax": {
+              "type": "number"
+            },
+            "totalTaxAmount": {
+              "type": "number"
+            },
+            "totalAmount": {
+              "type": "number"
+            },
+            "products": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Product"
+              }
+            },
+            "discounts": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Discount"
+              }
+            },
+            "charges": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Charge"
+              }
+            },
+            "taxes": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Tax"
+              }
+            },
+            "transactionDate": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "purchaseDate": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "period": {
+              "$ref": "#/components/schemas/Period"
+            },
+            "note": {
+              "type": "string"
+            }
+          },
+          "description": "Receipt template request with transaction details"
+        },
+        "Tax": {
+          "type": "object",
+          "properties": {
+            "rate": {
+              "type": "number",
+              "format": "double"
+            },
+            "type": {
+              "type": "string"
+            },
+            "amount": {
+              "type": "number"
+            },
+            "taxableAmount": {
+              "type": "number"
+            },
+            "label": {
+              "type": "string"
+            }
+          }
+        },
+        "Address": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "$ref": "#/components/schemas/Identifier"
+            },
+            "addressTypeCode": {
+              "$ref": "#/components/schemas/Code"
+            },
+            "addressFormatCode": {
+              "$ref": "#/components/schemas/Code"
+            },
+            "postbox": {
+              "type": "string"
+            },
+            "floor": {
+              "type": "string"
+            },
+            "room": {
+              "type": "string"
+            },
+            "streetName": {
+              "type": "string"
+            },
+            "additionalStreetName": {
+              "type": "string"
+            },
+            "blockName": {
+              "type": "string"
+            },
+            "buildingName": {
+              "type": "string"
+            },
+            "buildingNumber": {
+              "type": "string"
+            },
+            "description": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "inhouseMail": {
+              "type": "string"
+            },
+            "department": {
+              "type": "string"
+            },
+            "markAttention": {
+              "type": "string"
+            },
+            "markCare": {
+              "type": "string"
+            },
+            "plotIdentification": {
+              "type": "string"
+            },
+            "citySubdivisionName": {
+              "type": "string"
+            },
+            "cityName": {
+              "type": "string"
+            },
+            "postalZone": {
+              "type": "string"
+            },
+            "countrySubentity": {
+              "type": "string"
+            },
+            "countrySubentityCode": {
+              "$ref": "#/components/schemas/Code"
+            },
+            "region": {
+              "type": "string"
+            },
+            "district": {
+              "type": "string"
+            },
+            "timezoneOffset": {
+              "type": "string"
+            },
+            "addressLine": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/AddressLine"
+              }
+            },
+            "country": {
+              "$ref": "#/components/schemas/Country"
+            },
+            "locationCoordinate": {
+              "$ref": "#/components/schemas/LocationCoordinate"
+            }
+          }
+        },
+        "AddressLine": {
+          "type": "object",
+          "properties": {
+            "line": {
+              "type": "string"
+            }
+          }
+        },
+        "AllowanceCharge": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "$ref": "#/components/schemas/Identifier"
+            },
+            "chargeIndicator": {
+              "type": "boolean"
+            },
+            "allowanceChargeReasonCode": {
+              "$ref": "#/components/schemas/Code"
+            },
+            "allowanceChargeReason": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "multiplierFactorNumeric": {
+              "type": "number",
+              "format": "double"
+            },
+            "prepaidIndicator": {
+              "type": "boolean"
+            },
+            "sequenceNumeric": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "amount": {
+              "$ref": "#/components/schemas/Amount"
+            },
+            "taxInclusiveAmount": {
+              "$ref": "#/components/schemas/Amount"
+            },
+            "baseAmount": {
+              "$ref": "#/components/schemas/Amount"
+            },
+            "accountingCostCode": {
+              "$ref": "#/components/schemas/Code"
+            },
+            "accountingCost": {
+              "type": "string"
+            },
+            "perUnitAmount": {
+              "$ref": "#/components/schemas/Amount"
+            },
+            "taxCategory": {
+              "$ref": "#/components/schemas/TaxCategory"
+            },
+            "taxTotal": {
+              "$ref": "#/components/schemas/TaxTotal"
+            },
+            "paymentMeans": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/PaymentMeans"
+              }
+            }
+          }
+        },
+        "Amount": {
+          "type": "object",
+          "properties": {
+            "currencyID": {
+              "type": "string"
+            },
+            "value": {
+              "type": "number"
+            }
+          }
+        },
+        "Attachment": {
+          "type": "object",
+          "properties": {
+            "embeddedDocumentBinaryObject": {
+              "$ref": "#/components/schemas/EmbeddedDocument"
+            },
+            "externalReference": {
+              "$ref": "#/components/schemas/ExternalReference"
+            }
+          }
+        },
+        "Branch": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "$ref": "#/components/schemas/Identifier"
+            },
+            "name": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "financialInstitution": {
+              "$ref": "#/components/schemas/FinancialInstitution"
+            },
+            "address": {
+              "$ref": "#/components/schemas/Address"
+            }
+          }
+        },
+        "CardAccount": {
+          "type": "object",
+          "properties": {
+            "primaryAccountNumberID": {
+              "$ref": "#/components/schemas/Identifier"
+            },
+            "networkID": {
+              "$ref": "#/components/schemas/Identifier"
+            },
+            "cardTypeCode": {
+              "$ref": "#/components/schemas/Code"
+            },
+            "validityStartDate": {
+              "type": "string",
+              "format": "date"
+            },
+            "expiryDate": {
+              "type": "string",
+              "format": "date"
+            },
+            "issuerID": {
+              "$ref": "#/components/schemas/Identifier"
+            },
+            "issueNumberID": {
+              "$ref": "#/components/schemas/Identifier"
+            },
+            "getcV2ID": {
+              "$ref": "#/components/schemas/Identifier"
+            },
+            "cardChipCode": {
+              "$ref": "#/components/schemas/Code"
+            },
+            "chipApplicationID": {
+              "$ref": "#/components/schemas/Identifier"
+            },
+            "holderName": {
+              "type": "string"
+            },
+            "roleCode": {
+              "$ref": "#/components/schemas/Code"
+            }
+          }
+        },
+        "CashRegister": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "$ref": "#/components/schemas/Identifier"
+            },
+            "serialNumberID": {
+              "$ref": "#/components/schemas/Identifier"
+            }
+          }
+        },
+        "Certificate": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "$ref": "#/components/schemas/Identifier"
+            },
+            "certificateTypeCode": {
+              "type": "string"
+            },
+            "certificateType": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "remarks": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "issuerParty": {
+              "$ref": "#/components/schemas/Party"
+            },
+            "documentReference": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/DocumentReference"
+              }
+            },
+            "signature": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Signature"
+              }
+            }
+          }
+        },
+        "Clause": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "$ref": "#/components/schemas/Identifier"
+            },
+            "content": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "Code": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "string"
+            },
+            "languageID": {
+              "type": "string"
+            },
+            "listAgencyID": {
+              "type": "string"
+            },
+            "listAgencyName": {
+              "type": "string"
+            },
+            "listID": {
+              "type": "string"
+            },
+            "listName": {
+              "type": "string"
+            },
+            "listSchemeURI": {
+              "type": "string"
+            },
+            "listURI": {
+              "type": "string"
+            },
+            "listVersionID": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            }
+          }
+        },
+        "CommodityClassification": {
+          "type": "object",
+          "properties": {
+            "natureCode": {
+              "type": "string"
+            },
+            "cargoTypeCode": {
+              "type": "string"
+            },
+            "commodityCode": {
+              "type": "string"
+            },
+            "itemClassificationCode": {
+              "$ref": "#/components/schemas/Code"
+            }
+          }
+        },
+        "Communication": {
+          "type": "object",
+          "properties": {
+            "channelCode": {
+              "$ref": "#/components/schemas/Code"
+            },
+            "channel": {
+              "type": "string"
+            },
+            "value": {
+              "type": "string"
+            }
+          }
+        },
+        "Contact": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "$ref": "#/components/schemas/Identifier"
+            },
+            "name": {
+              "type": "string"
+            },
+            "jobTitle": {
+              "type": "string"
+            },
+            "department": {
+              "type": "string"
+            },
+            "telephone": {
+              "type": "string"
+            },
+            "telefax": {
+              "type": "string"
+            },
+            "electronicMail": {
+              "type": "string"
+            },
+            "note": {
+              "type": "string"
+            },
+            "otherCommunication": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Communication"
+              }
+            }
+          }
+        },
+        "Country": {
+          "type": "object",
+          "properties": {
+            "identificationCode": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            }
+          }
+        },
+        "CreditAccount": {
+          "type": "object",
+          "properties": {
+            "accountID": {
+              "$ref": "#/components/schemas/Identifier"
+            }
+          }
+        },
+        "Dimension": {
+          "type": "object",
+          "properties": {
+            "attributeID": {
+              "$ref": "#/components/schemas/Identifier"
+            },
+            "measure": {
+              "$ref": "#/components/schemas/Measure"
+            },
+            "description": {
+              "type": "string"
+            },
+            "minimumMeasure": {
+              "$ref": "#/components/schemas/Measure"
+            },
+            "maximumMeasure": {
+              "$ref": "#/components/schemas/Measure"
+            }
+          }
+        },
+        "DocumentDistribution": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "$ref": "#/components/schemas/Identifier"
+            },
+            "documentTypeCode": {
+              "$ref": "#/components/schemas/Code"
+            },
+            "distributionTypeCode": {
+              "$ref": "#/components/schemas/Code"
+            },
+            "distributionType": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "printQualifier": {
+              "type": "string"
+            },
+            "copyIndicator": {
+              "type": "boolean"
+            },
+            "maximumCopiesNumeric": {
+              "type": "number",
+              "format": "double"
+            },
+            "maximumOriginalsNumeric": {
+              "type": "number",
+              "format": "double"
+            },
+            "communication": {
+              "$ref": "#/components/schemas/Communication"
+            },
+            "party": {
+              "$ref": "#/components/schemas/Party"
+            }
+          }
+        },
+        "DocumentReference": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "$ref": "#/components/schemas/Identifier"
+            },
+            "copyIndicator": {
+              "type": "boolean"
+            },
+            "uuid": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "issueDate": {
+              "type": "string"
+            },
+            "issueTime": {
+              "type": "string"
+            },
+            "documentTypeCode": {
+              "type": "string"
+            },
+            "referencedDocumentInternalAddress": {
+              "type": "string"
+            },
+            "languageID": {
+              "type": "string"
+            },
+            "localeCode": {
+              "type": "string"
+            },
+            "versionID": {
+              "type": "string"
+            },
+            "documentStatusCode": {
+              "type": "string"
+            },
+            "documentDescription": {
+              "type": "string"
+            },
+            "attachment": {
+              "$ref": "#/components/schemas/Attachment"
+            },
+            "validityPeriod": {
+              "$ref": "#/components/schemas/Period"
+            },
+            "issuerParty": {
+              "$ref": "#/components/schemas/Party"
+            },
+            "resultOfVerification": {
+              "$ref": "#/components/schemas/ResultOfVerification"
+            }
+          }
+        },
+        "EmbeddedDocument": {
+          "type": "object",
+          "properties": {
+            "mimeCode": {
+              "type": "string"
+            },
+            "filename": {
+              "type": "string"
+            },
+            "embeddedDocumentBinaryObject": {
+              "type": "string",
+              "format": "byte"
+            }
+          }
+        },
+        "EmissionCalculationMethod": {
+          "type": "object",
+          "properties": {
+            "calculationMethodCode": {
+              "type": "string"
+            },
+            "fullnessIndicationCode": {
+              "type": "string"
+            },
+            "measurementFromLocation": {
+              "$ref": "#/components/schemas/Location"
+            },
+            "measurementToLocation": {
+              "$ref": "#/components/schemas/Location"
+            }
+          }
+        },
+        "EnvironmentalEmission": {
+          "type": "object",
+          "properties": {
+            "environmentalEmissionTypeCode": {
+              "type": "string"
+            },
+            "valueMeasure": {
+              "$ref": "#/components/schemas/Measure"
+            },
+            "description": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "emissionCalculationMethod": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/EmissionCalculationMethod"
+              }
+            }
+          }
+        },
+        "ExternalReference": {
+          "type": "object",
+          "properties": {
+            "uri": {
+              "type": "string"
+            }
+          }
+        },
+        "FinancialAccount": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "$ref": "#/components/schemas/Identifier"
+            },
+            "name": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "aliasName": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "accountTypeCode": {
+              "$ref": "#/components/schemas/Code"
+            },
+            "accountFormatCode": {
+              "$ref": "#/components/schemas/Code"
+            },
+            "currencyCode": {
+              "$ref": "#/components/schemas/Code"
+            },
+            "paymentNote": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "financialInstitutionBranch": {
+              "$ref": "#/components/schemas/Branch"
+            },
+            "country": {
+              "$ref": "#/components/schemas/Country"
+            }
+          }
+        },
+        "FinancialInstitution": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "$ref": "#/components/schemas/Identifier"
+            },
+            "name": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "address": {
+              "$ref": "#/components/schemas/Address"
+            }
+          }
+        },
+        "Item": {
+          "type": "object",
+          "properties": {
+            "description": {
+              "type": "string"
+            },
+            "packQuantity": {
+              "$ref": "#/components/schemas/Quantity"
+            },
+            "packSizeNumeric": {
+              "type": "number",
+              "format": "double"
+            },
+            "catalogueIndicator": {
+              "type": "boolean"
+            },
+            "name": {
+              "type": "string"
+            },
+            "itemTypeCode": {
+              "$ref": "#/components/schemas/Code"
+            },
+            "hazardousRiskIndicator": {
+              "type": "boolean"
+            },
+            "additionalInformation": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "keyword": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "brandName": {
+              "uniqueItems": true,
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "modelName": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "warrantyInformation": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "buyersItemIdentification": {
+              "$ref": "#/components/schemas/ItemIdentification"
+            },
+            "sellersItemIdentification": {
+              "$ref": "#/components/schemas/ItemIdentification"
+            },
+            "manufacturersItemIdentification": {
+              "$ref": "#/components/schemas/ItemIdentification"
+            },
+            "standardItemIdentification": {
+              "$ref": "#/components/schemas/ItemIdentification"
+            },
+            "catalogueItemIdentification": {
+              "$ref": "#/components/schemas/ItemIdentification"
+            },
+            "additionalItemIdentification": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ItemIdentification"
+              }
+            },
+            "catalogueDocumentReference": {
+              "$ref": "#/components/schemas/DocumentReference"
+            },
+            "itemSpecificationDocumentReference": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/DocumentReference"
+              }
+            },
+            "originCountry": {
+              "$ref": "#/components/schemas/Country"
+            },
+            "commodityClassification": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/CommodityClassification"
+              }
+            },
+            "transactionConditions": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/TransactionConditions"
+              }
+            },
+            "classifiedTaxCategory": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/TaxCategory"
+              }
+            },
+            "additionalItemProperty": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ItemProperty"
+              }
+            },
+            "manufacturerParty": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Party"
+              }
+            },
+            "informationContentProviderParty": {
+              "$ref": "#/components/schemas/Party"
+            },
+            "originAddress": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Address"
+              }
+            },
+            "itemInstance": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ItemInstance"
+              }
+            },
+            "certificate": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Certificate"
+              }
+            },
+            "dimension": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Dimension"
+              }
+            },
+            "environmentalEmission": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/EnvironmentalEmission"
+              }
+            }
+          }
+        },
+        "ItemIdentification": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "$ref": "#/components/schemas/Identifier"
+            },
+            "extendedID": {
+              "$ref": "#/components/schemas/Identifier"
+            },
+            "barcodeSymbologyID": {
+              "$ref": "#/components/schemas/Identifier"
+            },
+            "issuerScopeID": {
+              "$ref": "#/components/schemas/Identifier"
+            },
+            "physicalAttribute": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/PhysicalAttribute"
+              }
+            },
+            "measurementDimension": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Dimension"
+              }
+            },
+            "issuerParty": {
+              "$ref": "#/components/schemas/Party"
+            }
+          }
+        },
+        "ItemInstance": {
+          "type": "object",
+          "properties": {
+            "productTraceID": {
+              "$ref": "#/components/schemas/Identifier"
+            },
+            "manufactureDate": {
+              "type": "string",
+              "format": "date"
+            },
+            "manufactureTime": {
+              "$ref": "#/components/schemas/LocalTime"
+            },
+            "bestBeforeDate": {
+              "type": "string",
+              "format": "date"
+            },
+            "registrationID": {
+              "$ref": "#/components/schemas/Identifier"
+            },
+            "serialID": {
+              "$ref": "#/components/schemas/Identifier"
+            },
+            "additionalItemProperty": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ItemProperty"
+              }
+            },
+            "lotIdentification": {
+              "$ref": "#/components/schemas/LotIdentification"
+            }
+          }
+        },
+        "ItemProperty": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "$ref": "#/components/schemas/Identifier"
+            },
+            "name": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "nameCode": {
+              "$ref": "#/components/schemas/Code"
+            },
+            "testMethod": {
+              "type": "string"
+            },
+            "value": {
+              "type": "string"
+            },
+            "valueQuantity": {
+              "$ref": "#/components/schemas/Quantity"
+            },
+            "valueQualifier": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "importanceCode": {
+              "$ref": "#/components/schemas/Code"
+            },
+            "listValue": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "usabilityPeriod": {
+              "$ref": "#/components/schemas/Period"
+            },
+            "itemPropertyGroup": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ItemPropertyGroup"
+              }
+            },
+            "rangeDimension": {
+              "$ref": "#/components/schemas/Dimension"
+            },
+            "itemPropertyRange": {
+              "$ref": "#/components/schemas/ItemPropertyRange"
+            },
+            "standardPropertyIdentification": {
+              "$ref": "#/components/schemas/PropertyIdentification"
+            }
+          }
+        },
+        "ItemPropertyGroup": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "importanceCode": {
+              "type": "string"
+            }
+          }
+        },
+        "ItemPropertyRange": {
+          "type": "object",
+          "properties": {
+            "minimumValue": {
+              "type": "string"
+            },
+            "maximumValue": {
+              "type": "string"
+            }
+          }
+        },
+        "LocalTime": {
+          "type": "object",
+          "properties": {
+            "hour": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "minute": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "second": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "nano": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        },
+        "Location": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "$ref": "#/components/schemas/Identifier"
+            },
+            "description": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "conditions": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "countrySubentity": {
+              "type": "string"
+            },
+            "countrySubentityCode": {
+              "$ref": "#/components/schemas/Code"
+            },
+            "locationTypeCode": {
+              "$ref": "#/components/schemas/Code"
+            },
+            "informationURI": {
+              "$ref": "#/components/schemas/Identifier"
+            },
+            "name": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "validityPeriod": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Period"
+              }
+            },
+            "address": {
+              "$ref": "#/components/schemas/Address"
+            },
+            "locationCoordinate": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/LocationCoordinate"
+              }
+            }
+          }
+        },
+        "LocationCoordinate": {
+          "type": "object",
+          "properties": {
+            "coordinateSystemCode": {
+              "$ref": "#/components/schemas/Code"
+            },
+            "latitudeDegreesMeasure": {
+              "$ref": "#/components/schemas/Measure"
+            },
+            "latitudeMinutesMeasure": {
+              "$ref": "#/components/schemas/Measure"
+            },
+            "latitudeDirectionCode": {
+              "$ref": "#/components/schemas/Code"
+            },
+            "longitudeDegreesMeasure": {
+              "$ref": "#/components/schemas/Measure"
+            },
+            "longitudeMinutesMeasure": {
+              "$ref": "#/components/schemas/Measure"
+            },
+            "longitudeDirectionCode": {
+              "$ref": "#/components/schemas/Code"
+            },
+            "altitudeMeasure": {
+              "$ref": "#/components/schemas/Measure"
+            }
+          }
+        },
+        "LotIdentification": {
+          "type": "object",
+          "properties": {
+            "lotNumberID": {
+              "$ref": "#/components/schemas/Identifier"
+            },
+            "expiryDate": {
+              "type": "string",
+              "format": "date"
+            },
+            "additionalItemProperty": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ItemProperty"
+              }
+            }
+          }
+        },
+        "Measure": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "number"
+            },
+            "unitCode": {
+              "type": "string"
+            },
+            "unitCodeListVersionID": {
+              "type": "string"
+            }
+          }
+        },
+        "MonetaryTotal": {
+          "type": "object",
+          "properties": {
+            "lineExtensionAmount": {
+              "$ref": "#/components/schemas/Amount"
+            },
+            "taxExclusiveAmount": {
+              "$ref": "#/components/schemas/Amount"
+            },
+            "taxInclusiveAmount": {
+              "$ref": "#/components/schemas/Amount"
+            },
+            "allowanceTotalAmount": {
+              "$ref": "#/components/schemas/Amount"
+            },
+            "allowanceTotalTaxInclusiveAmount": {
+              "$ref": "#/components/schemas/Amount"
+            },
+            "chargeTotalAmount": {
+              "$ref": "#/components/schemas/Amount"
+            },
+            "chargeTotalTaxInclusiveAmount": {
+              "$ref": "#/components/schemas/Amount"
+            },
+            "withholdingTaxTotalAmount": {
+              "$ref": "#/components/schemas/Amount"
+            },
+            "prepaidAmount": {
+              "$ref": "#/components/schemas/Amount"
+            },
+            "payableRoundingAmount": {
+              "$ref": "#/components/schemas/Amount"
+            },
+            "payableAmount": {
+              "$ref": "#/components/schemas/Amount"
+            },
+            "payableAlternativeAmount": {
+              "$ref": "#/components/schemas/Amount"
+            }
+          }
+        },
+        "Name": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "string"
+            },
+            "languageID": {
+              "type": "string"
+            },
+            "languageLocaleID": {
+              "type": "string"
+            }
+          }
+        },
+        "Party": {
+          "type": "object",
+          "properties": {
+            "endpointID": {
+              "$ref": "#/components/schemas/Identifier"
+            },
+            "partyIdentification": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/PartyIdentification"
+              }
+            },
+            "partyName": {
+              "$ref": "#/components/schemas/PartyName"
+            },
+            "postalAddress": {
+              "$ref": "#/components/schemas/Address"
+            },
+            "partyTaxScheme": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/PartyTaxScheme"
+              }
+            },
+            "partyLegalEntity": {
+              "$ref": "#/components/schemas/PartyLegalEntity"
+            },
+            "contact": {
+              "$ref": "#/components/schemas/Contact"
+            }
+          }
+        },
+        "PartyIdentification": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "$ref": "#/components/schemas/Identifier"
+            }
+          }
+        },
+        "PartyLegalEntity": {
+          "type": "object",
+          "properties": {
+            "registrationName": {
+              "type": "string"
+            },
+            "companyLegalForm": {
+              "type": "string"
+            },
+            "companyID": {
+              "$ref": "#/components/schemas/Identifier"
+            }
+          }
+        },
+        "PartyName": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            }
+          }
+        },
+        "PartyTaxScheme": {
+          "type": "object",
+          "properties": {
+            "companyID": {
+              "type": "string"
+            },
+            "taxScheme": {
+              "$ref": "#/components/schemas/TaxScheme"
+            }
+          }
+        },
+        "Payment": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "$ref": "#/components/schemas/Identifier"
+            },
+            "paidAmount": {
+              "$ref": "#/components/schemas/Amount"
+            },
+            "paidCashAmount": {
+              "$ref": "#/components/schemas/Amount"
+            },
+            "cashChangeAmount": {
+              "$ref": "#/components/schemas/Amount"
+            },
+            "receivedDate": {
+              "type": "string",
+              "format": "date"
+            },
+            "paidDate": {
+              "type": "string",
+              "format": "date"
+            },
+            "paidTime": {
+              "$ref": "#/components/schemas/LocalTime"
+            },
+            "instructionID": {
+              "$ref": "#/components/schemas/Identifier"
+            },
+            "merchantID": {
+              "$ref": "#/components/schemas/Identifier"
+            },
+            "authorizationID": {
+              "$ref": "#/components/schemas/Identifier"
+            },
+            "transactionID": {
+              "$ref": "#/components/schemas/Identifier"
+            },
+            "paymentTerminalID": {
+              "$ref": "#/components/schemas/Identifier"
+            }
+          }
+        },
+        "PaymentMandate": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "$ref": "#/components/schemas/Identifier"
+            },
+            "mandateTypeCode": {
+              "$ref": "#/components/schemas/Code"
+            },
+            "maximumPaidAmount": {
+              "$ref": "#/components/schemas/Amount"
+            },
+            "signatureID": {
+              "$ref": "#/components/schemas/Identifier"
+            },
+            "payerParty": {
+              "$ref": "#/components/schemas/Party"
+            },
+            "payerFinancialAccount": {
+              "$ref": "#/components/schemas/FinancialAccount"
+            },
+            "validityPeriod": {
+              "$ref": "#/components/schemas/Period"
+            },
+            "paymentReversalPeriod": {
+              "$ref": "#/components/schemas/Period"
+            },
+            "clause": {
+              "$ref": "#/components/schemas/Clause"
+            },
+            "maximumPaymentInstructionsNumeric": {
+              "type": "number",
+              "format": "double"
+            }
+          }
+        },
+        "PaymentMeans": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "$ref": "#/components/schemas/Identifier"
+            },
+            "paymentMeansCode": {
+              "$ref": "#/components/schemas/Code"
+            },
+            "paymentMeansDescription": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "paymentID": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Identifier"
+              }
+            },
+            "paymentDueDate": {
+              "type": "string",
+              "format": "date"
+            },
+            "paymentChannelCode": {
+              "$ref": "#/components/schemas/Code"
+            },
+            "instructionID": {
+              "$ref": "#/components/schemas/Identifier"
+            },
+            "instructionNote": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "chargeBearerCode": {
+              "$ref": "#/components/schemas/Code"
+            },
+            "serviceLevelCode": {
+              "$ref": "#/components/schemas/Code"
+            },
+            "cardAccount": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/CardAccount"
+              }
+            },
+            "payerFinancialAccount": {
+              "$ref": "#/components/schemas/FinancialAccount"
+            },
+            "payeeFinancialAccount": {
+              "$ref": "#/components/schemas/FinancialAccount"
+            },
+            "creditAccount": {
+              "$ref": "#/components/schemas/CreditAccount"
+            },
+            "paymentMandate": {
+              "$ref": "#/components/schemas/PaymentMandate"
+            },
+            "tradeFinancing": {
+              "$ref": "#/components/schemas/TradeFinancing"
+            },
+            "remittanceDocumentDistribution": {
+              "$ref": "#/components/schemas/DocumentDistribution"
+            }
+          }
+        },
+        "PhysicalAttribute": {
+          "type": "object",
+          "properties": {
+            "attributeID": {
+              "$ref": "#/components/schemas/Identifier"
+            },
+            "positionCode": {
+              "$ref": "#/components/schemas/Code"
+            },
+            "descriptionCode": {
+              "$ref": "#/components/schemas/Code"
+            },
+            "description": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "Price": {
+          "type": "object",
+          "properties": {
+            "priceAmount": {
+              "$ref": "#/components/schemas/Amount"
+            },
+            "taxInclusivePriceAmount": {
+              "$ref": "#/components/schemas/Amount"
+            },
+            "baseQuantity": {
+              "$ref": "#/components/schemas/Quantity"
+            },
+            "priceChangeReason": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "priceTypeCode": {
+              "$ref": "#/components/schemas/Code"
+            },
+            "priceType": {
+              "type": "string"
+            },
+            "orderableUnitFactorRate": {
+              "type": "number"
+            },
+            "validityPeriod": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Period"
+              }
+            },
+            "priceList": {
+              "$ref": "#/components/schemas/PriceList"
+            },
+            "allowanceCharge": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/AllowanceCharge"
+              }
+            }
+          }
+        },
+        "PriceList": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "$ref": "#/components/schemas/Identifier"
+            },
+            "statusCode": {
+              "$ref": "#/components/schemas/Code"
+            },
+            "validityPeriod": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Period"
+              }
+            }
+          }
+        },
+        "PropertyIdentification": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "$ref": "#/components/schemas/Identifier"
+            },
+            "issuerScopeId": {
+              "$ref": "#/components/schemas/Identifier"
+            },
+            "issuerParty": {
+              "$ref": "#/components/schemas/Party"
+            }
+          }
+        },
+        "PurchaseReceipt": {
+          "type": "object",
+          "properties": {
+            "customizationID": {
+              "$ref": "#/components/schemas/Identifier"
+            },
+            "profileID": {
+              "$ref": "#/components/schemas/Identifier"
+            },
+            "profileExecutionID": {
+              "$ref": "#/components/schemas/Identifier"
+            },
+            "id": {
+              "$ref": "#/components/schemas/Identifier"
+            },
+            "uuid": {
+              "$ref": "#/components/schemas/Identifier"
+            },
+            "issueDate": {
+              "type": "string"
+            },
+            "issueTime": {
+              "type": "string"
+            },
+            "transactionDate": {
+              "type": "string"
+            },
+            "transactionTime": {
+              "type": "string"
+            },
+            "purchaseDate": {
+              "type": "string"
+            },
+            "purchaseTime": {
+              "type": "string"
+            },
+            "note": {
+              "type": "string"
+            },
+            "documentCurrencyCode": {
+              "type": "string"
+            },
+            "purchaseReference": {
+              "$ref": "#/components/schemas/PurchaseReference"
+            },
+            "salesDocumentReference": {
+              "$ref": "#/components/schemas/DocumentReference"
+            },
+            "additionalDocumentReference": {
+              "$ref": "#/components/schemas/DocumentReference"
+            },
+            "signature": {
+              "$ref": "#/components/schemas/Signature"
+            },
+            "accountingSupplierParty": {
+              "$ref": "#/components/schemas/Party"
+            },
+            "accountingCustomerParty": {
+              "$ref": "#/components/schemas/Party"
+            },
+            "cashierContact": {
+              "$ref": "#/components/schemas/Contact"
+            },
+            "cashRegister": {
+              "$ref": "#/components/schemas/CashRegister"
+            },
+            "pointOfSaleLocation": {
+              "$ref": "#/components/schemas/Location"
+            },
+            "pointOfSaleContact": {
+              "$ref": "#/components/schemas/Contact"
+            },
+            "payment": {
+              "$ref": "#/components/schemas/Payment"
+            },
+            "paymentMeans": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/PaymentMeans"
+              }
+            },
+            "allowanceCharge": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/AllowanceCharge"
+              }
+            },
+            "taxTotals": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/TaxTotal"
+              }
+            },
+            "legalMonetaryTotal": {
+              "$ref": "#/components/schemas/MonetaryTotal"
+            },
+            "purchaseReceiptLines": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/PurchaseReceiptLine"
+              }
+            },
+            "verificationNonce": {
+              "type": "string"
+            }
+          }
+        },
+        "PurchaseReceiptLine": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "$ref": "#/components/schemas/Identifier"
+            },
+            "uuid": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "note": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "quantity": {
+              "$ref": "#/components/schemas/Quantity"
+            },
+            "lineExtensionAmount": {
+              "$ref": "#/components/schemas/Amount"
+            },
+            "taxInclusiveLineExtensionAmount": {
+              "$ref": "#/components/schemas/Amount"
+            },
+            "purchaseLinePeriod": {
+              "$ref": "#/components/schemas/Period"
+            },
+            "purchaseReference": {
+              "$ref": "#/components/schemas/PurchaseReference"
+            },
+            "allowanceCharges": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/AllowanceCharge"
+              }
+            },
+            "taxTotals": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/TaxTotal"
+              }
+            },
+            "item": {
+              "$ref": "#/components/schemas/Item"
+            },
+            "price": {
+              "$ref": "#/components/schemas/Price"
+            }
+          }
+        },
+        "PurchaseReference": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "$ref": "#/components/schemas/Identifier"
+            },
+            "description": {
+              "type": "string"
+            }
+          }
+        },
+        "Quantity": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "number"
+            },
+            "unitCode": {
+              "type": "string"
+            },
+            "unitCodeListAgencyID": {
+              "type": "string"
+            },
+            "unitCodeListAgencyName": {
+              "type": "string"
+            },
+            "unitCodeListID": {
+              "type": "string"
+            }
+          }
+        },
+        "ResultOfVerification": {
+          "type": "object",
+          "properties": {
+            "validatorID": {
+              "$ref": "#/components/schemas/Identifier"
+            },
+            "validationResultCode": {
+              "type": "string"
+            },
+            "validationDate": {
+              "type": "string"
+            },
+            "validationTime": {
+              "type": "string"
+            },
+            "validateProcess": {
+              "type": "string"
+            },
+            "validateTool": {
+              "type": "string"
+            },
+            "validateToolVersion": {
+              "type": "string"
+            },
+            "signatoryParty": {
+              "$ref": "#/components/schemas/Party"
+            }
+          }
+        },
+        "Signature": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "$ref": "#/components/schemas/Identifier"
+            },
+            "reasonCode": {
+              "$ref": "#/components/schemas/Code"
+            },
+            "note": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "validationDate": {
+              "type": "string",
+              "format": "date"
+            },
+            "validationTime": {
+              "$ref": "#/components/schemas/LocalTime"
+            },
+            "validatorID": {
+              "$ref": "#/components/schemas/Identifier"
+            },
+            "canonicalizationMethod": {
+              "type": "string"
+            },
+            "signatureMethod": {
+              "type": "string"
+            },
+            "signatoryParty": {
+              "$ref": "#/components/schemas/Party"
+            },
+            "digitalSignatureAttachment": {
+              "$ref": "#/components/schemas/Attachment"
+            },
+            "documentReference": {
+              "$ref": "#/components/schemas/DocumentReference"
+            }
+          }
+        },
+        "TaxCategory": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "$ref": "#/components/schemas/Identifier"
+            },
+            "name": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "percent": {
+              "type": "number",
+              "format": "double"
+            },
+            "baseUnitMeasure": {
+              "$ref": "#/components/schemas/Measure"
+            },
+            "perUnitAmount": {
+              "$ref": "#/components/schemas/Amount"
+            },
+            "taxExemptionReasonCode": {
+              "$ref": "#/components/schemas/Code"
+            },
+            "taxExemptionReason": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "tierRange": {
+              "type": "string"
+            },
+            "tierRatePercent": {
+              "type": "number",
+              "format": "double"
+            },
+            "taxScheme": {
+              "$ref": "#/components/schemas/TaxScheme"
+            }
+          }
+        },
+        "TaxScheme": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "$ref": "#/components/schemas/Identifier"
+            },
+            "name": {
+              "$ref": "#/components/schemas/Name"
+            },
+            "taxTypeCode": {
+              "$ref": "#/components/schemas/Code"
+            },
+            "currencyCode": {
+              "$ref": "#/components/schemas/Code"
+            },
+            "jurisdictionRegionAddress": {
+              "$ref": "#/components/schemas/Address"
+            }
+          }
+        },
+        "TaxSubtotal": {
+          "type": "object",
+          "properties": {
+            "taxableAmount": {
+              "$ref": "#/components/schemas/Amount"
+            },
+            "taxAmount": {
+              "$ref": "#/components/schemas/Amount"
+            },
+            "taxInclusiveAmount": {
+              "$ref": "#/components/schemas/Amount"
+            },
+            "calculationSequenceNumeric": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "transactionCurrencyTaxAmount": {
+              "$ref": "#/components/schemas/Amount"
+            },
+            "percent": {
+              "type": "number",
+              "format": "double"
+            },
+            "baseUnitMeasure": {
+              "$ref": "#/components/schemas/Measure"
+            },
+            "perUnitAmount": {
+              "$ref": "#/components/schemas/Amount"
+            },
+            "tierRange": {
+              "type": "string"
+            },
+            "tierRatePercent": {
+              "type": "number",
+              "format": "double"
+            },
+            "taxCategory": {
+              "$ref": "#/components/schemas/TaxCategory"
+            },
+            "country": {
+              "$ref": "#/components/schemas/Country"
+            }
+          }
+        },
+        "TaxTotal": {
+          "type": "object",
+          "properties": {
+            "taxAmount": {
+              "$ref": "#/components/schemas/Amount"
+            },
+            "calculationSequenceNumeric": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "roundingAmount": {
+              "$ref": "#/components/schemas/Amount"
+            },
+            "taxEvidenceIndicator": {
+              "type": "boolean"
+            },
+            "taxIncludedIndicator": {
+              "type": "boolean"
+            },
+            "taxSubtotals": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/TaxSubtotal"
+              }
+            }
+          }
+        },
+        "TradeFinancing": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "$ref": "#/components/schemas/Identifier"
+            },
+            "financingInstrumentCode": {
+              "$ref": "#/components/schemas/Code"
+            },
+            "contractDocumentReference": {
+              "$ref": "#/components/schemas/DocumentReference"
+            },
+            "documentReference": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/DocumentReference"
+              }
+            },
+            "financingParty": {
+              "$ref": "#/components/schemas/Party"
+            },
+            "financingFinancialAccount": {
+              "$ref": "#/components/schemas/FinancialAccount"
+            },
+            "clause": {
+              "$ref": "#/components/schemas/Clause"
+            }
+          }
+        },
+        "TransactionConditions": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "$ref": "#/components/schemas/Identifier"
+            },
+            "actionCode": {
+              "$ref": "#/components/schemas/Code"
+            },
+            "description": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "documentReference": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/DocumentReference"
+              }
+            }
+          }
+        },
+        "EncryptedReceiptRequestDto": {
+          "type": "object",
+          "properties": {
+            "recipientId": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "receiptId": {
+              "type": "string"
+            },
+            "receiverType": {
+              "type": "string",
+              "enum": [
+                "WEBHOOK",
+                "DEVICE"
+              ]
+            },
+            "encryptedReceipt": {
+              "type": "string"
+            },
+            "encryptedSymmetricKey": {
+              "type": "string"
+            },
+            "finalHash": {
+              "type": "string"
+            },
+            "publicKey": {
+              "type": "string"
+            },
+            "supplierPartyId": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        },
+        "EncryptedReceiptsRequest": {
+          "type": "object",
+          "properties": {
+            "encryptedReceipts": {
+              "uniqueItems": true,
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/EncryptedReceiptRequestDto"
+              }
+            },
+            "matchId": {
+              "type": "string"
+            },
+            "templateHash": {
+              "type": "string"
+            }
+          },
+          "description": "Encrypted receipt request with device-specific encryption"
+        },
+        "ReceiptCreatedResponse": {
+          "type": "object",
+          "properties": {
+            "cheqiReceiptId": {
+              "type": "string"
+            },
+            "createdAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "templateHash": {
+              "type": "string"
+            }
+          }
+        },
+        "EmailReceiptRequest": {
+          "required": [
+            "customerEmail",
+            "purchaseReceipt"
+          ],
+          "type": "object",
+          "properties": {
+            "customerEmail": {
+              "type": "string"
+            },
+            "purchaseReceipt": {
+              "$ref": "#/components/schemas/PurchaseReceipt"
+            }
+          },
+          "description": "Email receipt request with customer email and receipt details"
+        },
+        "CreditNoteTemplateRequest": {
+          "type": "object",
+          "properties": {
+            "originatorDocumentReference": {
+              "type": "string"
+            },
+            "documentNumber": {
+              "type": "string"
+            },
+            "identifiers": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Identifier"
+              }
+            },
+            "issueDate": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "currency": {
+              "type": "string"
+            },
+            "invoiceSubtotal": {
+              "type": "number"
+            },
+            "totalBeforeTax": {
+              "type": "number"
+            },
+            "totalTaxAmount": {
+              "type": "number"
+            },
+            "totalAmount": {
+              "type": "number"
+            },
+            "products": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Product"
+              }
+            },
+            "discounts": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Discount"
+              }
+            },
+            "taxes": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Tax"
+              }
+            },
+            "note": {
+              "type": "string"
+            }
+          },
+          "description": "Credit note template request with refund details"
+        },
+        "CreditNote": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "$ref": "#/components/schemas/Identifier"
+            },
+            "issueDate": {
+              "type": "string"
+            },
+            "issueTime": {
+              "type": "string"
+            },
+            "documentCurrencyCode": {
+              "type": "string"
+            },
+            "note": {
+              "type": "string"
+            },
+            "creditNoteTypeCode": {
+              "$ref": "#/components/schemas/Code"
+            },
+            "accountingSupplierParty": {
+              "$ref": "#/components/schemas/Party"
+            },
+            "accountingCustomerParty": {
+              "$ref": "#/components/schemas/Party"
+            },
+            "legalMonetaryTotal": {
+              "$ref": "#/components/schemas/MonetaryTotal"
+            },
+            "originatorDocumentReference": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/DocumentReference"
+              }
+            },
+            "creditNoteLine": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/CreditNoteLine"
+              }
+            },
+            "taxTotal": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/TaxTotal"
+              }
+            },
+            "verificationNonce": {
+              "type": "string"
+            }
+          }
+        },
+        "CreditNoteLine": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "$ref": "#/components/schemas/Identifier"
+            },
+            "creditedQuantity": {
+              "$ref": "#/components/schemas/Quantity"
+            },
+            "lineExtensionAmount": {
+              "$ref": "#/components/schemas/Amount"
+            },
+            "invoicePeriod": {
+              "$ref": "#/components/schemas/Period"
+            },
+            "item": {
+              "$ref": "#/components/schemas/Item"
+            },
+            "price": {
+              "$ref": "#/components/schemas/Price"
+            },
+            "note": {
+              "type": "string",
+              "xml": {
+                "name": "Note",
+                "namespace": "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"
+              }
+            },
+            "taxTotal": {
+              "type": "array",
+              "xml": {
+                "name": "TaxTotal",
+                "namespace": "urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2"
+              },
+              "items": {
+                "$ref": "#/components/schemas/TaxTotal"
+              }
+            }
+          }
+        },
+        "EncryptedCreditNoteDto": {
+          "required": [
+            "creditNoteId",
+            "originalReceiptId",
+            "recipientId"
+          ],
+          "type": "object",
+          "properties": {
+            "additionalProperties": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "object"
+              }
+            },
+            "recipientId": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "creditNoteId": {
+              "type": "string"
+            },
+            "originalReceiptId": {
+              "type": "string"
+            },
+            "receiverType": {
+              "type": "string",
+              "enum": [
+                "WEBHOOK",
+                "DEVICE"
+              ]
+            },
+            "encryptedCreditNote": {
+              "type": "string"
+            },
+            "encryptedSymmetricKey": {
+              "type": "string"
+            },
+            "encryptedCustomerDetails": {
+              "type": "string"
+            },
+            "encryptedCustomerAesKey": {
+              "type": "string"
+            },
+            "finalHash": {
+              "type": "string"
+            },
+            "publicKey": {
+              "type": "string"
+            },
+            "supplierPartyId": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        },
+        "EncryptedCreditNotesRequest": {
+          "type": "object",
+          "properties": {
+            "matchId": {
+              "type": "string"
+            },
+            "parentCheqiReceiptId": {
+              "type": "string"
+            },
+            "encryptedCreditNotes": {
+              "uniqueItems": true,
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/EncryptedCreditNoteDto"
+              }
+            },
+            "templateHash": {
+              "type": "string"
+            }
+          },
+          "description": "Encrypted credit note request with device-specific encryption"
+        },
+        "CreditNoteCreatedResponse": {
+          "type": "object",
+          "properties": {
+            "cheqiReceiptId": {
+              "type": "string"
+            },
+            "parentCheqiReceiptId": {
+              "type": "string"
+            },
+            "templateHash": {
+              "type": "string"
+            },
+            "createdAt": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        },
+        "UploadPublicKeyRequest": {
+          "required": [
+            "keyAlgorithm",
+            "publicKey"
+          ],
+          "type": "object",
+          "properties": {
+            "publicKey": {
+              "type": "string"
+            },
+            "keyAlgorithm": {
+              "type": "string",
+              "enum": [
+                "RSA_2048",
+                "RSA_4096",
+                "ECDSA_P256",
+                "ECDSA_P384",
+                "ED25519"
+              ]
+            }
+          },
+          "description": "Public key upload request with key data and algorithm"
+        },
+        "IssuerKeyResponse": {
+          "type": "object",
+          "properties": {
+            "publicKey": {
+              "type": "string"
+            },
+            "keyAlgorithm": {
+              "type": "string",
+              "enum": [
+                "RSA_2048",
+                "RSA_4096",
+                "ECDSA_P256",
+                "ECDSA_P384",
+                "ED25519"
+              ]
+            },
+            "keyCreatedAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "issuerType": {
+              "type": "string"
+            },
+            "issuerId": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        },
+        "PublicKeyResponse": {
+          "type": "object",
+          "properties": {
+            "publicKey": {
+              "type": "string"
+            },
+            "keyAlgorithm": {
+              "type": "string",
+              "enum": [
+                "RSA_2048",
+                "RSA_4096",
+                "ECDSA_P256",
+                "ECDSA_P384",
+                "ED25519"
+              ]
+            },
+            "keyCreatedAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "hasKey": {
+              "type": "boolean"
+            }
+          }
+        }
+      },
+      "securitySchemes": {
+        "cheqi_oauth": {
+          "type": "oauth2",
+          "flows": {
+            "implicit": {
+              "authorizationUrl": "https://test.api.cheqi.io/oauth/authorize",
+              "scopes": {
+                "write_receipts": "Write receipts",
+                "read_receipts": "Read receipts",
+                "manage_client_applications": "Manage client applications",
+                "read_client_applications": "Read client applications"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
