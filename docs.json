@@ -54,7 +54,7 @@
       },
       {
         "tab": "API ref",
-        "openapi": "cheqi.json"
+        "openapi": "https://test.api.cheqi.io/v3/api-docs"
       }
     ],
     "global": {
