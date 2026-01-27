@@ -7,6 +7,9 @@
     "light": "#07C983",
     "dark": "#15803D"
   },
+  "seo":{
+    "indexing":"all"
+  },
   "favicon": "/favicon.svg",
   "navigation": {
     "tabs": [
@@ -43,13 +46,7 @@
           },
           {
             "group": "Endpoint examples",
-            "pages": [
-              "docs/api-reference/endpoint/get",
-              "docs/api-reference/endpoint/create",
-              "docs/api-reference/endpoint/delete",
-              "docs/api-reference/endpoint/webhook",
-              "docs/api-reference/webhook"
-            ]
+            "openapi":"docs/api-reference/openapi.json"
           }
         ]
       }

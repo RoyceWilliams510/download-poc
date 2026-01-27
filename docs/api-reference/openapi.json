@@ -21,6 +21,9 @@
   "paths": {
     "/plants": {
       "get": {
+        "x-mint":{
+          "keywords":["plants", "lebron", "curry", "system", "user", "access"]
+        },
         "description": "Returns all plants from the system that the user has access to",
         "parameters": [
           {
