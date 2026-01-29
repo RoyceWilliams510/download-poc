@@ -10,6 +10,11 @@
   "seo":{
     "indexing":"all"
   },
+  "styling": {
+    "codeblocks": {
+      "theme": "css-variables"
+    }
+  },
   "favicon": "/favicon.svg",
   "navigation": {
     "tabs": [
