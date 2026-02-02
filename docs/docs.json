@@ -52,8 +52,14 @@
           {
             "group": "W&B Server",
             "hidden": true,
-            "pages": [
-              "/wandb"
+            "groups": [
+              {
+                "group": "Configure SSO with OIDC",
+                "noindex": false,
+                "pages": [
+                  "/wandb"
+                ]
+              }
             ]
           },
           {
