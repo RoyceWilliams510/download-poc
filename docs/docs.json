@@ -50,6 +50,13 @@
             ]
           },
           {
+            "group": "W&B Server",
+            "hidden": true,
+            "pages": [
+              "/wandb"
+            ]
+          },
+          {
             "group": "Endpoint examples",
             "openapi":"/api-reference/openapi.json"
           }
