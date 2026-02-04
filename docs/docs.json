@@ -7,8 +7,8 @@
     "light": "#07C983",
     "dark": "#15803D"
   },
-  "seo":{
-    "indexing":"all"
+  "seo": {
+    "indexing": "all"
   },
   "styling": {
     "codeblocks": {
@@ -32,11 +32,9 @@
           {
             "version": "1.0.0",
             "pages": [
-              "/base",
               "/index",
               "/quickstart",
-              "/development",
-              "/iframe"
+              "/development"
             ]
           },
           {
@@ -73,25 +71,25 @@
           },
           {
             "group": "Endpoint examples",
-            "openapi":"/api-reference/openapi.json"
+            "openapi": "/api-reference/openapi.json"
           }
-        ]
-      }
-    ],
-    "global": {
-      "anchors": [
-        {
-          "anchor": "Documentation",
-          "href": "https://mintlify.com/docs",
-          "icon": "book-open-cover"
-        },
-        {
-          "anchor": "Blog",
-          "href": "https://mintlify.com/blog",
-          "icon": "newspaper"
+        ],
+        "global": {
+          "anchors": [
+            {
+              "anchor": "Documentation",
+              "href": "https://mintlify.com/docs",
+              "icon": "book-open-cover"
+            },
+            {
+              "anchor": "Blog",
+              "href": "https://mintlify.com/blog",
+              "icon": "newspaper"
+            }
+          ]
         }
-      ]
-    }
+      }
+    ]
   },
   "logo": {
     "light": "//logo/light.svg",
@@ -112,20 +110,15 @@
   },
   "contextual": {
     "options": [
-     "copy",
-     "view",
-     "chatgpt",
-     "claude",
-     "perplexity",
-     "mcp",
-     "cursor",
-     "vscode"
-   ]
-  },
-  "integrations": {
-    "intercom":{
-      "appId": "intercom-app-id",
-      "apiBase":"https://api-iam.eu.intercom.io"
-    }
+      "copy",
+      "view",
+      "chatgpt",
+      "claude",
+      "perplexity",
+      "mcp",
+      "cursor",
+      "vscode"
+    ]
   }
 }
+  
