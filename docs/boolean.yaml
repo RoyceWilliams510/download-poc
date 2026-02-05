@@ -55,6 +55,9 @@ paths:
                   type: number
                   enum: [1, 2, 3]
                   description: Regular enum with number constraint
+                hasNull:
+                  type: boolean
+                  enum: [true, null]
               required:
                 - workspace
       responses:
