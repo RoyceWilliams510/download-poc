@@ -47,6 +47,14 @@ paths:
                 regularBoolean:
                   type: boolean
                   description: Regular boolean without enum constraint
+                regularStringEnum:
+                  type: string
+                  enum: [testoption, testoption2]
+                  description: Regular enum with string constraint
+                regularNumberEnum:
+                  type: number
+                  enum: [1, 2, 3]
+                  description: Regular enum with number constraint
               required:
                 - workspace
       responses:
