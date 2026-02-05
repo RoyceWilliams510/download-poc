@@ -58,14 +58,8 @@
           },
           {
             "group": "API documentation",
-            "openapi": "motion.yaml"
+            "openapi": "boolean.yaml"
           }
-        ]
-      },
-      {
-        "tab":"home",
-        "pages": [
-          "/home"
         ]
       }
     ],

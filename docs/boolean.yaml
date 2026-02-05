@@ -1,0 +1,54 @@
+openapi: 3.1.0
+info:
+  title: Notion API
+  version: 1.0.0
+servers:
+  - url: https://api.test.com
+security:
+  - bearerAuth: []
+paths:
+  /v1/test/boolean-enums:
+    post:
+      tags:
+        - Test
+      summary: Test boolean enum constraints
+      operationId: test-boolean-enums
+      description: Test endpoint for various boolean enum behaviors
+      parameters:
+        - name: workspace
+          in: query
+          description: Test case - only true is allowed
+          schema:
+            type: boolean
+            enum: [true]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                workspace:
+                  type: boolean
+                  enum: [true]
+                  description: Only true is allowed
+                isDisabled:
+                  type: boolean
+                  enum: [false]
+                  description: Only false is allowed
+                isEnabled:
+                  type: boolean
+                  enum: [true]
+                  description: Only true is allowed
+                isOptional:
+                  type: boolean
+                  enum: [true, false]
+                  description: Both true and false allowed
+                regularBoolean:
+                  type: boolean
+                  description: Regular boolean without enum constraint
+              required:
+                - workspace
+      responses:
+        '200':
+          description: Success
