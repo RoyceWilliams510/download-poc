@@ -87,6 +87,22 @@ paths:
                         type:
                           type: string
                           const: workspace
+                        # Test cases for boolean enum constraints
+                        isDisabled:
+                          type: boolean
+                          enum: [false]
+                          description: Test case - only false is allowed
+                        isEnabled:
+                          type: boolean
+                          enum: [true]
+                          description: Test case - only true is allowed
+                        isOptional:
+                          type: boolean
+                          enum: [true, false]
+                          description: Test case - both true and false allowed
+                        regularBoolean:
+                          type: boolean
+                          description: Test case - regular boolean without enum constraint (should default to true/false)
                       additionalProperties: false
                       required:
                         - workspace
