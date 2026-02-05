@@ -57,39 +57,32 @@
             ]
           },
           {
-            "group": "W&B Server",
-            "hidden": true,
-            "groups": [
-              {
-                "group": "Configure SSO with OIDC",
-                "noindex": false,
-                "pages": [
-                  "/wandb"
-                ]
-              }
-            ]
-          },
-          {
-            "group": "Endpoint examples",
-            "openapi": "/api-reference/openapi.json"
+            "group": "API documentation",
+            "openapi": "motion.yaml"
           }
-        ],
-        "global": {
-          "anchors": [
-            {
-              "anchor": "Documentation",
-              "href": "https://mintlify.com/docs",
-              "icon": "book-open-cover"
-            },
-            {
-              "anchor": "Blog",
-              "href": "https://mintlify.com/blog",
-              "icon": "newspaper"
-            }
-          ]
-        }
+        ]
+      },
+      {
+        "tab":"home",
+        "pages": [
+          "/home"
+        ]
       }
-    ]
+    ],
+    "global": {
+      "anchors": [
+        {
+          "anchor": "Documentation",
+          "href": "https://mintlify.com/docs",
+          "icon": "book-open-cover"
+        },
+        {
+          "anchor": "Blog",
+          "href": "https://mintlify.com/blog",
+          "icon": "newspaper"
+        }
+      ]
+    }
   },
   "logo": {
     "light": "//logo/light.svg",
@@ -121,4 +114,3 @@
     ]
   }
 }
-  
