@@ -15,13 +15,38 @@
       "theme": "css-variables"
     }
   },
-  "footer": {
-    "socials": {
-      "discord": "https://unkey.com/discord",
-      "x-twitter": "https://x.com/unkeydev",
-      "github": "https://github.com/unkeyed/unkey",
-      "linkedin": "https://linkedin/company/unkeyed"
-    }
+"footer": {
+    "links": [
+      {
+        "header": " ",
+        "items": [
+          {
+            "label": "Privacy Policy",
+            "href": "https://antithesis.com/legal/privacy_policy/"
+          },
+          {
+            "label": "Terms of Use",
+            "href": "https://antithesis.com/legal/terms_of_use/"
+          },
+          {
+            "label": "Security",
+            "href": "https://antithesis.com/security/manifesto/"
+          },
+          {
+            "label": "SOC 2 Type 2",
+            "href": "https://trust.antithesis.com/"
+          },
+          {
+            "label": "Email Updates",
+            "href": "https://eepurl.com/gucvHX"
+          },
+          {
+            "label": "Contact Us",
+            "href": "https://antithesis.com/contact/"
+          }
+        ]
+      }
+    ]
   },
   "favicon": "/favicon.svg",
   "navigation": {
@@ -59,6 +84,15 @@
           {
             "group": "API documentation",
             "openapi": "boolean.yaml"
+          }
+        ]
+      },
+      {
+        "tab": "API Sven",
+        "groups": [
+          {
+            "group": "API documentation",
+            "openapi": "sven.json"
           }
         ]
       }
