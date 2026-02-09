@@ -92,7 +92,7 @@
         "groups": [
           {
             "group": "API documentation",
-            "openapi": "sven.json"
+            "openapi": "v1.json"
           }
         ]
       }

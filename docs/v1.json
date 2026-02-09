@@ -1,0 +1,4080 @@
+{
+    "openapi": "3.0.0",
+    "paths": {
+      "/v1/agents/{agentId}/appointments": {
+        "get": {
+          "operationId": "AgentAppointmentComplianceController_getAgentAppointments_v1",
+          "parameters": [
+            {
+              "name": "agentId",
+              "required": true,
+              "in": "path",
+              "description": "Agent ID",
+              "schema": {
+                "example": "507f1f77bcf86cd799439011",
+                "type": "string"
+              }
+            },
+            {
+              "name": "stateCode",
+              "required": false,
+              "in": "query",
+              "description": "State code (two-letter abbreviation)",
+              "schema": {
+                "example": "FL",
+                "type": "string"
+              }
+            },
+            {
+              "name": "status",
+              "required": false,
+              "in": "query",
+              "description": "Filter for the appointment status",
+              "schema": {
+                "example": "appointed",
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "List of agent appointments",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "data": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/AgentAppointmentResponse"
+                        }
+                      },
+                      "requestId": {
+                        "type": "string",
+                        "description": "Unique request identifier",
+                        "example": "dev-2c5e7cf2-9acf-4c8c-ab2f-b81f39d775a8"
+                      },
+                      "timestamp": {
+                        "type": "string",
+                        "description": "Response timestamp",
+                        "example": "2025-11-12T20:49:03.293Z"
+                      }
+                    },
+                    "required": [
+                      "data",
+                      "requestId",
+                      "timestamp"
+                    ]
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Invalid or missing auth token",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponseDto"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Agent not found",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponseDto"
+                  }
+                }
+              }
+            }
+          },
+          "tags": [
+            "agents"
+          ]
+        }
+      },
+      "/v1/downstream-entity-associations/{downstreamEntityAssociationId}/appointments": {
+        "get": {
+          "operationId": "DownstreamEntityAppointmentsController_getDownstreamEntityAppointments_v1",
+          "parameters": [
+            {
+              "name": "downstreamEntityAssociationId",
+              "required": true,
+              "in": "path",
+              "description": "Downstream entity association ID",
+              "schema": {
+                "example": "507f1f77bcf86cd799439011",
+                "type": "string"
+              }
+            },
+            {
+              "name": "stateCode",
+              "required": false,
+              "in": "query",
+              "description": "State code (two-letter abbreviation)",
+              "schema": {
+                "example": "FL",
+                "type": "string"
+              }
+            },
+            {
+              "name": "status",
+              "required": false,
+              "in": "query",
+              "description": "Filter for the appointment status",
+              "schema": {
+                "example": "appointed",
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "List of downstream entity appointments",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "data": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/DownstreamEntityAppointmentResponse"
+                        }
+                      },
+                      "requestId": {
+                        "type": "string",
+                        "description": "Unique request identifier",
+                        "example": "dev-2c5e7cf2-9acf-4c8c-ab2f-b81f39d775a8"
+                      },
+                      "timestamp": {
+                        "type": "string",
+                        "description": "Response timestamp",
+                        "example": "2025-11-12T20:49:03.293Z"
+                      }
+                    },
+                    "required": [
+                      "data",
+                      "requestId",
+                      "timestamp"
+                    ]
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Invalid or missing auth token",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponseDto"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Downstream entity association not found",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponseDto"
+                  }
+                }
+              }
+            }
+          },
+          "tags": [
+            "downstream-entity-associations"
+          ]
+        }
+      },
+      "/v1/agents": {
+        "post": {
+          "operationId": "AgentFeatureController_addAgent_v1",
+          "parameters": [],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateAgentDto"
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Agent successfully added",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "data": {
+                        "$ref": "#/components/schemas/AgentEntryResponse"
+                      },
+                      "requestId": {
+                        "type": "string",
+                        "description": "Unique request identifier",
+                        "example": "dev-2c5e7cf2-9acf-4c8c-ab2f-b81f39d775a8"
+                      },
+                      "timestamp": {
+                        "type": "string",
+                        "description": "Response timestamp",
+                        "example": "2025-11-12T20:49:03.293Z"
+                      }
+                    },
+                    "required": [
+                      "data",
+                      "requestId",
+                      "timestamp"
+                    ]
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid request body or email not deliverable",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponseDto"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Invalid or missing auth token",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponseDto"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Downstream entity association or NPN not found",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponseDto"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Agent already associated with this downstream entity",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponseDto"
+                  }
+                }
+              }
+            }
+          },
+          "tags": [
+            "agents"
+          ]
+        },
+        "get": {
+          "operationId": "AgentFeatureController_getAgents_v1",
+          "parameters": [
+            {
+              "name": "downstreamEntityAssociationId",
+              "required": false,
+              "in": "query",
+              "description": "Filter by downstream entity association ID",
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "npn",
+              "required": false,
+              "in": "query",
+              "description": "Filter by National Producer Number (NPN). Mutually exclusive with licenseNumber/stateCode.",
+              "schema": {
+                "example": "123456",
+                "type": "string"
+              }
+            },
+            {
+              "name": "licenseNumber",
+              "required": false,
+              "in": "query",
+              "description": "Filter by license number. Must be provided together with stateCode. Mutually exclusive with npn.",
+              "schema": {
+                "example": "ABC123456",
+                "type": "string"
+              }
+            },
+            {
+              "name": "stateCode",
+              "required": false,
+              "in": "query",
+              "description": "Filter by state code. Must be provided together with licenseNumber. Mutually exclusive with npn.",
+              "schema": {
+                "example": "AK",
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "List of agents",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "data": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/AgentEntryResponse"
+                        }
+                      },
+                      "requestId": {
+                        "type": "string",
+                        "description": "Unique request identifier",
+                        "example": "dev-2c5e7cf2-9acf-4c8c-ab2f-b81f39d775a8"
+                      },
+                      "timestamp": {
+                        "type": "string",
+                        "description": "Response timestamp",
+                        "example": "2025-11-12T20:49:03.293Z"
+                      }
+                    },
+                    "required": [
+                      "data",
+                      "requestId",
+                      "timestamp"
+                    ]
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid query parameters",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponseDto"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Invalid or missing auth token",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponseDto"
+                  }
+                }
+              }
+            }
+          },
+          "tags": [
+            "agents"
+          ]
+        }
+      },
+      "/v1/agents/{agentId}": {
+        "get": {
+          "operationId": "AgentFeatureController_getAgent_v1",
+          "parameters": [
+            {
+              "name": "agentId",
+              "required": true,
+              "in": "path",
+              "description": "The unique identifier of the agent",
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "producerCode",
+              "required": false,
+              "in": "query",
+              "description": "Filter by producer code",
+              "schema": {
+                "example": "PROD-001",
+                "type": "string"
+              }
+            },
+            {
+              "name": "downstreamEntityAssociationId",
+              "required": false,
+              "in": "query",
+              "description": "Filter by downstream entity association ID",
+              "schema": {
+                "example": "507f1f77bcf86cd799439011",
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Agent details",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "data": {
+                        "$ref": "#/components/schemas/AgentEntryResponse"
+                      },
+                      "requestId": {
+                        "type": "string",
+                        "description": "Unique request identifier",
+                        "example": "dev-2c5e7cf2-9acf-4c8c-ab2f-b81f39d775a8"
+                      },
+                      "timestamp": {
+                        "type": "string",
+                        "description": "Response timestamp",
+                        "example": "2025-11-12T20:49:03.293Z"
+                      }
+                    },
+                    "required": [
+                      "data",
+                      "requestId",
+                      "timestamp"
+                    ]
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Agent associated with multiple downstream entities - specify filter",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponseDto"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Invalid or missing auth token",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponseDto"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Agent not found",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponseDto"
+                  }
+                }
+              }
+            }
+          },
+          "tags": [
+            "agents"
+          ]
+        }
+      },
+      "/v1/agents/{agentId}/sync": {
+        "post": {
+          "operationId": "AgentFeatureController_enqueueAgentEntityInfo_v1",
+          "parameters": [
+            {
+              "name": "agentId",
+              "required": true,
+              "in": "path",
+              "description": "The unique identifier of the agent to sync",
+              "schema": {
+                "format": "mongodb-objectid",
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "201": {
+              "description": "Agent sync job enqueued successfully"
+            },
+            "401": {
+              "description": "Invalid or missing auth token",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponseDto"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Agent not found",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponseDto"
+                  }
+                }
+              }
+            }
+          },
+          "tags": [
+            "agents"
+          ]
+        }
+      },
+      "/v1/downstream-entity-associations": {
+        "get": {
+          "operationId": "AssociatedDownstreamEntitiesController_getAllDownstreamEntities_v1",
+          "parameters": [
+            {
+              "name": "downstreamEntityNpn",
+              "required": false,
+              "in": "query",
+              "description": "Downstream entity National Producer Number (NPN). Mutually exclusive with licenseNumber/stateCode, emailDomain, and email.",
+              "schema": {
+                "example": "12345678",
+                "type": "string"
+              }
+            },
+            {
+              "name": "licenseNumber",
+              "required": false,
+              "in": "query",
+              "description": "Downstream entity license number. Must be provided together with stateCode. Mutually exclusive with downstreamEntityNpn, emailDomain, and email.",
+              "schema": {
+                "example": "ABC123456",
+                "type": "string"
+              }
+            },
+            {
+              "name": "stateCode",
+              "required": false,
+              "in": "query",
+              "description": "State code. Must be provided together with licenseNumber. Mutually exclusive with downstreamEntityNpn, emailDomain, and email.",
+              "schema": {
+                "example": "CA",
+                "type": "string"
+              }
+            },
+            {
+              "name": "emailDomain",
+              "required": false,
+              "in": "query",
+              "description": "Email domain to filter downstream entity associations by contact email. Mutually exclusive with downstreamEntityNpn, licenseNumber/stateCode, and email.",
+              "schema": {
+                "example": "example.com",
+                "type": "string"
+              }
+            },
+            {
+              "name": "email",
+              "required": false,
+              "in": "query",
+              "description": "Exact email address to filter downstream entity associations by contact email. Mutually exclusive with downstreamEntityNpn, licenseNumber/stateCode, and emailDomain.",
+              "schema": {
+                "example": "john.doe@example.com",
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "List of downstream entity associations",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "data": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/DownstreamEntityAssociationResponseDto"
+                        }
+                      },
+                      "requestId": {
+                        "type": "string",
+                        "description": "Unique request identifier",
+                        "example": "dev-2c5e7cf2-9acf-4c8c-ab2f-b81f39d775a8"
+                      },
+                      "timestamp": {
+                        "type": "string",
+                        "description": "Response timestamp",
+                        "example": "2025-11-12T20:49:03.293Z"
+                      }
+                    },
+                    "required": [
+                      "data",
+                      "requestId",
+                      "timestamp"
+                    ]
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Invalid or missing auth token",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponseDto"
+                  }
+                }
+              }
+            }
+          },
+          "tags": [
+            "downstream-entity-associations"
+          ]
+        }
+      },
+      "/v1/downstream-entity-associations/{downstreamEntityAssociationId}": {
+        "get": {
+          "operationId": "AssociatedDownstreamEntitiesController_getDownstreamEntity_v1",
+          "parameters": [
+            {
+              "name": "downstreamEntityAssociationId",
+              "required": true,
+              "in": "path",
+              "description": "Associated downstream entity ID",
+              "schema": {
+                "example": "507f1f77bcf86cd799439011",
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Downstream entity association details",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "data": {
+                        "$ref": "#/components/schemas/DownstreamEntityAssociationResponseDto"
+                      },
+                      "requestId": {
+                        "type": "string",
+                        "description": "Unique request identifier",
+                        "example": "dev-2c5e7cf2-9acf-4c8c-ab2f-b81f39d775a8"
+                      },
+                      "timestamp": {
+                        "type": "string",
+                        "description": "Response timestamp",
+                        "example": "2025-11-12T20:49:03.293Z"
+                      }
+                    },
+                    "required": [
+                      "data",
+                      "requestId",
+                      "timestamp"
+                    ]
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Invalid or missing auth token",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponseDto"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Downstream entity association not found",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponseDto"
+                  }
+                }
+              }
+            }
+          },
+          "tags": [
+            "downstream-entity-associations"
+          ]
+        }
+      },
+      "/v1/downstream-entity-associations/{downstreamEntityAssociationId}/sign-in-url": {
+        "get": {
+          "operationId": "AssociatedDownstreamEntitiesController_getSignInUrl_v1",
+          "parameters": [
+            {
+              "name": "downstreamEntityAssociationId",
+              "required": true,
+              "in": "path",
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "email",
+              "required": true,
+              "in": "query",
+              "description": "Email address of the user to generate sign-in URL for",
+              "schema": {
+                "example": "user@example.com",
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Sign-in URL for downstream entity",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "data": {
+                        "$ref": "#/components/schemas/SignInUrlResponse"
+                      },
+                      "requestId": {
+                        "type": "string",
+                        "description": "Unique request identifier",
+                        "example": "dev-2c5e7cf2-9acf-4c8c-ab2f-b81f39d775a8"
+                      },
+                      "timestamp": {
+                        "type": "string",
+                        "description": "Response timestamp",
+                        "example": "2025-11-12T20:49:03.293Z"
+                      }
+                    },
+                    "required": [
+                      "data",
+                      "requestId",
+                      "timestamp"
+                    ]
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid email or missing member",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponseDto"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Invalid or missing auth token",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponseDto"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Downstream entity association not found",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponseDto"
+                  }
+                }
+              }
+            }
+          },
+          "tags": [
+            "downstream-entity-associations"
+          ]
+        }
+      },
+      "/v1/downstream-entity-associations/{downstreamEntityAssociationId}/sync": {
+        "post": {
+          "operationId": "AssociatedDownstreamEntitiesController_enqueueDownstreamEntityEntityInfo_v1",
+          "parameters": [
+            {
+              "name": "downstreamEntityAssociationId",
+              "required": true,
+              "in": "path",
+              "description": "Downstream entity association ID",
+              "schema": {
+                "example": "507f1f77bcf86cd799439011",
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "201": {
+              "description": "Downstream entity sync job enqueued"
+            },
+            "401": {
+              "description": "Invalid or missing auth token",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponseDto"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Downstream entity association not found",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponseDto"
+                  }
+                }
+              }
+            }
+          },
+          "tags": [
+            "downstream-entity-associations"
+          ]
+        }
+      },
+      "/v1/downstream-entity-associations/invite": {
+        "post": {
+          "operationId": "AssociatedDownstreamEntitiesController_inviteDownstreamEntity_v1",
+          "parameters": [
+            {
+              "name": "idempotency-key",
+              "in": "header",
+              "description": "UUID to ensure idempotent request processing",
+              "required": false,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "x-idempotency-key",
+              "in": "header",
+              "description": "Alternative UUID header for idempotent request processing",
+              "required": false,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InviteDownstreamEntityDto"
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Downstream entity invitation sent",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "data": {
+                        "$ref": "#/components/schemas/InviteDownstreamEntityResponse"
+                      },
+                      "requestId": {
+                        "type": "string",
+                        "description": "Unique request identifier",
+                        "example": "dev-2c5e7cf2-9acf-4c8c-ab2f-b81f39d775a8"
+                      },
+                      "timestamp": {
+                        "type": "string",
+                        "description": "Response timestamp",
+                        "example": "2025-11-12T20:49:03.293Z"
+                      }
+                    },
+                    "required": [
+                      "data",
+                      "requestId",
+                      "timestamp"
+                    ]
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid request body",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponseDto"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Invalid or missing auth token",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponseDto"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Downstream entity already exists",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponseDto"
+                  }
+                }
+              }
+            }
+          },
+          "tags": [
+            "downstream-entity-associations"
+          ]
+        }
+      },
+      "/v1/downstream-entity-associations/add": {
+        "post": {
+          "operationId": "AssociatedDownstreamEntitiesController_addDownstreamEntity_v1",
+          "parameters": [
+            {
+              "name": "idempotency-key",
+              "in": "header",
+              "description": "UUID to ensure idempotent request processing",
+              "required": false,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "x-idempotency-key",
+              "in": "header",
+              "description": "Alternative UUID header for idempotent request processing",
+              "required": false,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AddDownstreamEntityDto"
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Downstream entity added",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "data": {
+                        "$ref": "#/components/schemas/DownstreamEntityAssociationResponseDto"
+                      },
+                      "requestId": {
+                        "type": "string",
+                        "description": "Unique request identifier",
+                        "example": "dev-2c5e7cf2-9acf-4c8c-ab2f-b81f39d775a8"
+                      },
+                      "timestamp": {
+                        "type": "string",
+                        "description": "Response timestamp",
+                        "example": "2025-11-12T20:49:03.293Z"
+                      }
+                    },
+                    "required": [
+                      "data",
+                      "requestId",
+                      "timestamp"
+                    ]
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid request body",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponseDto"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Invalid or missing auth token",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponseDto"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Downstream entity already exists",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponseDto"
+                  }
+                }
+              }
+            }
+          },
+          "tags": [
+            "downstream-entity-associations"
+          ]
+        }
+      },
+      "/v1/downstream-entity-associations/dangerously-invite": {
+        "post": {
+          "deprecated": true,
+          "operationId": "AssociatedDownstreamEntitiesController_dangerouslyInviteDownstreamEntity_v1",
+          "parameters": [
+            {
+              "name": "idempotency-key",
+              "in": "header",
+              "description": "UUID to ensure idempotent request processing",
+              "required": false,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "x-idempotency-key",
+              "in": "header",
+              "description": "Alternative UUID header for idempotent request processing",
+              "required": false,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InviteDownstreamEntityDto"
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Downstream entity invitation sent (deprecated)",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "data": {
+                        "$ref": "#/components/schemas/InviteDownstreamEntityResponse"
+                      },
+                      "requestId": {
+                        "type": "string",
+                        "description": "Unique request identifier",
+                        "example": "dev-2c5e7cf2-9acf-4c8c-ab2f-b81f39d775a8"
+                      },
+                      "timestamp": {
+                        "type": "string",
+                        "description": "Response timestamp",
+                        "example": "2025-11-12T20:49:03.293Z"
+                      }
+                    },
+                    "required": [
+                      "data",
+                      "requestId",
+                      "timestamp"
+                    ]
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid request body",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponseDto"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Invalid or missing auth token",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponseDto"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Downstream entity already exists",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponseDto"
+                  }
+                }
+              }
+            }
+          },
+          "summary": "",
+          "tags": [
+            "downstream-entity-associations"
+          ]
+        }
+      },
+      "/v1/downstream-entity-associations/dangerously-add": {
+        "post": {
+          "deprecated": true,
+          "operationId": "AssociatedDownstreamEntitiesController_dangerouslyAddDownstreamEntity_v1",
+          "parameters": [
+            {
+              "name": "idempotency-key",
+              "in": "header",
+              "description": "UUID to ensure idempotent request processing",
+              "required": false,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "x-idempotency-key",
+              "in": "header",
+              "description": "Alternative UUID header for idempotent request processing",
+              "required": false,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AddDownstreamEntityDto"
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Downstream entity added (deprecated)",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "data": {
+                        "$ref": "#/components/schemas/DownstreamEntityAssociationResponseDto"
+                      },
+                      "requestId": {
+                        "type": "string",
+                        "description": "Unique request identifier",
+                        "example": "dev-2c5e7cf2-9acf-4c8c-ab2f-b81f39d775a8"
+                      },
+                      "timestamp": {
+                        "type": "string",
+                        "description": "Response timestamp",
+                        "example": "2025-11-12T20:49:03.293Z"
+                      }
+                    },
+                    "required": [
+                      "data",
+                      "requestId",
+                      "timestamp"
+                    ]
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid request body",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponseDto"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Invalid or missing auth token",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponseDto"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Downstream entity already exists",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponseDto"
+                  }
+                }
+              }
+            }
+          },
+          "summary": "",
+          "tags": [
+            "downstream-entity-associations"
+          ]
+        }
+      },
+      "/v1/auth/jwt": {
+        "post": {
+          "operationId": "AuthController_getToken_v1",
+          "parameters": [],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetTokenDto"
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "JWT access token response",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "data": {
+                        "$ref": "#/components/schemas/GetTokenResponse"
+                      },
+                      "requestId": {
+                        "type": "string",
+                        "description": "Unique request identifier",
+                        "example": "dev-2c5e7cf2-9acf-4c8c-ab2f-b81f39d775a8"
+                      },
+                      "timestamp": {
+                        "type": "string",
+                        "description": "Response timestamp",
+                        "example": "2025-11-12T20:49:03.293Z"
+                      }
+                    },
+                    "required": [
+                      "data",
+                      "requestId",
+                      "timestamp"
+                    ]
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Invalid client credentials",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponseDto"
+                  }
+                }
+              }
+            },
+            "429": {
+              "description": "Rate limit exceeded",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponseDto"
+                  }
+                }
+              }
+            }
+          },
+          "tags": [
+            "auth"
+          ]
+        }
+      },
+      "/v1/auth/test-oauth": {
+        "get": {
+          "operationId": "AuthController_testOauth_v1",
+          "parameters": [],
+          "responses": {
+            "200": {
+              "description": "OAuth token is valid",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "data": {
+                        "$ref": "#/components/schemas/TestAuthResponse"
+                      },
+                      "requestId": {
+                        "type": "string",
+                        "description": "Unique request identifier",
+                        "example": "dev-2c5e7cf2-9acf-4c8c-ab2f-b81f39d775a8"
+                      },
+                      "timestamp": {
+                        "type": "string",
+                        "description": "Response timestamp",
+                        "example": "2025-11-12T20:49:03.293Z"
+                      }
+                    },
+                    "required": [
+                      "data",
+                      "requestId",
+                      "timestamp"
+                    ]
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Invalid or missing OAuth token",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponseDto"
+                  }
+                }
+              }
+            }
+          },
+          "tags": [
+            "auth"
+          ]
+        }
+      },
+      "/v1/auth/test-restricted-access-token": {
+        "get": {
+          "operationId": "AuthController_testRestrictedAccessToken_v1",
+          "parameters": [],
+          "responses": {
+            "200": {
+              "description": "Restricted access token is valid",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "data": {
+                        "$ref": "#/components/schemas/TestAuthResponse"
+                      },
+                      "requestId": {
+                        "type": "string",
+                        "description": "Unique request identifier",
+                        "example": "dev-2c5e7cf2-9acf-4c8c-ab2f-b81f39d775a8"
+                      },
+                      "timestamp": {
+                        "type": "string",
+                        "description": "Response timestamp",
+                        "example": "2025-11-12T20:49:03.293Z"
+                      }
+                    },
+                    "required": [
+                      "data",
+                      "requestId",
+                      "timestamp"
+                    ]
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Invalid or missing restricted access token",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponseDto"
+                  }
+                }
+              }
+            }
+          },
+          "tags": [
+            "auth"
+          ]
+        }
+      },
+      "/v1/compliance-data-subscriptions/{niprDataSubscriptionId}": {
+        "get": {
+          "operationId": "ComplianceDataSubscriptionsController_getStatus_v1",
+          "parameters": [
+            {
+              "name": "niprDataSubscriptionId",
+              "required": true,
+              "in": "path",
+              "description": "NIPR data subscription ID",
+              "schema": {
+                "example": "507f1f77bcf86cd799439011",
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "NIPR data subscription status",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "data": {
+                        "$ref": "#/components/schemas/ComplianceDataSubscriptionResponse"
+                      },
+                      "requestId": {
+                        "type": "string",
+                        "description": "Unique request identifier",
+                        "example": "dev-2c5e7cf2-9acf-4c8c-ab2f-b81f39d775a8"
+                      },
+                      "timestamp": {
+                        "type": "string",
+                        "description": "Response timestamp",
+                        "example": "2025-11-12T20:49:03.293Z"
+                      }
+                    },
+                    "required": [
+                      "data",
+                      "requestId",
+                      "timestamp"
+                    ]
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Invalid or missing auth token",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponseDto"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "NIPR data subscription not found",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponseDto"
+                  }
+                }
+              }
+            }
+          },
+          "tags": [
+            "compliance-data-subscriptions"
+          ]
+        }
+      },
+      "/v1/downstream-entity-associations/{downstreamEntityAssociationId}/policy-compliance-statuses": {
+        "get": {
+          "operationId": "EoAndCyberComplianceController_getDownstreamEntityPolicyCompliance_v1",
+          "parameters": [
+            {
+              "name": "downstreamEntityAssociationId",
+              "required": true,
+              "in": "path",
+              "description": "The unique identifier for the downstream entity association",
+              "schema": {
+                "example": "684fdb88e8956de1febe6091",
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "E&O and Cyber policy compliance statuses",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "data": {
+                        "$ref": "#/components/schemas/PolicyComplianceResponse"
+                      },
+                      "requestId": {
+                        "type": "string",
+                        "description": "Unique request identifier",
+                        "example": "dev-2c5e7cf2-9acf-4c8c-ab2f-b81f39d775a8"
+                      },
+                      "timestamp": {
+                        "type": "string",
+                        "description": "Response timestamp",
+                        "example": "2025-11-12T20:49:03.293Z"
+                      }
+                    },
+                    "required": [
+                      "data",
+                      "requestId",
+                      "timestamp"
+                    ]
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Invalid or missing auth token",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponseDto"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Downstream entity association not found",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponseDto"
+                  }
+                }
+              }
+            }
+          },
+          "tags": [
+            "downstream-entity-associations"
+          ]
+        }
+      },
+      "/v1/file-documents": {
+        "get": {
+          "operationId": "FileDocumentFeatureController_getFileDocuments_v1",
+          "parameters": [
+            {
+              "name": "category",
+              "required": true,
+              "in": "query",
+              "description": "Filter documents by file document category",
+              "schema": {
+                "example": "Producer Agreement",
+                "type": "string",
+                "enum": [
+                  "W9",
+                  "E&O",
+                  "Cyber",
+                  "Producer Agreement",
+                  "Crime & Fidelity",
+                  "Other Contract",
+                  "Other Document",
+                  "Payment Details",
+                  "License PDF",
+                  "Proof of Incorporation",
+                  "Certificate of Good Standing",
+                  "Annual Report Filing",
+                  "Registered Agent Info",
+                  "Foreign Qualification Certificate"
+                ]
+              }
+            },
+            {
+              "name": "subCategory",
+              "required": false,
+              "in": "query",
+              "description": "Filter Producer Agreement documents by type (instance or template)",
+              "schema": {
+                "example": "template",
+                "type": "string",
+                "enum": [
+                  "instance",
+                  "template"
+                ]
+              }
+            },
+            {
+              "name": "isDeleted",
+              "required": false,
+              "in": "query",
+              "description": "Filter documents by their soft-deletion status",
+              "schema": {
+                "example": false,
+                "type": "boolean"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "List of file documents",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "data": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/FileDocumentResponse"
+                        }
+                      },
+                      "requestId": {
+                        "type": "string",
+                        "description": "Unique request identifier",
+                        "example": "dev-2c5e7cf2-9acf-4c8c-ab2f-b81f39d775a8"
+                      },
+                      "timestamp": {
+                        "type": "string",
+                        "description": "Response timestamp",
+                        "example": "2025-11-12T20:49:03.293Z"
+                      }
+                    },
+                    "required": [
+                      "data",
+                      "requestId",
+                      "timestamp"
+                    ]
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Invalid or missing auth token",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponseDto"
+                  }
+                }
+              }
+            }
+          },
+          "tags": [
+            "file-documents"
+          ]
+        },
+        "post": {
+          "operationId": "FileDocumentFeatureController_uploadNewDocument_v1",
+          "parameters": [],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "multipart/form-data": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "file",
+                    "downstreamEntityId",
+                    "category"
+                  ],
+                  "properties": {
+                    "file": {
+                      "type": "string",
+                      "format": "binary",
+                      "description": "PDF file to upload"
+                    },
+                    "downstreamEntityId": {
+                      "type": "string"
+                    },
+                    "category": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Document uploaded successfully",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "data": {
+                        "$ref": "#/components/schemas/FileDocumentResponse"
+                      },
+                      "requestId": {
+                        "type": "string",
+                        "description": "Unique request identifier",
+                        "example": "dev-2c5e7cf2-9acf-4c8c-ab2f-b81f39d775a8"
+                      },
+                      "timestamp": {
+                        "type": "string",
+                        "description": "Response timestamp",
+                        "example": "2025-11-12T20:49:03.293Z"
+                      }
+                    },
+                    "required": [
+                      "data",
+                      "requestId",
+                      "timestamp"
+                    ]
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid file or missing required fields",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponseDto"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Invalid or missing auth token",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponseDto"
+                  }
+                }
+              }
+            }
+          },
+          "tags": [
+            "file-documents"
+          ]
+        }
+      },
+      "/v1/heartbeat": {
+        "get": {
+          "operationId": "HeartbeatController_heartbeat_v1",
+          "parameters": [],
+          "responses": {
+            "200": {
+              "description": "API health check response",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "data": {
+                        "$ref": "#/components/schemas/HeartbeatResponse"
+                      },
+                      "requestId": {
+                        "type": "string",
+                        "description": "Unique request identifier",
+                        "example": "dev-2c5e7cf2-9acf-4c8c-ab2f-b81f39d775a8"
+                      },
+                      "timestamp": {
+                        "type": "string",
+                        "description": "Response timestamp",
+                        "example": "2025-11-12T20:49:03.293Z"
+                      }
+                    },
+                    "required": [
+                      "data",
+                      "requestId",
+                      "timestamp"
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "tags": [
+            "heartbeat"
+          ]
+        }
+      },
+      "/v1/agents/{agentId}/license-compliance-statuses": {
+        "get": {
+          "operationId": "AgentsLicenseComplianceController_getAgentComplianceStatuses_v1",
+          "parameters": [
+            {
+              "name": "agentId",
+              "required": true,
+              "in": "path",
+              "description": "Agent ID",
+              "schema": {
+                "example": "507f1f77bcf86cd799439011",
+                "type": "string"
+              }
+            },
+            {
+              "name": "stateCode",
+              "required": true,
+              "in": "query",
+              "description": "State code (two-letter abbreviation)",
+              "schema": {
+                "example": "CA",
+                "type": "string"
+              }
+            },
+            {
+              "name": "productId",
+              "required": true,
+              "in": "query",
+              "description": "Product ID",
+              "schema": {
+                "example": "6098a7f8c9e77c001f3c5a1b",
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Agent license compliance statuses",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "data": {
+                        "$ref": "#/components/schemas/LicenseComplianceDashboardResponse"
+                      },
+                      "requestId": {
+                        "type": "string",
+                        "description": "Unique request identifier",
+                        "example": "dev-2c5e7cf2-9acf-4c8c-ab2f-b81f39d775a8"
+                      },
+                      "timestamp": {
+                        "type": "string",
+                        "description": "Response timestamp",
+                        "example": "2025-11-12T20:49:03.293Z"
+                      }
+                    },
+                    "required": [
+                      "data",
+                      "requestId",
+                      "timestamp"
+                    ]
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Invalid or missing auth token",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponseDto"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Agent not found",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponseDto"
+                  }
+                }
+              }
+            }
+          },
+          "tags": [
+            "agents-license-compliance"
+          ]
+        }
+      },
+      "/v1/downstream-entity-associations/{downstreamEntityAssociationId}/license-compliance-statuses": {
+        "get": {
+          "operationId": "DownstreamEntitiesLicenseComplianceController_getDownstreamEntityCompliance_v1",
+          "parameters": [
+            {
+              "name": "downstreamEntityAssociationId",
+              "required": true,
+              "in": "path",
+              "description": "Downstream entity association ID",
+              "schema": {
+                "example": "507f1f77bcf86cd799439011",
+                "type": "string"
+              }
+            },
+            {
+              "name": "stateCode",
+              "required": true,
+              "in": "query",
+              "description": "State code (two-letter abbreviation)",
+              "schema": {
+                "example": "CA",
+                "type": "string"
+              }
+            },
+            {
+              "name": "productId",
+              "required": true,
+              "in": "query",
+              "description": "Product ID",
+              "schema": {
+                "example": "6098a7f8c9e77c001f3c5a1b",
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Downstream entity license compliance statuses",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "data": {
+                        "$ref": "#/components/schemas/LicenseComplianceDashboardResponse"
+                      },
+                      "requestId": {
+                        "type": "string",
+                        "description": "Unique request identifier",
+                        "example": "dev-2c5e7cf2-9acf-4c8c-ab2f-b81f39d775a8"
+                      },
+                      "timestamp": {
+                        "type": "string",
+                        "description": "Response timestamp",
+                        "example": "2025-11-12T20:49:03.293Z"
+                      }
+                    },
+                    "required": [
+                      "data",
+                      "requestId",
+                      "timestamp"
+                    ]
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Invalid or missing auth token",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponseDto"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Downstream entity association not found",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponseDto"
+                  }
+                }
+              }
+            }
+          },
+          "tags": [
+            "downstream-entity-associations"
+          ]
+        }
+      },
+      "/v1/agents/{agentId}/licenses": {
+        "get": {
+          "operationId": "AgentLicensesController_getAgentActiveLicenses_v1",
+          "parameters": [
+            {
+              "name": "agentId",
+              "required": true,
+              "in": "path",
+              "description": "Agent ID",
+              "schema": {
+                "example": "507f1f77bcf86cd799439011",
+                "type": "string"
+              }
+            },
+            {
+              "name": "stateCode",
+              "required": false,
+              "in": "query",
+              "description": "State code (two-letter abbreviation)",
+              "schema": {
+                "example": "FL",
+                "type": "string"
+              }
+            },
+            {
+              "name": "status",
+              "required": false,
+              "in": "query",
+              "description": "Filter for the license status",
+              "schema": {
+                "example": "active",
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "List of agent licenses",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "data": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/LicenseResponse"
+                        }
+                      },
+                      "requestId": {
+                        "type": "string",
+                        "description": "Unique request identifier",
+                        "example": "dev-2c5e7cf2-9acf-4c8c-ab2f-b81f39d775a8"
+                      },
+                      "timestamp": {
+                        "type": "string",
+                        "description": "Response timestamp",
+                        "example": "2025-11-12T20:49:03.293Z"
+                      }
+                    },
+                    "required": [
+                      "data",
+                      "requestId",
+                      "timestamp"
+                    ]
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Invalid or missing auth token",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponseDto"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Agent not found",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponseDto"
+                  }
+                }
+              }
+            }
+          },
+          "tags": [
+            "agents"
+          ]
+        }
+      },
+      "/v1/downstream-entity-associations/{downstreamEntityAssociationId}/licenses": {
+        "get": {
+          "operationId": "DownstreamEntityLicensesController_getDownstreamEntityActiveLicenses_v1",
+          "parameters": [
+            {
+              "name": "downstreamEntityAssociationId",
+              "required": true,
+              "in": "path",
+              "description": "Downstream entity association ID",
+              "schema": {
+                "example": "507f1f77bcf86cd799439011",
+                "type": "string"
+              }
+            },
+            {
+              "name": "stateCode",
+              "required": false,
+              "in": "query",
+              "description": "State code (two-letter abbreviation)",
+              "schema": {
+                "example": "FL",
+                "type": "string"
+              }
+            },
+            {
+              "name": "status",
+              "required": false,
+              "in": "query",
+              "description": "Filter for the license status",
+              "schema": {
+                "example": "active",
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "List of downstream entity licenses",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "data": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/LicenseResponse"
+                        }
+                      },
+                      "requestId": {
+                        "type": "string",
+                        "description": "Unique request identifier",
+                        "example": "dev-2c5e7cf2-9acf-4c8c-ab2f-b81f39d775a8"
+                      },
+                      "timestamp": {
+                        "type": "string",
+                        "description": "Response timestamp",
+                        "example": "2025-11-12T20:49:03.293Z"
+                      }
+                    },
+                    "required": [
+                      "data",
+                      "requestId",
+                      "timestamp"
+                    ]
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Invalid or missing auth token",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponseDto"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Downstream entity association not found",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponseDto"
+                  }
+                }
+              }
+            }
+          },
+          "tags": [
+            "downstream-entity-associations"
+          ]
+        }
+      },
+      "/v1/downstream-entity-associations/licenses/surplus-lines": {
+        "get": {
+          "operationId": "DownstreamEntityLicensesController_getSurplusLinesLicenses_v1",
+          "parameters": [
+            {
+              "name": "fein",
+              "required": true,
+              "in": "query",
+              "description": "Federal Employer Identification Number (FEIN) of the agency. Can be provided with or without hyphen (e.g., \"12-3456789\" or \"123456789\")",
+              "schema": {
+                "example": "12-3456789",
+                "type": "string"
+              }
+            },
+            {
+              "name": "stateCode",
+              "required": true,
+              "in": "query",
+              "description": "State code (two-letter abbreviation)",
+              "schema": {
+                "example": "FL",
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Surplus lines licenses by FEIN and state",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "data": {
+                        "$ref": "#/components/schemas/SurplusLinesResponse"
+                      },
+                      "requestId": {
+                        "type": "string",
+                        "description": "Unique request identifier",
+                        "example": "dev-2c5e7cf2-9acf-4c8c-ab2f-b81f39d775a8"
+                      },
+                      "timestamp": {
+                        "type": "string",
+                        "description": "Response timestamp",
+                        "example": "2025-11-12T20:49:03.293Z"
+                      }
+                    },
+                    "required": [
+                      "data",
+                      "requestId",
+                      "timestamp"
+                    ]
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Invalid or missing auth token",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponseDto"
+                  }
+                }
+              }
+            }
+          },
+          "tags": [
+            "downstream-entity-associations"
+          ]
+        }
+      },
+      "/v1/downstream-entity-associations/licenses/dangerously-surplus-lines": {
+        "get": {
+          "deprecated": true,
+          "operationId": "DownstreamEntityLicensesController_dangerouslyGetSurplusLinesLicenses_v1",
+          "parameters": [
+            {
+              "name": "fein",
+              "required": true,
+              "in": "query",
+              "description": "Federal Employer Identification Number (FEIN) of the agency. Can be provided with or without hyphen (e.g., \"12-3456789\" or \"123456789\")",
+              "schema": {
+                "example": "12-3456789",
+                "type": "string"
+              }
+            },
+            {
+              "name": "stateCode",
+              "required": true,
+              "in": "query",
+              "description": "State code (two-letter abbreviation)",
+              "schema": {
+                "example": "FL",
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Surplus lines licenses by FEIN and state (deprecated)",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "data": {
+                        "$ref": "#/components/schemas/SurplusLinesResponse"
+                      },
+                      "requestId": {
+                        "type": "string",
+                        "description": "Unique request identifier",
+                        "example": "dev-2c5e7cf2-9acf-4c8c-ab2f-b81f39d775a8"
+                      },
+                      "timestamp": {
+                        "type": "string",
+                        "description": "Response timestamp",
+                        "example": "2025-11-12T20:49:03.293Z"
+                      }
+                    },
+                    "required": [
+                      "data",
+                      "requestId",
+                      "timestamp"
+                    ]
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Invalid or missing auth token",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponseDto"
+                  }
+                }
+              }
+            }
+          },
+          "summary": "",
+          "tags": [
+            "downstream-entity-associations"
+          ]
+        }
+      },
+      "/v1/agents/{agentId}/regulatory-actions": {
+        "get": {
+          "operationId": "AgentRegulatoryActionsController_getAgentRegulatoryActions_v1",
+          "parameters": [
+            {
+              "name": "agentId",
+              "required": true,
+              "in": "path",
+              "description": "The unique identifier of the agent",
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "List of agent regulatory actions",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "data": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/RegulatoryActionResponse"
+                        }
+                      },
+                      "requestId": {
+                        "type": "string",
+                        "description": "Unique request identifier",
+                        "example": "dev-2c5e7cf2-9acf-4c8c-ab2f-b81f39d775a8"
+                      },
+                      "timestamp": {
+                        "type": "string",
+                        "description": "Response timestamp",
+                        "example": "2025-11-12T20:49:03.293Z"
+                      }
+                    },
+                    "required": [
+                      "data",
+                      "requestId",
+                      "timestamp"
+                    ]
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Invalid or missing auth token",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponseDto"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Agent not found",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponseDto"
+                  }
+                }
+              }
+            }
+          },
+          "tags": [
+            "agents"
+          ]
+        }
+      },
+      "/v1/downstream-entity-associations/{downstreamEntityAssociationId}/regulatory-actions": {
+        "get": {
+          "operationId": "DownstreamEntityRegulatoryActionsController_getDownstreamAssociationRegulatoryActions_v1",
+          "parameters": [
+            {
+              "name": "downstreamEntityAssociationId",
+              "required": true,
+              "in": "path",
+              "description": "Associated downstream entity ID",
+              "schema": {
+                "example": "507f1f77bcf86cd799439011",
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "List of downstream entity regulatory actions",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "data": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/RegulatoryActionResponse"
+                        }
+                      },
+                      "requestId": {
+                        "type": "string",
+                        "description": "Unique request identifier",
+                        "example": "dev-2c5e7cf2-9acf-4c8c-ab2f-b81f39d775a8"
+                      },
+                      "timestamp": {
+                        "type": "string",
+                        "description": "Response timestamp",
+                        "example": "2025-11-12T20:49:03.293Z"
+                      }
+                    },
+                    "required": [
+                      "data",
+                      "requestId",
+                      "timestamp"
+                    ]
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Invalid or missing auth token",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponseDto"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Downstream entity association not found",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponseDto"
+                  }
+                }
+              }
+            }
+          },
+          "tags": [
+            "downstream-entity-associations"
+          ]
+        }
+      },
+      "/v1/products": {
+        "get": {
+          "operationId": "ProductsController_getAllProducts_v1",
+          "parameters": [],
+          "responses": {
+            "200": {
+              "description": "List of products",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "data": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/ProductResponse"
+                        }
+                      },
+                      "requestId": {
+                        "type": "string",
+                        "description": "Unique request identifier",
+                        "example": "dev-2c5e7cf2-9acf-4c8c-ab2f-b81f39d775a8"
+                      },
+                      "timestamp": {
+                        "type": "string",
+                        "description": "Response timestamp",
+                        "example": "2025-11-12T20:49:03.293Z"
+                      }
+                    },
+                    "required": [
+                      "data",
+                      "requestId",
+                      "timestamp"
+                    ]
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Invalid or missing auth token",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponseDto"
+                  }
+                }
+              }
+            }
+          },
+          "tags": [
+            "products"
+          ]
+        }
+      },
+      "/v1/products/{productId}": {
+        "get": {
+          "operationId": "ProductsController_getProduct_v1",
+          "parameters": [
+            {
+              "name": "productId",
+              "required": true,
+              "in": "path",
+              "description": "Product ID",
+              "schema": {
+                "example": "507f1f77bcf86cd799439011",
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Product details",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "data": {
+                        "$ref": "#/components/schemas/ProductResponse"
+                      },
+                      "requestId": {
+                        "type": "string",
+                        "description": "Unique request identifier",
+                        "example": "dev-2c5e7cf2-9acf-4c8c-ab2f-b81f39d775a8"
+                      },
+                      "timestamp": {
+                        "type": "string",
+                        "description": "Response timestamp",
+                        "example": "2025-11-12T20:49:03.293Z"
+                      }
+                    },
+                    "required": [
+                      "data",
+                      "requestId",
+                      "timestamp"
+                    ]
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Invalid or missing auth token",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponseDto"
+                  }
+                }
+              }
+            }
+          },
+          "tags": [
+            "products"
+          ]
+        }
+      }
+    },
+    "info": {
+      "title": "Turris Public API",
+      "description": "API for managing insurance compliance data",
+      "version": "1.0.0",
+      "contact": {}
+    },
+    "tags": [],
+    "servers": [
+      {
+        "url": "https://public.api.live.turrisfi.com",
+        "description": "Production"
+      },
+      {
+        "url": "https://public.api.sandbox.turrisfi.com",
+        "description": "Sandbox"
+      }
+    ],
+    "components": {
+      "securitySchemes": {
+        "bearer": {
+          "scheme": "bearer",
+          "bearerFormat": "JWT",
+          "type": "http"
+        },
+        "restricted-access-token": {
+          "type": "apiKey",
+          "in": "header",
+          "name": "x-restricted-access-token",
+          "description": "Alternative authentication: Restricted access token (if not using Bearer token)"
+        }
+      },
+      "schemas": {
+        "AgentAppointmentResponse": {
+          "type": "object",
+          "properties": {
+            "niprDataSubscriptionId": {
+              "type": "string",
+              "description": "NIPR data subscription ID"
+            },
+            "stateCode": {
+              "type": "string",
+              "description": "Two-letter state code",
+              "example": "AL"
+            },
+            "carrierName": {
+              "type": "string",
+              "description": "Carrier name"
+            },
+            "ein": {
+              "type": "string",
+              "description": "Employer Identification Number"
+            },
+            "companyCode": {
+              "type": "string",
+              "description": "Company code"
+            },
+            "lineOfAuthorityName": {
+              "type": "string",
+              "description": "Line of authority name"
+            },
+            "lineOfAuthorityCode": {
+              "type": "string",
+              "description": "Line of authority code"
+            },
+            "status": {
+              "type": "string",
+              "description": "Appointment status",
+              "example": "active"
+            },
+            "terminationReason": {
+              "type": "string",
+              "description": "Termination reason"
+            },
+            "statusChangeDate": {
+              "format": "date-time",
+              "type": "string",
+              "description": "Status change date"
+            },
+            "renewalDate": {
+              "format": "date-time",
+              "type": "string",
+              "description": "Renewal date"
+            },
+            "npn": {
+              "type": "string",
+              "description": "National Producer Number"
+            },
+            "appointerStateCoId": {
+              "type": "string",
+              "description": "Appointer state company ID"
+            },
+            "countyName": {
+              "type": "string",
+              "description": "County name"
+            },
+            "updatedAt": {
+              "format": "date-time",
+              "type": "string",
+              "description": "Last update timestamp"
+            },
+            "agentId": {
+              "type": "string",
+              "description": "Agent ID"
+            }
+          },
+          "required": [
+            "niprDataSubscriptionId",
+            "stateCode",
+            "carrierName",
+            "ein",
+            "companyCode",
+            "lineOfAuthorityName",
+            "lineOfAuthorityCode",
+            "status",
+            "npn",
+            "agentId"
+          ]
+        },
+        "ErrorResponseDto": {
+          "type": "object",
+          "properties": {
+            "statusCode": {
+              "type": "number",
+              "description": "HTTP status code"
+            },
+            "requestId": {
+              "type": "string",
+              "description": "Unique request identifier for debugging"
+            },
+            "errorType": {
+              "type": "string",
+              "description": "Error type classification"
+            },
+            "errorMessage": {
+              "description": "Array of error messages",
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "timestamp": {
+              "type": "string",
+              "description": "ISO timestamp when the error occurred"
+            }
+          },
+          "required": [
+            "statusCode",
+            "requestId",
+            "errorType",
+            "errorMessage",
+            "timestamp"
+          ]
+        },
+        "DownstreamEntityAppointmentResponse": {
+          "type": "object",
+          "properties": {
+            "niprDataSubscriptionId": {
+              "type": "string",
+              "description": "NIPR data subscription ID"
+            },
+            "stateCode": {
+              "type": "string",
+              "description": "Two-letter state code",
+              "example": "AL"
+            },
+            "carrierName": {
+              "type": "string",
+              "description": "Carrier name"
+            },
+            "ein": {
+              "type": "string",
+              "description": "Employer Identification Number"
+            },
+            "companyCode": {
+              "type": "string",
+              "description": "Company code"
+            },
+            "lineOfAuthorityName": {
+              "type": "string",
+              "description": "Line of authority name"
+            },
+            "lineOfAuthorityCode": {
+              "type": "string",
+              "description": "Line of authority code"
+            },
+            "status": {
+              "type": "string",
+              "description": "Appointment status",
+              "example": "active"
+            },
+            "terminationReason": {
+              "type": "string",
+              "description": "Termination reason"
+            },
+            "statusChangeDate": {
+              "format": "date-time",
+              "type": "string",
+              "description": "Status change date"
+            },
+            "renewalDate": {
+              "format": "date-time",
+              "type": "string",
+              "description": "Renewal date"
+            },
+            "npn": {
+              "type": "string",
+              "description": "National Producer Number"
+            },
+            "appointerStateCoId": {
+              "type": "string",
+              "description": "Appointer state company ID"
+            },
+            "countyName": {
+              "type": "string",
+              "description": "County name"
+            },
+            "updatedAt": {
+              "format": "date-time",
+              "type": "string",
+              "description": "Last update timestamp"
+            },
+            "downstreamEntityId": {
+              "type": "string",
+              "description": "Downstream entity ID"
+            }
+          },
+          "required": [
+            "niprDataSubscriptionId",
+            "stateCode",
+            "carrierName",
+            "ein",
+            "companyCode",
+            "lineOfAuthorityName",
+            "lineOfAuthorityCode",
+            "status",
+            "npn",
+            "downstreamEntityId"
+          ]
+        },
+        "AgentData": {
+          "type": "object",
+          "properties": {
+            "_id": {
+              "type": "string",
+              "description": "Unique identifier of the agent"
+            },
+            "npn": {
+              "type": "string",
+              "description": "National Producer Number"
+            },
+            "firstName": {
+              "type": "string",
+              "description": "Agent first name"
+            },
+            "lastName": {
+              "type": "string",
+              "description": "Agent last name"
+            },
+            "downstreamEntityAgentAssociationIds": {
+              "description": "IDs of downstream entity agent associations this agent belongs to",
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "createdAt": {
+              "type": "string",
+              "description": "Timestamp when the agent was created"
+            },
+            "updatedAt": {
+              "type": "string",
+              "description": "Timestamp when the agent was last updated"
+            }
+          },
+          "required": [
+            "_id",
+            "npn",
+            "firstName",
+            "lastName",
+            "downstreamEntityAgentAssociationIds",
+            "createdAt",
+            "updatedAt"
+          ]
+        },
+        "NiprEntityInfoResponse": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "type": "string",
+              "description": "Status of the NIPR entity info request"
+            },
+            "jobId": {
+              "type": "string",
+              "description": "Job ID for the NIPR request"
+            },
+            "message": {
+              "type": "string",
+              "description": "Message from the NIPR request"
+            },
+            "rawEntityInfoId": {
+              "type": "string",
+              "description": "Raw entity info ID"
+            }
+          },
+          "required": [
+            "status"
+          ]
+        },
+        "ComplianceDataSubscriptionResponse": {
+          "type": "object",
+          "properties": {
+            "dataOwnerId": {
+              "type": "string",
+              "description": "Data owner ID"
+            },
+            "dataOwnerModel": {
+              "type": "string",
+              "description": "Data owner model type"
+            },
+            "entityId": {
+              "type": "string",
+              "description": "Entity ID associated with the NIPR data"
+            },
+            "entityModel": {
+              "type": "string",
+              "description": "Entity model type"
+            },
+            "npn": {
+              "type": "string",
+              "description": "National Producer Number"
+            },
+            "entityInfo": {
+              "description": "NIPR entity info details",
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/NiprEntityInfoResponse"
+                }
+              ]
+            },
+            "lastSynchronizationDate": {
+              "format": "date-time",
+              "type": "string",
+              "description": "Last synchronization date"
+            },
+            "pdbAlertsSubscriptionStatus": {
+              "type": "string",
+              "description": "PDB Alerts subscription status"
+            },
+            "pdbAlertsPausedAt": {
+              "format": "date-time",
+              "type": "string",
+              "description": "Date when PDB Alerts was paused"
+            }
+          },
+          "required": [
+            "dataOwnerId",
+            "dataOwnerModel",
+            "entityId",
+            "entityModel",
+            "entityInfo"
+          ]
+        },
+        "AuthorityResponse": {
+          "type": "object",
+          "properties": {
+            "upstreamEntityProductId": {
+              "type": "string",
+              "description": "Upstream entity product ID"
+            },
+            "requestedStates": {
+              "description": "States requested for this product",
+              "example": [
+                "CA",
+                "TX",
+                "NY"
+              ],
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "approvedStates": {
+              "description": "States approved for this product",
+              "example": [
+                "CA",
+                "TX"
+              ],
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "upstreamEntityProductId",
+            "requestedStates",
+            "approvedStates"
+          ]
+        },
+        "AgentEntryResponse": {
+          "type": "object",
+          "properties": {
+            "agent": {
+              "description": "Agent details",
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/AgentData"
+                }
+              ]
+            },
+            "onboardingCategory": {
+              "type": "string",
+              "description": "How the agent was onboarded",
+              "example": "addition"
+            },
+            "niprDataSubscription": {
+              "description": "NIPR data subscription for this agent",
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/ComplianceDataSubscriptionResponse"
+                }
+              ]
+            },
+            "isUploadedByUpstreamEntity": {
+              "type": "boolean",
+              "description": "Whether the agent was uploaded by the upstream entity"
+            },
+            "isDeleted": {
+              "type": "boolean",
+              "description": "Whether the agent entry is soft-deleted"
+            },
+            "authority": {
+              "description": "Authority settings for this agent per product",
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/AuthorityResponse"
+              }
+            },
+            "email": {
+              "type": "string",
+              "description": "Agent email address"
+            },
+            "isDeliverable": {
+              "type": "boolean",
+              "description": "Whether the email is deliverable"
+            },
+            "externalId": {
+              "type": "string",
+              "description": "External identifier for the agent"
+            }
+          },
+          "required": [
+            "agent",
+            "onboardingCategory",
+            "niprDataSubscription",
+            "isUploadedByUpstreamEntity",
+            "isDeleted",
+            "authority"
+          ]
+        },
+        "CreateAgentDto": {
+          "type": "object",
+          "properties": {
+            "npn": {
+              "type": "string",
+              "description": "National Producer Number (NPN) of the agent",
+              "example": "12345678"
+            },
+            "email": {
+              "type": "string",
+              "description": "Email address of the agent",
+              "example": "agent@example.com"
+            },
+            "downstreamEntityAssociationId": {
+              "type": "string",
+              "description": "MongoDB ID of the downstream entity association",
+              "example": "507f1f77bcf86cd799439012"
+            }
+          },
+          "required": [
+            "npn"
+          ]
+        },
+        "PopulatedDownstreamEntityResponse": {
+          "type": "object",
+          "properties": {
+            "_id": {
+              "type": "string",
+              "description": "Downstream entity ID"
+            },
+            "isNpnRequired": {
+              "type": "boolean",
+              "description": "Whether NPN is required for this downstream entity"
+            },
+            "legalName": {
+              "type": "string",
+              "description": "Legal name of the downstream entity"
+            },
+            "category": {
+              "type": "string",
+              "description": "Category of the downstream entity"
+            },
+            "npn": {
+              "type": "string",
+              "description": "National Producer Number"
+            },
+            "ein": {
+              "type": "string",
+              "description": "Employer Identification Number"
+            }
+          },
+          "required": [
+            "_id",
+            "isNpnRequired",
+            "legalName",
+            "category",
+            "npn",
+            "ein"
+          ]
+        },
+        "DownstreamEntityAssociationResponseDto": {
+          "type": "object",
+          "properties": {
+            "_id": {
+              "type": "string",
+              "description": "Association ID"
+            },
+            "producerCode": {
+              "type": "string",
+              "description": "Producer code"
+            },
+            "externalId": {
+              "type": "string",
+              "description": "External ID"
+            },
+            "downstreamEntity": {
+              "description": "Downstream entity details",
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/PopulatedDownstreamEntityResponse"
+                }
+              ]
+            },
+            "niprDataSubscription": {
+              "description": "NIPR data subscription for this association",
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/ComplianceDataSubscriptionResponse"
+                }
+              ]
+            }
+          },
+          "required": [
+            "_id",
+            "downstreamEntity",
+            "niprDataSubscription"
+          ]
+        },
+        "SignInUrlResponse": {
+          "type": "object",
+          "properties": {
+            "signInUrl": {
+              "type": "string",
+              "description": "Sign-in URL with pre-filled parameters"
+            }
+          },
+          "required": [
+            "signInUrl"
+          ]
+        },
+        "InviteDownstreamEntityResponse": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "description": "Invitation URL (when useInviteUrl is true)"
+            }
+          }
+        },
+        "OnboardingSettingsDto": {
+          "type": "object",
+          "properties": {
+            "isCyberPolicyOptional": {
+              "type": "boolean",
+              "description": "Whether cyber policy is optional during onboarding",
+              "example": false
+            },
+            "isRequestedAuthorityStepUsed": {
+              "type": "boolean",
+              "description": "Whether requested authority step is used",
+              "example": true
+            },
+            "isPaymentDetailsStepUsed": {
+              "type": "boolean",
+              "description": "Whether payment details step is used",
+              "example": false
+            },
+            "isCustomOnboardingStepUsed": {
+              "type": "boolean",
+              "description": "Whether custom onboarding step is used",
+              "example": false
+            },
+            "isPreContractReviewStepUsed": {
+              "type": "boolean",
+              "description": "Whether pre-contract review step is used",
+              "example": true
+            }
+          },
+          "required": [
+            "isCyberPolicyOptional",
+            "isRequestedAuthorityStepUsed",
+            "isPaymentDetailsStepUsed",
+            "isCustomOnboardingStepUsed",
+            "isPreContractReviewStepUsed"
+          ]
+        },
+        "InviteDownstreamEntityDto": {
+          "type": "object",
+          "properties": {
+            "useInviteUrl": {
+              "type": "boolean",
+              "description": "If true, returns an invite URL instead of sending an email",
+              "example": false
+            },
+            "isNpnRequired": {
+              "type": "boolean",
+              "description": "Whether NPN is required for this downstream entity",
+              "example": true
+            },
+            "downstreamEntityName": {
+              "type": "string",
+              "description": "Name of the downstream entity",
+              "example": "ABC Insurance Agency"
+            },
+            "firstName": {
+              "type": "string",
+              "description": "First name of the primary contact",
+              "example": "John"
+            },
+            "lastName": {
+              "type": "string",
+              "description": "Last name of the primary contact",
+              "example": "Doe"
+            },
+            "email": {
+              "type": "string",
+              "description": "Email address of the primary contact",
+              "example": "john.doe@example.com"
+            },
+            "category": {
+              "type": "string",
+              "description": "Category of the downstream entity",
+              "enum": [
+                "agency",
+                "agency network",
+                "wholesale brokerage",
+                "third party administrator"
+              ],
+              "example": "agency"
+            },
+            "producerCode": {
+              "type": "string",
+              "description": "Producer code for this downstream entity",
+              "example": "PROD-001"
+            },
+            "externalId": {
+              "type": "string",
+              "description": "External identifier for integration purposes",
+              "example": "EXT-12345"
+            },
+            "producerAgreementId": {
+              "type": "string",
+              "description": "Producer agreement ID to associate with this invitation",
+              "example": "507f1f77bcf86cd799439011"
+            },
+            "onboardingSettings": {
+              "description": "Onboarding settings to customize the onboarding flow",
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/OnboardingSettingsDto"
+                }
+              ]
+            },
+            "parentProducerCode": {
+              "type": "string",
+              "description": "Producer code of the parent entity (for branch relationships)",
+              "example": "PARENT-001"
+            },
+            "customFields": {
+              "type": "object",
+              "description": "Custom fields for additional data",
+              "example": {
+                "customField1": "value1",
+                "customField2": 123
+              }
+            }
+          },
+          "required": [
+            "useInviteUrl",
+            "isNpnRequired",
+            "downstreamEntityName",
+            "firstName",
+            "lastName",
+            "email",
+            "category"
+          ]
+        },
+        "AddDownstreamEntityDto": {
+          "type": "object",
+          "properties": {
+            "downstreamEntityNpn": {
+              "type": "string",
+              "description": "National Producer Number (NPN) of the downstream entity. Required when isNpnRequired is true.",
+              "example": "12345678"
+            },
+            "branchName": {
+              "type": "string",
+              "description": "Branch name. Required when parentProducerCode is provided.",
+              "example": "West Coast Branch"
+            },
+            "downstreamEntityName": {
+              "type": "string",
+              "description": "Name of the downstream entity. Required when NPN is not provided.",
+              "example": "ABC Insurance Agency"
+            },
+            "firstName": {
+              "type": "string",
+              "description": "First name of the primary contact",
+              "example": "John"
+            },
+            "lastName": {
+              "type": "string",
+              "description": "Last name of the primary contact",
+              "example": "Doe"
+            },
+            "email": {
+              "type": "string",
+              "description": "Email address of the primary contact",
+              "example": "john.doe@example.com"
+            },
+            "producerCode": {
+              "type": "string",
+              "description": "Producer code for this downstream entity",
+              "example": "PROD-001"
+            },
+            "externalId": {
+              "type": "string",
+              "description": "External identifier for integration purposes",
+              "example": "EXT-12345"
+            },
+            "parentProducerCode": {
+              "type": "string",
+              "description": "Producer code of the parent entity (for branch relationships)",
+              "example": "PARENT-001"
+            },
+            "parentDownstreamEntityAssociationId": {
+              "type": "string",
+              "description": "Parent downstream entity association ID (for branch relationships)",
+              "example": "507f1f77bcf86cd799439011"
+            },
+            "ein": {
+              "type": "string",
+              "description": "Federal Employer Identification Number (EIN/FEIN)",
+              "example": "12-3456789"
+            },
+            "isNpnRequired": {
+              "type": "boolean",
+              "description": "Whether NPN is required for this downstream entity",
+              "example": true
+            },
+            "category": {
+              "type": "string",
+              "description": "Category of the downstream entity",
+              "enum": [
+                "agency",
+                "agency network",
+                "wholesale brokerage",
+                "third party administrator"
+              ],
+              "example": "agency"
+            }
+          },
+          "required": [
+            "firstName",
+            "lastName",
+            "email",
+            "isNpnRequired",
+            "category"
+          ]
+        },
+        "GetTokenResponse": {
+          "type": "object",
+          "properties": {
+            "accessToken": {
+              "type": "string",
+              "description": "JWT access token",
+              "example": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9..."
+            },
+            "expiresIn": {
+              "type": "number",
+              "description": "Token expiration time in seconds",
+              "example": 3600
+            },
+            "tokenType": {
+              "type": "string",
+              "description": "Token type",
+              "example": "Bearer"
+            }
+          },
+          "required": [
+            "accessToken",
+            "expiresIn",
+            "tokenType"
+          ]
+        },
+        "GetTokenDto": {
+          "type": "object",
+          "properties": {
+            "clientId": {
+              "type": "string",
+              "description": "Your API client ID",
+              "example": "m2m-client-abc123"
+            },
+            "clientSecret": {
+              "type": "string",
+              "description": "Your API client secret",
+              "example": "your-client-secret"
+            }
+          },
+          "required": [
+            "clientId",
+            "clientSecret"
+          ]
+        },
+        "TestAuthResponse": {
+          "type": "object",
+          "properties": {
+            "message": {
+              "type": "string",
+              "description": "Confirmation message indicating the token is valid"
+            }
+          },
+          "required": [
+            "message"
+          ]
+        },
+        "PolicyAddressResponse": {
+          "type": "object",
+          "properties": {
+            "line1": {
+              "type": "string",
+              "description": "Address line 1"
+            },
+            "line2": {
+              "type": "string",
+              "description": "Address line 2"
+            },
+            "city": {
+              "type": "string",
+              "description": "City"
+            },
+            "state": {
+              "type": "string",
+              "description": "State"
+            },
+            "zip": {
+              "type": "string",
+              "description": "ZIP code"
+            },
+            "country": {
+              "type": "string",
+              "description": "Country",
+              "default": "USA"
+            }
+          },
+          "required": [
+            "country"
+          ]
+        },
+        "PolicyMetadataResponse": {
+          "type": "object",
+          "properties": {
+            "_id": {
+              "type": "string",
+              "description": "Policy document ID"
+            },
+            "primaryInsured": {
+              "type": "string",
+              "description": "Name of the primary insured"
+            },
+            "otherInsured": {
+              "description": "Names of other insured",
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "carrierName": {
+              "type": "string",
+              "description": "Name of the insurance carrier"
+            },
+            "effectiveDate": {
+              "format": "date-time",
+              "type": "string",
+              "description": "Date the policy is effective"
+            },
+            "expiryDate": {
+              "format": "date-time",
+              "type": "string",
+              "description": "Date the policy expires"
+            },
+            "aggregateCoverageInUSD": {
+              "type": "number",
+              "description": "Aggregate coverage amount in USD"
+            },
+            "coveragePerClaimInUSD": {
+              "type": "number",
+              "description": "Per claim coverage amount in USD"
+            },
+            "dataExtractionStatus": {
+              "type": "string",
+              "description": "Status of data extraction"
+            },
+            "policyNumber": {
+              "type": "string",
+              "description": "Policy number"
+            },
+            "address": {
+              "description": "Address of the policy",
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/PolicyAddressResponse"
+                }
+              ]
+            },
+            "receivedDate": {
+              "format": "date-time",
+              "type": "string",
+              "description": "Date the policy was received"
+            },
+            "collectionStatus": {
+              "type": "string",
+              "description": "Status of the collection"
+            },
+            "createdAt": {
+              "format": "date-time",
+              "type": "string",
+              "description": "Creation timestamp"
+            },
+            "updatedAt": {
+              "format": "date-time",
+              "type": "string",
+              "description": "Last update timestamp"
+            }
+          }
+        },
+        "PolicyComplianceResponse": {
+          "type": "object",
+          "properties": {
+            "eAndO": {
+              "description": "E&O policy metadata",
+              "nullable": true,
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/PolicyMetadataResponse"
+                }
+              ]
+            },
+            "cyber": {
+              "description": "Cyber policy metadata",
+              "nullable": true,
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/PolicyMetadataResponse"
+                }
+              ]
+            },
+            "downstreamEntityId": {
+              "type": "string",
+              "description": "Downstream entity ID"
+            },
+            "downstreamEntityName": {
+              "type": "string",
+              "description": "Downstream entity name"
+            },
+            "downstreamEntityNpn": {
+              "type": "string",
+              "description": "Downstream entity NPN"
+            }
+          },
+          "required": [
+            "eAndO",
+            "cyber",
+            "downstreamEntityId",
+            "downstreamEntityName",
+            "downstreamEntityNpn"
+          ]
+        },
+        "DocumentVersionResponse": {
+          "type": "object",
+          "properties": {
+            "s3VersionId": {
+              "type": "string",
+              "description": "S3 version ID"
+            },
+            "metadataModel": {
+              "type": "string",
+              "description": "Metadata model type"
+            },
+            "metadataId": {
+              "type": "string",
+              "description": "Metadata ID"
+            }
+          },
+          "required": [
+            "s3VersionId"
+          ]
+        },
+        "FileDocumentResponse": {
+          "type": "object",
+          "properties": {
+            "_id": {
+              "type": "string",
+              "description": "Document ID"
+            },
+            "category": {
+              "type": "string",
+              "description": "Document category"
+            },
+            "versions": {
+              "description": "Document versions",
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/DocumentVersionResponse"
+              }
+            },
+            "createdAt": {
+              "format": "date-time",
+              "type": "string",
+              "description": "Created date"
+            },
+            "updatedAt": {
+              "format": "date-time",
+              "type": "string",
+              "description": "Updated date"
+            }
+          },
+          "required": [
+            "_id",
+            "category"
+          ]
+        },
+        "HeartbeatResponse": {
+          "type": "object",
+          "properties": {
+            "message": {
+              "type": "string",
+              "description": "Status message indicating the API is healthy"
+            },
+            "statusCode": {
+              "type": "number",
+              "description": "HTTP status code"
+            }
+          },
+          "required": [
+            "message",
+            "statusCode"
+          ]
+        },
+        "StatusFieldsResponse": {
+          "type": "object",
+          "properties": {
+            "statusName": {
+              "type": "string",
+              "description": "Status name (e.g., compliant, non-compliant)"
+            },
+            "statusMessages": {
+              "description": "Status messages explaining the compliance state",
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "statusName",
+            "statusMessages"
+          ]
+        },
+        "StateStatusResponse": {
+          "type": "object",
+          "properties": {
+            "stateCode": {
+              "type": "string",
+              "description": "Two-letter state code",
+              "example": "AL"
+            },
+            "licenseStatus": {
+              "description": "License compliance status",
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/StatusFieldsResponse"
+                }
+              ]
+            },
+            "appointmentStatus": {
+              "description": "Appointment compliance status",
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/StatusFieldsResponse"
+                }
+              ]
+            }
+          },
+          "required": [
+            "stateCode"
+          ]
+        },
+        "LicenseComplianceDashboardResponse": {
+          "type": "object",
+          "properties": {
+            "productName": {
+              "type": "string",
+              "description": "Product name"
+            },
+            "states": {
+              "description": "Compliance statuses for each state",
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/StateStatusResponse"
+              }
+            }
+          },
+          "required": [
+            "productName",
+            "states"
+          ]
+        },
+        "LineOfAuthorityResponse": {
+          "type": "object",
+          "properties": {
+            "code": {
+              "type": "string",
+              "description": "Line of authority code"
+            },
+            "name": {
+              "type": "string",
+              "description": "Line of authority name"
+            },
+            "status": {
+              "type": "string",
+              "description": "Line of authority status"
+            }
+          },
+          "required": [
+            "code",
+            "name",
+            "status"
+          ]
+        },
+        "LicenseResponse": {
+          "type": "object",
+          "properties": {
+            "niprDataSubscriptionId": {
+              "type": "string",
+              "description": "NIPR data subscription ID"
+            },
+            "npn": {
+              "type": "string",
+              "description": "National Producer Number"
+            },
+            "stateCode": {
+              "type": "string",
+              "description": "Two-letter state code",
+              "example": "AL"
+            },
+            "licenseNumber": {
+              "type": "string",
+              "description": "License number"
+            },
+            "licenseClassCode": {
+              "type": "string",
+              "description": "License class code"
+            },
+            "licenseClassName": {
+              "type": "string",
+              "description": "License class name"
+            },
+            "status": {
+              "type": "string",
+              "description": "License status"
+            },
+            "residencyStatus": {
+              "type": "string",
+              "description": "Residency status"
+            },
+            "issueDate": {
+              "format": "date-time",
+              "type": "string",
+              "description": "Issue date"
+            },
+            "nextRenewalDate": {
+              "format": "date-time",
+              "type": "string",
+              "description": "Next renewal date"
+            },
+            "expirationDate": {
+              "format": "date-time",
+              "type": "string",
+              "description": "Expiration date"
+            },
+            "linesOfAuthority": {
+              "description": "Lines of authority",
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/LineOfAuthorityResponse"
+              }
+            },
+            "updatedAt": {
+              "format": "date-time",
+              "type": "string",
+              "description": "Last update timestamp"
+            }
+          },
+          "required": [
+            "niprDataSubscriptionId",
+            "npn",
+            "stateCode",
+            "licenseNumber",
+            "licenseClassCode",
+            "licenseClassName",
+            "status",
+            "residencyStatus"
+          ]
+        },
+        "SurplusLinesLicenseResponse": {
+          "type": "object",
+          "properties": {
+            "licenseNumber": {
+              "type": "string",
+              "description": "License number"
+            },
+            "licenseClassName": {
+              "type": "string",
+              "description": "License class name"
+            },
+            "licenseClassCode": {
+              "type": "string",
+              "description": "License class code"
+            },
+            "stateCode": {
+              "type": "string",
+              "description": "Two-letter state code",
+              "example": "AL"
+            },
+            "status": {
+              "type": "string",
+              "description": "License status"
+            },
+            "issueDate": {
+              "format": "date-time",
+              "type": "string",
+              "description": "Issue date"
+            },
+            "nextRenewalDate": {
+              "format": "date-time",
+              "type": "string",
+              "description": "Next renewal date"
+            },
+            "residencyStatus": {
+              "type": "string",
+              "description": "Residency status"
+            },
+            "linesOfAuthority": {
+              "description": "Lines of authority",
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/LineOfAuthorityResponse"
+              }
+            }
+          },
+          "required": [
+            "licenseNumber",
+            "licenseClassName",
+            "licenseClassCode",
+            "stateCode",
+            "status"
+          ]
+        },
+        "SurplusLinesResponse": {
+          "type": "object",
+          "properties": {
+            "agencyName": {
+              "type": "string",
+              "description": "Agency legal name"
+            },
+            "agencyNpn": {
+              "type": "string",
+              "description": "Agency NPN"
+            },
+            "agencyFein": {
+              "type": "string",
+              "description": "Agency FEIN"
+            },
+            "surplusLinesLicenses": {
+              "description": "Surplus lines licenses",
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/SurplusLinesLicenseResponse"
+              }
+            }
+          },
+          "required": [
+            "agencyName",
+            "agencyNpn",
+            "agencyFein",
+            "surplusLinesLicenses"
+          ]
+        },
+        "RegulatoryActionResponse": {
+          "type": "object",
+          "properties": {
+            "_id": {
+              "type": "string",
+              "description": "Regulatory action ID"
+            },
+            "niprDataSubscriptionId": {
+              "type": "string",
+              "description": "NIPR data subscription ID"
+            },
+            "npn": {
+              "type": "string",
+              "description": "National Producer Number"
+            },
+            "stateCode": {
+              "type": "string",
+              "description": "Two-letter state code",
+              "example": "AL"
+            },
+            "actionId": {
+              "type": "string",
+              "description": "Unique identifier for the regulatory action"
+            },
+            "originOfAction": {
+              "type": "string",
+              "description": "Source/trigger of the regulatory action"
+            },
+            "reasonForAction": {
+              "type": "string",
+              "description": "Specific reason why the action was taken"
+            },
+            "disposition": {
+              "type": "string",
+              "description": "Outcome or decision of the regulatory action"
+            },
+            "dateOfAction": {
+              "format": "date-time",
+              "type": "string",
+              "description": "Date when the regulatory action was taken"
+            },
+            "effectiveDate": {
+              "format": "date-time",
+              "type": "string",
+              "description": "Date when the regulatory action becomes effective"
+            },
+            "enterDate": {
+              "format": "date-time",
+              "type": "string",
+              "description": "Date when the action was entered into the system"
+            },
+            "fileRef": {
+              "type": "string",
+              "description": "Reference number for associated documentation"
+            },
+            "penaltyFineForfeitureInUSD": {
+              "type": "number",
+              "description": "Monetary penalty amount in US dollars",
+              "default": 0
+            },
+            "lengthOfOrderInDays": {
+              "type": "number",
+              "description": "Duration of the order in days",
+              "default": 0
+            },
+            "updatedAt": {
+              "format": "date-time",
+              "type": "string",
+              "description": "Last update timestamp"
+            },
+            "createdAt": {
+              "format": "date-time",
+              "type": "string",
+              "description": "Creation timestamp"
+            }
+          },
+          "required": [
+            "niprDataSubscriptionId",
+            "npn",
+            "stateCode",
+            "actionId",
+            "penaltyFineForfeitureInUSD",
+            "lengthOfOrderInDays"
+          ]
+        },
+        "ProductStateResponse": {
+          "type": "object",
+          "properties": {
+            "complianceRequirementId": {
+              "type": "string",
+              "description": "Compliance requirement ID"
+            },
+            "newBusinessCommissionPerCent": {
+              "type": "number",
+              "description": "New business commission percentage"
+            },
+            "renewalCommissionPerCent": {
+              "type": "number",
+              "description": "Renewal commission percentage"
+            }
+          },
+          "required": [
+            "complianceRequirementId",
+            "newBusinessCommissionPerCent",
+            "renewalCommissionPerCent"
+          ]
+        },
+        "ProductResponse": {
+          "type": "object",
+          "properties": {
+            "_id": {
+              "type": "string",
+              "description": "Product ID"
+            },
+            "upstreamEntityId": {
+              "type": "string",
+              "description": "Upstream entity ID that owns the product"
+            },
+            "name": {
+              "type": "string",
+              "description": "Product name"
+            },
+            "description": {
+              "type": "string",
+              "description": "Product description"
+            },
+            "newBusinessCommissionPerCent": {
+              "type": "number",
+              "description": "New business commission percentage"
+            },
+            "renewalCommissionPerCent": {
+              "type": "number",
+              "description": "Renewal commission percentage"
+            },
+            "carrierId": {
+              "type": "string",
+              "description": "Carrier ID that underwrites the product"
+            },
+            "filingNumber": {
+              "type": "string",
+              "description": "Filing number for the product"
+            },
+            "states": {
+              "description": "States where the product is available",
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ProductStateResponse"
+              }
+            },
+            "lineOfBusiness": {
+              "type": "string",
+              "description": "Line of business of the product"
+            },
+            "createdAt": {
+              "format": "date-time",
+              "type": "string",
+              "description": "Creation timestamp"
+            },
+            "updatedAt": {
+              "format": "date-time",
+              "type": "string",
+              "description": "Last update timestamp"
+            }
+          },
+          "required": [
+            "upstreamEntityId",
+            "name",
+            "description",
+            "newBusinessCommissionPerCent",
+            "renewalCommissionPerCent",
+            "carrierId",
+            "states"
+          ]
+        }
+      }
+    }
+  }
