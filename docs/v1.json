@@ -1320,6 +1320,7 @@
       "/v1/auth/test-oauth": {
         "get": {
           "operationId": "AuthController_testOauth_v1",
+          "summary": "Test OAuth",
           "parameters": [],
           "responses": {
             "200": {
