@@ -92,7 +92,9 @@
         "groups": [
           {
             "group": "API documentation",
-            "openapi": "v1.json"
+            "pages": [
+              "/api-reference/post-v1"
+            ]
           }
         ]
       }
