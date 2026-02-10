@@ -1,0 +1,2170 @@
+asyncapi: 3.0.0
+info:
+  title: SLNG Gateway API AsyncAPI Specification
+  version: ""
+  description: SLNG Gateway API
+  contact:
+    name: SLNG Support
+    url: https://slng.ai
+    email: support@slng.ai
+  license:
+    name: Proprietary
+  tags:
+    - name: STT
+      description: Speech-to-Text services
+servers:
+  production:
+    host: api.slng.ai
+    protocol: wss
+    description: Production
+  staging:
+    host: stageapi.slng.ai
+    protocol: wss
+    description: Staging
+channels:
+  /v1/stt/deepgram/nova:2:
+    address: /v1/stt/deepgram/nova:2
+    title: nova:2 WebSocket
+    summary: nova:2 - websocket
+    description: Speech-to-Text API for converting audio files to text using
+      Deepgram nova. Real-time speech-to-text transcription with ultra-low
+      latency using Deepgram's Nova model. Optimized for streaming audio with
+      intelligent Voice Activity Detection (VAD) and speaker diarization.
+    tags:
+      - name: Nova 2
+    x-slng-service-type: stt
+    x-slng-provider-id: deepgram
+    x-slng-provider-name: Deepgram
+    x-slng-model-id: nova
+    x-slng-model-name: Nova
+    x-slng-variant-id: "2"
+    x-slng-variant-name: Nova 2
+    x-slng-deployment:
+      platform: deepgram
+      regions:
+        - us
+        - eu
+    servers:
+      - $ref: "#/servers/production"
+      - $ref: "#/servers/staging"
+    messages:
+      request:
+        $ref: "#/components/messages/SttWebsocketRequest"
+      response:
+        $ref: "#/components/messages/SttWebsocketResponse"
+    bindings:
+      ws:
+        method: GET
+        headers:
+          $ref: "#/components/schemas/WebsocketHeaders"
+  /v1/stt/deepgram/nova:3:
+    address: /v1/stt/deepgram/nova:3
+    title: nova:3 WebSocket
+    summary: nova:3 - websocket
+    description: Speech-to-Text API for converting audio files to text using
+      Deepgram nova. Real-time speech-to-text transcription with ultra-low
+      latency using Deepgram's Nova model. Optimized for streaming audio with
+      intelligent Voice Activity Detection (VAD) and speaker diarization.
+    tags:
+      - name: Nova 3
+    x-slng-service-type: stt
+    x-slng-provider-id: deepgram
+    x-slng-provider-name: Deepgram
+    x-slng-model-id: nova
+    x-slng-model-name: Nova
+    x-slng-variant-id: "3"
+    x-slng-variant-name: Nova 3
+    x-slng-deployment:
+      platform: deepgram
+      regions:
+        - us
+        - eu
+    servers:
+      - $ref: "#/servers/production"
+      - $ref: "#/servers/staging"
+    messages:
+      request:
+        $ref: "#/components/messages/SttWebsocketRequest"
+      response:
+        $ref: "#/components/messages/SttWebsocketResponse"
+    bindings:
+      ws:
+        method: GET
+        headers:
+          $ref: "#/components/schemas/WebsocketHeaders"
+  /v1/stt/deepgram/nova:3-medical:
+    address: /v1/stt/deepgram/nova:3-medical
+    title: nova:3-medical WebSocket
+    summary: nova:3-medical - websocket
+    description: Speech-to-Text API for converting audio files to text using
+      Deepgram nova. Real-time speech-to-text transcription with ultra-low
+      latency using Deepgram's Nova model. Optimized for streaming audio with
+      intelligent Voice Activity Detection (VAD) and speaker diarization.
+    tags:
+      - name: Nova 3 Medical
+    servers:
+      - $ref: "#/servers/production"
+      - $ref: "#/servers/staging"
+    messages:
+      request:
+        $ref: "#/components/messages/SttWebsocketRequest"
+      response:
+        $ref: "#/components/messages/SttWebsocketResponse"
+    bindings:
+      ws:
+        method: GET
+        headers:
+          $ref: "#/components/schemas/WebsocketHeaders"
+  /v1/stt/slng/openai/whisper:large-v3:
+    address: /v1/stt/slng/openai/whisper:large-v3
+    title: openai/whisper:large-v3 WebSocket
+    summary: openai/whisper:large-v3 - websocket
+    description: Real-time speech-to-text transcription using OpenAI's Whisper Large
+      v3 model via WebSocket. Supports streaming audio input with intelligent
+      Voice Activity Detection (VAD), partial transcripts for immediate
+      feedback, and automatic language detection. Perfect for live
+      transcription, voice commands, and real-time captioning.
+    tags:
+      - name: Whisper Large v3
+    servers:
+      - $ref: "#/servers/production"
+      - $ref: "#/servers/staging"
+    messages:
+      request:
+        $ref: "#/components/messages/SttWebsocketRequest"
+      response:
+        $ref: "#/components/messages/SttWebsocketResponse"
+    bindings:
+      ws:
+        method: GET
+        headers:
+          $ref: "#/components/schemas/WebsocketHeaders"
+  /v1/stt/slng/openai/whisper:large-v3-compressed:
+    address: /v1/stt/slng/openai/whisper:large-v3-compressed
+    title: openai/whisper:large-v3-compressed WebSocket
+    summary: openai/whisper:large-v3-compressed - websocket
+    description: Real-time speech-to-text transcription using OpenAI's Whisper Large
+      v3 model via WebSocket with compressed audio support. Supports streaming
+      audio input with intelligent Voice Activity Detection (VAD), partial
+      transcripts for immediate feedback, and automatic language detection.
+    tags:
+      - name: Whisper Large v3 (Compressed)
+    servers:
+      - $ref: "#/servers/production"
+      - $ref: "#/servers/staging"
+    messages:
+      request:
+        $ref: "#/components/messages/SttWebsocketRequest"
+      response:
+        $ref: "#/components/messages/SttWebsocketResponse"
+    bindings:
+      ws:
+        method: GET
+        headers:
+          $ref: "#/components/schemas/WebsocketHeaders"
+  /v1/stt/slng/speechmatics:en:
+    address: /v1/stt/slng/speechmatics:en
+    title: speechmatics:en WebSocket
+    summary: speechmatics:en - websocket
+    description: Speech-to-Text. Real-time speech-to-text transcription using
+      Speechmatics model hosted by SLNG via WebSocket. Supports streaming audio
+      input with intelligent Voice Activity Detection (VAD), partial transcripts
+      for immediate feedback. Perfect for live transcription, voice commands,
+      and real-time captioning. Supports English and Spanish with high accuracy.
+    tags:
+      - name: Speechmatics EN
+    servers:
+      - $ref: "#/servers/production"
+      - $ref: "#/servers/staging"
+    messages:
+      request:
+        $ref: "#/components/messages/SttWebsocketRequest"
+      response:
+        $ref: "#/components/messages/SttWebsocketResponse"
+    bindings:
+      ws:
+        method: GET
+        headers:
+          $ref: "#/components/schemas/WebsocketHeaders"
+    x-slng-service-type: stt
+    x-slng-provider-id: slng
+    x-slng-provider-name: SLNG
+    x-slng-model-id: speechmatics
+    x-slng-model-name: Speechmatics
+    x-slng-variant-id: en
+    x-slng-variant-name: Speechmatics EN
+    x-slng-protocols:
+      - websocket
+    x-slng-deployment:
+      platform: hathora
+      regions:
+        - uk
+    x-slng-audio-config:
+      sampleRate: 16000
+      bytesPerSample: 2
+      channels: 1
+      encoding: pcm
+    x-slng-pricing-unit: second
+  /v1/stt/slng/speechmatics:es:
+    address: /v1/stt/slng/speechmatics:es
+    title: speechmatics:es WebSocket
+    summary: speechmatics:es - websocket
+    description: Speech-to-Text. Real-time speech-to-text transcription using
+      Speechmatics model hosted by SLNG via WebSocket. Supports streaming audio
+      input with intelligent Voice Activity Detection (VAD), partial transcripts
+      for immediate feedback. Perfect for live transcription, voice commands,
+      and real-time captioning. Supports English and Spanish with high accuracy.
+    tags:
+      - name: Speechmatics ES
+    servers:
+      - $ref: "#/servers/staging"
+      - $ref: "#/servers/production"
+    messages:
+      request:
+        $ref: "#/components/messages/SttWebsocketRequest"
+      response:
+        $ref: "#/components/messages/SttWebsocketResponse"
+    bindings:
+      ws:
+        method: GET
+        headers:
+          $ref: "#/components/schemas/WebsocketHeaders"
+    x-slng-service-type: stt
+    x-slng-provider-id: slng
+    x-slng-provider-name: SLNG
+    x-slng-model-id: speechmatics
+    x-slng-model-name: Speechmatics
+    x-slng-variant-id: es
+    x-slng-variant-name: Speechmatics ES
+    x-slng-protocols:
+      - websocket
+    x-slng-deployment:
+      platform: hathora
+      regions:
+        - uk
+    x-slng-audio-config:
+      sampleRate: 16000
+      bytesPerSample: 2
+      channels: 1
+      encoding: pcm
+    x-slng-pricing-unit: second
+  /v1/stt/slng/deepgram/nova:3-en:
+    address: /v1/stt/slng/deepgram/nova:3-en
+    title: deepgram/nova:3-en WebSocket
+    summary: deepgram/nova:3-en - websocket
+    description: Speech-to-Text API for converting audio files to text using SLNG
+      deepgram/nova. Real-time speech-to-text transcription with ultra-low
+      latency using Deepgram's Nova model. Optimized for streaming audio with
+      intelligent Voice Activity Detection (VAD) and speaker diarization.
+    tags:
+      - name: Deepgram Nova 3 English
+    x-slng-service-type: stt
+    x-slng-provider-id: slng
+    x-slng-provider-name: SLNG
+    x-slng-model-id: deepgram/nova
+    x-slng-model-name: Nova
+    x-slng-variant-id: 3-en
+    x-slng-variant-name: Deepgram Nova 3 English
+    x-slng-deployment:
+      platform: modal
+      regions:
+        - eu-west-1
+        - ap-south-1
+      environment: staging
+    servers:
+      - $ref: "#/servers/production"
+    messages:
+      request:
+        $ref: "#/components/messages/SttWebsocketRequest"
+      response:
+        $ref: "#/components/messages/SttWebsocketResponse"
+    bindings:
+      ws:
+        method: GET
+        headers:
+          $ref: "#/components/schemas/WebsocketHeaders"
+  /v1/stt/slng/deepgram/nova:3-es:
+    address: /v1/stt/slng/deepgram/nova:3-es
+    title: deepgram/nova:3-es WebSocket
+    summary: deepgram/nova:3-es - websocket
+    description: Speech-to-Text API for converting audio files to text using SLNG
+      deepgram/nova. Real-time speech-to-text transcription with ultra-low
+      latency using Deepgram's Nova model. Optimized for streaming audio with
+      intelligent Voice Activity Detection (VAD) and speaker diarization.
+    tags:
+      - name: Deepgram Nova 3 Spanish
+    servers:
+      - $ref: "#/servers/production"
+    messages:
+      request:
+        $ref: "#/components/messages/SttWebsocketRequest"
+      response:
+        $ref: "#/components/messages/SttWebsocketResponse"
+    bindings:
+      ws:
+        method: GET
+        headers:
+          $ref: "#/components/schemas/WebsocketHeaders"
+  /v1/stt/slng/deepgram/nova:3-hi:
+    address: /v1/stt/slng/deepgram/nova:3-hi
+    title: deepgram/nova:3-hi WebSocket
+    summary: deepgram/nova:3-hi - websocket
+    description: Speech-to-Text API for converting audio files to text using SLNG
+      deepgram/nova. Real-time speech-to-text transcription with ultra-low
+      latency using Deepgram's Nova model. Optimized for streaming audio with
+      intelligent Voice Activity Detection (VAD) and speaker diarization.
+    tags:
+      - name: Deepgram Nova 3 Hindi
+    servers:
+      - $ref: "#/servers/production"
+    messages:
+      request:
+        $ref: "#/components/messages/SttWebsocketRequest"
+      response:
+        $ref: "#/components/messages/SttWebsocketResponse"
+    bindings:
+      ws:
+        method: GET
+        headers:
+          $ref: "#/components/schemas/WebsocketHeaders"
+  /v1/stt/slng/deepgram/nova:3-multi:
+    address: /v1/stt/slng/deepgram/nova:3-multi
+    title: deepgram/nova:3-multi WebSocket
+    summary: deepgram/nova:3-multi - websocket
+    description: Speech-to-Text API for converting audio files to text using SLNG
+      deepgram/nova. Real-time speech-to-text transcription with ultra-low
+      latency using Deepgram's Nova model. Optimized for streaming audio with
+      intelligent Voice Activity Detection (VAD) and speaker diarization.
+    tags:
+      - name: Deepgram Nova 3 Multi-Language
+    servers:
+      - $ref: "#/servers/production"
+    messages:
+      request:
+        $ref: "#/components/messages/SttWebsocketRequest"
+      response:
+        $ref: "#/components/messages/SttWebsocketResponse"
+    bindings:
+      ws:
+        method: GET
+        headers:
+          $ref: "#/components/schemas/WebsocketHeaders"
+  /v1/tts/deepgram/aura:2:
+    address: /v1/tts/deepgram/aura:2
+    title: aura:2 WebSocket
+    summary: aura:2 - websocket
+    description: Text-to-Speech API for generating speech from text using Deepgram
+      aura. Real-time conversational TTS designed for voice agents with
+      ultra-low latency. Establishes a WebSocket connection for real-time
+      text-to-speech.
+    tags:
+      - name: Aura 2 (Deepgram)
+    servers:
+      - $ref: "#/servers/production"
+      - $ref: "#/servers/staging"
+    messages:
+      request:
+        $ref: "#/components/messages/TtsWebsocketRequest"
+      response:
+        $ref: "#/components/messages/TtsWebsocketResponse"
+    bindings:
+      ws:
+        method: GET
+        headers:
+          $ref: "#/components/schemas/WebsocketHeaders"
+  /v1/tts/elevenlabs/eleven:3:
+    address: /v1/tts/elevenlabs/eleven:3
+    title: eleven:3 WebSocket
+    summary: eleven:3 - websocket
+    description: Text-to-Speech API for generating speech from text using ElevenLabs
+      eleven. Premium TTS with industry-leading latency and voice quality.
+      Establishes a WebSocket connection for real-time text-to-speech using the
+      unified SLNG TTS protocol.
+    tags:
+      - name: Eleven v3
+    servers:
+      - $ref: "#/servers/production"
+    messages:
+      request:
+        $ref: "#/components/messages/TtsWebsocketRequest"
+      response:
+        $ref: "#/components/messages/TtsWebsocketResponse"
+    bindings:
+      ws:
+        method: GET
+        headers:
+          $ref: "#/components/schemas/WebsocketHeaders"
+  /v1/tts/elevenlabs/eleven-flash:2:
+    address: /v1/tts/elevenlabs/eleven-flash:2
+    title: eleven-flash:2 WebSocket
+    summary: eleven-flash:2 - websocket
+    description: Text-to-Speech API for generating speech from text using ElevenLabs
+      eleven-flash. Ultra-low latency TTS with industry-leading speed.
+      Establishes a WebSocket connection for real-time text-to-speech.
+    tags:
+      - name: Eleven Flash v2
+    x-slng-service-type: tts
+    x-slng-provider-id: elevenlabs
+    x-slng-provider-name: ElevenLabs
+    x-slng-model-id: eleven-flash
+    x-slng-model-name: Eleven Flash
+    x-slng-variant-id: "2"
+    x-slng-variant-name: Eleven Flash v2
+    x-slng-deployment:
+      platform: elevenlabs
+      regions:
+        - us-east-1
+    servers:
+      - $ref: "#/servers/production"
+    messages:
+      request:
+        $ref: "#/components/messages/TtsWebsocketRequest"
+      response:
+        $ref: "#/components/messages/TtsWebsocketResponse"
+    bindings:
+      ws:
+        method: GET
+        headers:
+          $ref: "#/components/schemas/WebsocketHeaders"
+  /v1/tts/elevenlabs/eleven-flash:2.5:
+    address: /v1/tts/elevenlabs/eleven-flash:2.5
+    title: eleven-flash:2.5 WebSocket
+    summary: eleven-flash:2.5 - websocket
+    description: Text-to-Speech API for generating speech from text using ElevenLabs
+      eleven-flash. Latest ultra-low latency TTS with multilingual support.
+      Establishes a WebSocket connection for real-time text-to-speech.
+    tags:
+      - name: Eleven Flash v2.5
+    servers:
+      - $ref: "#/servers/production"
+    messages:
+      request:
+        $ref: "#/components/messages/TtsWebsocketRequest"
+      response:
+        $ref: "#/components/messages/TtsWebsocketResponse"
+    bindings:
+      ws:
+        method: GET
+        headers:
+          $ref: "#/components/schemas/WebsocketHeaders"
+  /v1/tts/elevenlabs/eleven-multilingual:2:
+    address: /v1/tts/elevenlabs/eleven-multilingual:2
+    title: eleven-multilingual:2 WebSocket
+    summary: eleven-multilingual:2 - websocket
+    description: Text-to-Speech API for generating speech from text using ElevenLabs
+      eleven-multilingual. Multilingual TTS with ultra-low latency. Establishes
+      a WebSocket connection for real-time text-to-speech.
+    tags:
+      - name: Multilingual v2
+    servers:
+      - $ref: "#/servers/production"
+    messages:
+      request:
+        $ref: "#/components/messages/TtsWebsocketRequest"
+      response:
+        $ref: "#/components/messages/TtsWebsocketResponse"
+    bindings:
+      ws:
+        method: GET
+        headers:
+          $ref: "#/components/schemas/WebsocketHeaders"
+  /v1/tts/slng/canopylabs/orpheus:en:
+    address: /v1/tts/slng/canopylabs/orpheus:en
+    title: canopylabs/orpheus:en WebSocket
+    summary: canopylabs/orpheus:en - websocket
+    description: Text-to-Speech API for generating speech from text using SLNG
+      canopylabs/orpheus. High-quality streaming TTS with emotion control,
+      hosted on SLNG infrastructure. Establishes a WebSocket connection for
+      real-time text-to-speech.
+    tags:
+      - name: Orpheus English
+    x-slng-service-type: tts
+    x-slng-provider-id: slng
+    x-slng-provider-name: SLNG
+    x-slng-model-id: canopylabs/orpheus
+    x-slng-model-name: Orpheus
+    x-slng-variant-id: en
+    x-slng-variant-name: Orpheus English
+    x-slng-deployment:
+      platform: modal
+      regions:
+        - eu-west
+      environment: prod
+    servers:
+      - $ref: "#/servers/production"
+    messages:
+      request:
+        $ref: "#/components/messages/TtsWebsocketRequest"
+      response:
+        $ref: "#/components/messages/TtsWebsocketResponse"
+    bindings:
+      ws:
+        method: GET
+        headers:
+          $ref: "#/components/schemas/WebsocketHeaders"
+  /v1/tts/slng/myshell/melo:v1:
+    address: /v1/tts/slng/myshell/melo:v1
+    title: myshell/melo:v1 WebSocket
+    summary: myshell/melo:v1 - websocket
+    description: Text-to-Speech API for generating speech from text using SLNG
+      myshell/melo. Melo - High-quality TTS model deployed on SLNG
+      infrastructure. Establishes a WebSocket connection for real-time
+      text-to-speech.
+    tags:
+      - name: Melo v1
+    servers:
+      - $ref: "#/servers/production"
+    messages:
+      request:
+        $ref: "#/components/messages/TtsWebsocketRequest"
+      response:
+        $ref: "#/components/messages/TtsWebsocketResponse"
+    bindings:
+      ws:
+        method: GET
+        headers:
+          $ref: "#/components/schemas/WebsocketHeaders"
+  /v1/tts/slng/funaudiollm/cosyvoice:v1:
+    address: /v1/tts/slng/funaudiollm/cosyvoice:v1
+    title: funaudiollm/cosyvoice:v1 WebSocket
+    summary: funaudiollm/cosyvoice:v1 - websocket
+    description: Text-to-Speech API for generating speech from text using SLNG
+      funaudiollm/cosyvoice. CosyVoice TTS model deployed on SLNG
+      infrastructure. Establishes a WebSocket connection for real-time
+      text-to-speech using the unified SLNG TTS protocol.
+    tags:
+      - name: CosyVoice v1
+    servers:
+      - $ref: "#/servers/production"
+    messages:
+      request:
+        $ref: "#/components/messages/TtsWebsocketRequest"
+      response:
+        $ref: "#/components/messages/TtsWebsocketResponse"
+    bindings:
+      ws:
+        method: GET
+        headers:
+          $ref: "#/components/schemas/WebsocketHeaders"
+  /v1/tts/slng/geneing/kokoro:v1:
+    address: /v1/tts/slng/geneing/kokoro:v1
+    title: geneing/kokoro:v1 WebSocket
+    summary: geneing/kokoro:v1 - websocket
+    description: Text-to-Speech API for generating speech from text using SLNG
+      geneing/kokoro. Kokoro TTS model deployed on SLNG infrastructure.
+      Establishes a WebSocket connection for real-time text-to-speech.
+    tags:
+      - name: Kokoro v1
+    servers:
+      - $ref: "#/servers/production"
+    messages:
+      request:
+        $ref: "#/components/messages/TtsWebsocketRequest"
+      response:
+        $ref: "#/components/messages/TtsWebsocketResponse"
+    bindings:
+      ws:
+        method: GET
+        headers:
+          $ref: "#/components/schemas/WebsocketHeaders"
+  /v1/tts/slng/resemble/chatterbox:v2:
+    address: /v1/tts/slng/resemble/chatterbox:v2
+    title: resemble/chatterbox:v2 WebSocket
+    summary: resemble/chatterbox:v2 - websocket
+    description: Text-to-Speech API for generating speech from text using SLNG
+      resemble/chatterbox. Chatterbox TTS model from Resemble AI with voice
+      cloning capabilities. Establishes a WebSocket connection for real-time
+      text-to-speech.
+    tags:
+      - name: Chatterbox v2
+    servers:
+      - $ref: "#/servers/production"
+    messages:
+      request:
+        $ref: "#/components/messages/TtsWebsocketRequest"
+      response:
+        $ref: "#/components/messages/TtsWebsocketResponse"
+    bindings:
+      ws:
+        method: GET
+        headers:
+          $ref: "#/components/schemas/WebsocketHeaders"
+  /v1/tts/slng/rime/arcana/{lang}:
+    address: /v1/tts/slng/rime/arcana/{lang}
+    title: rime/arcana/{lang} WebSocket
+    summary: rime/arcana/{lang} - websocket
+    description: Text-to-Speech API for generating speech from text using SLNG
+      rime/arcana. Rime Arcana TTS model supporting multiple languages.
+      Establishes a WebSocket connection for real-time text-to-speech.
+    tags:
+      - name: Rime Arcana
+    servers:
+      - $ref: "#/servers/production"
+    messages:
+      request:
+        $ref: "#/components/messages/TtsWebsocketRequest"
+      response:
+        $ref: "#/components/messages/TtsWebsocketResponse"
+    bindings:
+      ws:
+        method: GET
+        headers:
+          $ref: "#/components/schemas/WebsocketHeaders"
+  /v1/tts/slng/rime/arcana:ar:
+    address: /v1/tts/slng/rime/arcana:ar
+    title: rime/arcana:ar WebSocket
+    summary: rime/arcana:ar - websocket
+    description: Text-to-Speech API for generating Arabic speech from text using
+      Rime Arcana TTS model. Establishes a WebSocket connection for real-time
+      text-to-speech.
+    tags:
+      - name: Rime Arcana Arabic
+    x-slng-service-type: tts
+    x-slng-provider-id: slng
+    x-slng-provider-name: SLNG
+    x-slng-model-id: rime/arcana
+    x-slng-model-name: Rime Arcana
+    x-slng-variant-id: ar
+    x-slng-variant-name: Rime Arcana Arabic
+    x-slng-protocols:
+      - http
+      - websocket
+    x-slng-deployment:
+      platform: cluster-b
+      regions:
+        - eu-north-1
+    servers:
+      - $ref: "#/servers/production"
+    messages:
+      request:
+        $ref: "#/components/messages/TtsWebsocketRequest"
+      response:
+        $ref: "#/components/messages/TtsWebsocketResponse"
+    bindings:
+      ws:
+        method: GET
+        headers:
+          $ref: "#/components/schemas/WebsocketHeaders"
+  /v1/tts/slng/rime/arcana:de:
+    address: /v1/tts/slng/rime/arcana:de
+    title: rime/arcana:de WebSocket
+    summary: rime/arcana:de - websocket
+    description: Text-to-Speech API for generating German speech from text using
+      Rime Arcana TTS model. Establishes a WebSocket connection for real-time
+      text-to-speech.
+    tags:
+      - name: Rime Arcana German
+    x-slng-service-type: tts
+    x-slng-provider-id: slng
+    x-slng-provider-name: SLNG
+    x-slng-model-id: rime/arcana
+    x-slng-model-name: Rime Arcana
+    x-slng-variant-id: de
+    x-slng-variant-name: Rime Arcana German
+    x-slng-protocols:
+      - http
+      - websocket
+    x-slng-deployment:
+      platform: cluster-b
+      regions:
+        - eu-north-1
+    servers:
+      - $ref: "#/servers/production"
+    messages:
+      request:
+        $ref: "#/components/messages/TtsWebsocketRequest"
+      response:
+        $ref: "#/components/messages/TtsWebsocketResponse"
+    bindings:
+      ws:
+        method: GET
+        headers:
+          $ref: "#/components/schemas/WebsocketHeaders"
+  /v1/tts/slng/rime/arcana:en:
+    address: /v1/tts/slng/rime/arcana:en
+    title: rime/arcana:en WebSocket
+    summary: rime/arcana:en - websocket
+    description: Text-to-Speech API for generating English speech from text using
+      Rime Arcana TTS model. Establishes a WebSocket connection for real-time
+      text-to-speech.
+    tags:
+      - name: Rime Arcana English
+    x-slng-service-type: tts
+    x-slng-provider-id: slng
+    x-slng-provider-name: SLNG
+    x-slng-model-id: rime/arcana
+    x-slng-model-name: Rime Arcana
+    x-slng-variant-id: en
+    x-slng-variant-name: Rime Arcana English
+    x-slng-protocols:
+      - http
+      - websocket
+    x-slng-deployment:
+      platform: cluster-b
+      regions:
+        - eu-north-1
+    servers:
+      - $ref: "#/servers/production"
+    messages:
+      request:
+        $ref: "#/components/messages/TtsWebsocketRequest"
+      response:
+        $ref: "#/components/messages/TtsWebsocketResponse"
+    bindings:
+      ws:
+        method: GET
+        headers:
+          $ref: "#/components/schemas/WebsocketHeaders"
+  /v1/tts/slng/rime/arcana:es:
+    address: /v1/tts/slng/rime/arcana:es
+    title: rime/arcana:es WebSocket
+    summary: rime/arcana:es - websocket
+    description: Text-to-Speech API for generating Spanish speech from text using
+      Rime Arcana TTS model. Establishes a WebSocket connection for real-time
+      text-to-speech.
+    tags:
+      - name: Rime Arcana Spanish
+    x-slng-service-type: tts
+    x-slng-provider-id: slng
+    x-slng-provider-name: SLNG
+    x-slng-model-id: rime/arcana
+    x-slng-model-name: Rime Arcana
+    x-slng-variant-id: es
+    x-slng-variant-name: Rime Arcana Spanish
+    x-slng-protocols:
+      - http
+      - websocket
+    x-slng-deployment:
+      platform: cluster-b
+      regions:
+        - eu-north-1
+    servers:
+      - $ref: "#/servers/production"
+    messages:
+      request:
+        $ref: "#/components/messages/TtsWebsocketRequest"
+      response:
+        $ref: "#/components/messages/TtsWebsocketResponse"
+    bindings:
+      ws:
+        method: GET
+        headers:
+          $ref: "#/components/schemas/WebsocketHeaders"
+  /v1/tts/slng/rime/arcana:fr:
+    address: /v1/tts/slng/rime/arcana:fr
+    title: rime/arcana:fr WebSocket
+    summary: rime/arcana:fr - websocket
+    description: Text-to-Speech API for generating French speech from text using
+      Rime Arcana TTS model. Establishes a WebSocket connection for real-time
+      text-to-speech.
+    tags:
+      - name: Rime Arcana French
+    x-slng-service-type: tts
+    x-slng-provider-id: slng
+    x-slng-provider-name: SLNG
+    x-slng-model-id: rime/arcana
+    x-slng-model-name: Rime Arcana
+    x-slng-variant-id: fr
+    x-slng-variant-name: Rime Arcana French
+    x-slng-protocols:
+      - http
+      - websocket
+    x-slng-deployment:
+      platform: cluster-b
+      regions:
+        - eu-north-1
+    servers:
+      - $ref: "#/servers/production"
+    messages:
+      request:
+        $ref: "#/components/messages/TtsWebsocketRequest"
+      response:
+        $ref: "#/components/messages/TtsWebsocketResponse"
+    bindings:
+      ws:
+        method: GET
+        headers:
+          $ref: "#/components/schemas/WebsocketHeaders"
+  /v1/tts/slng/deepgram/aura:2:
+    address: /v1/tts/slng/deepgram/aura:2
+    title: deepgram/aura:2 WebSocket
+    summary: deepgram/aura:2 - websocket
+    description: Text-to-Speech API for generating speech from text using SLNG
+      deepgram/aura. Real-time conversational TTS designed for voice agents with
+      ultra-low latency. Establishes a WebSocket connection for real-time
+      text-to-speech.
+    tags:
+      - name: Aura 2 (SLNG)
+    servers:
+      - $ref: "#/servers/production"
+      - $ref: "#/servers/staging"
+    messages:
+      request:
+        $ref: "#/components/messages/TtsWebsocketRequest"
+      response:
+        $ref: "#/components/messages/TtsWebsocketResponse"
+    bindings:
+      ws:
+        method: GET
+        headers:
+          $ref: "#/components/schemas/WebsocketHeaders"
+  /v1/tts/slng/deepgram/aura:2-en:
+    address: /v1/tts/slng/deepgram/aura:2-en
+    title: deepgram/aura:2-en WebSocket
+    summary: deepgram/aura:2-en - websocket
+    description: Text-to-Speech API for generating speech from text using SLNG
+      deepgram/aura. Real-time conversational TTS designed for voice agents with
+      ultra-low latency. English voices only. Establishes a WebSocket connection
+      for real-time text-to-speech.
+    tags:
+      - name: Aura 2 English (SLNG)
+    servers:
+      - $ref: "#/servers/production"
+    messages:
+      request:
+        $ref: "#/components/messages/TtsWebsocketRequest"
+      response:
+        $ref: "#/components/messages/TtsWebsocketResponse"
+    bindings:
+      ws:
+        method: GET
+        headers:
+          $ref: "#/components/schemas/WebsocketHeaders"
+  /v1/tts/slng/deepgram/aura:2-es:
+    address: /v1/tts/slng/deepgram/aura:2-es
+    title: deepgram/aura:2-es WebSocket
+    summary: deepgram/aura:2-es - websocket
+    description: Text-to-Speech API for generating speech from text using SLNG
+      deepgram/aura. Real-time conversational TTS designed for voice agents with
+      ultra-low latency. Spanish voices only. Establishes a WebSocket connection
+      for real-time text-to-speech.
+    tags:
+      - name: Aura 2 Spanish (SLNG)
+    servers:
+      - $ref: "#/servers/production"
+    messages:
+      request:
+        $ref: "#/components/messages/TtsWebsocketRequest"
+      response:
+        $ref: "#/components/messages/TtsWebsocketResponse"
+    bindings:
+      ws:
+        method: GET
+        headers:
+          $ref: "#/components/schemas/WebsocketHeaders"
+  /v1/llm/slng/openai/gpt-oss:20b:
+    address: /v1/llm/slng/openai/gpt-oss:20b
+    title: slng/openai/gpt-oss:20b WebSocket
+    summary: slng/openai/gpt-oss:20b - websocket
+    description: LLM API for text generation using SLNG-hosted OpenAI GPT-OSS model
+      via WebSocket.
+    messages:
+      request:
+        $ref: "#/components/messages/LlmWebsocketRequest"
+      response:
+        $ref: "#/components/messages/LlmWebsocketResponse"
+  /v1/llm/slng/fixie-ai/ultravox:v0_6-llama-3_1-8b:
+    address: /v1/llm/slng/fixie-ai/ultravox:v0_6-llama-3_1-8b
+    title: slng/fixie-ai/ultravox:v0_6-llama-3_1-8b WebSocket
+    summary: slng/fixie-ai/ultravox:v0_6-llama-3_1-8b - websocket
+    description: LLM API for text and audio understanding using SLNG-hosted Fixie AI
+      Ultravox model via WebSocket.
+    messages:
+      request:
+        $ref: "#/components/messages/LlmWebsocketRequest"
+      response:
+        $ref: "#/components/messages/LlmWebsocketResponse"
+  /v1/bridges/cognigy/stt/{model_variant}:
+    address: /v1/bridges/cognigy/stt/{model_variant}
+    title: Cognigy STT Bridge WebSocket
+    summary: Cognigy STT Bridge - websocket
+    description: |
+      WebSocket protocol bridge for Cognigy Voice Gateway STT integration.
+      Accepts Cognigy's native websocket messages (start, stop, binary audio)
+      and translates them to SLNG's standard STT websocket protocol.
+      The model_variant path parameter specifies the target model
+      (e.g., slng/openai/whisper:large-v3, deepgram/nova:3).
+    tags:
+      - name: Cognigy STT Bridge
+    x-slng-bridge:
+      provider: cognigy
+      targetServiceType: stt
+    servers:
+      - $ref: "#/servers/production"
+      - $ref: "#/servers/staging"
+    messages:
+      request:
+        $ref: "#/components/messages/CognigySTTWebsocketRequest"
+      response:
+        $ref: "#/components/messages/CognigySTTWebsocketResponse"
+    bindings:
+      ws:
+        method: GET
+        headers:
+          $ref: "#/components/schemas/WebsocketHeaders"
+  /v1/bridges/cognigy/tts/{model_variant}:
+    address: /v1/bridges/cognigy/tts/{model_variant}
+    title: Cognigy TTS Bridge WebSocket
+    summary: Cognigy TTS Bridge - websocket
+    description: |
+      WebSocket protocol bridge for Cognigy Voice Gateway TTS integration.
+      Accepts Cognigy's native websocket messages (stream, flush, stop)
+      and translates them to SLNG's standard TTS websocket protocol.
+      The model_variant path parameter specifies the target model
+      (e.g., elevenlabs/eleven:3, deepgram/aura:2).
+    tags:
+      - name: Cognigy TTS Bridge
+    x-slng-bridge:
+      provider: cognigy
+      targetServiceType: tts
+    servers:
+      - $ref: "#/servers/production"
+      - $ref: "#/servers/staging"
+    messages:
+      request:
+        $ref: "#/components/messages/CognigyTTSWebsocketRequest"
+      response:
+        $ref: "#/components/messages/CognigyTTSWebsocketResponse"
+    bindings:
+      ws:
+        method: GET
+        headers:
+          $ref: "#/components/schemas/WebsocketHeaders"
+operations:
+  sttDeepgramNova2Send:
+    action: send
+    channel:
+      $ref: "#/channels/~1v1~1stt~1deepgram~1nova:2"
+    summary: Send audio frames to Deepgram Nova 2
+    messages:
+      - $ref: "#/channels/~1v1~1stt~1deepgram~1nova:2/messages/request"
+    description: Send audio frames to Deepgram Nova 2
+  sttDeepgramNova2Receive:
+    action: receive
+    channel:
+      $ref: "#/channels/~1v1~1stt~1deepgram~1nova:2"
+    summary: Receive transcripts from Deepgram Nova 2
+    messages:
+      - $ref: "#/channels/~1v1~1stt~1deepgram~1nova:2/messages/response"
+    description: Receive transcripts from Deepgram Nova 2
+  sttDeepgramNova3Send:
+    action: send
+    channel:
+      $ref: "#/channels/~1v1~1stt~1deepgram~1nova:3"
+    summary: Send audio frames to Deepgram Nova 3
+    messages:
+      - $ref: "#/channels/~1v1~1stt~1deepgram~1nova:3/messages/request"
+    description: Send audio frames to Deepgram Nova 3
+  sttDeepgramNova3Receive:
+    action: receive
+    channel:
+      $ref: "#/channels/~1v1~1stt~1deepgram~1nova:3"
+    summary: Receive transcripts from Deepgram Nova 3
+    messages:
+      - $ref: "#/channels/~1v1~1stt~1deepgram~1nova:3/messages/response"
+    description: Receive transcripts from Deepgram Nova 3
+  sttDeepgramNova3MedicalSend:
+    action: send
+    channel:
+      $ref: "#/channels/~1v1~1stt~1deepgram~1nova:3-medical"
+    summary: Send audio frames to Deepgram Nova 3 Medical
+    messages:
+      - $ref: "#/channels/~1v1~1stt~1deepgram~1nova:3-medical/messages/request"
+    description: Send audio frames to Deepgram Nova 3 Medical
+  sttDeepgramNova3MedicalReceive:
+    action: receive
+    channel:
+      $ref: "#/channels/~1v1~1stt~1deepgram~1nova:3-medical"
+    summary: Receive transcripts from Deepgram Nova 3 Medical
+    messages:
+      - $ref: "#/channels/~1v1~1stt~1deepgram~1nova:3-medical/messages/response"
+    description: Receive transcripts from Deepgram Nova 3 Medical
+  sttWhisperLargeV3Send:
+    action: send
+    channel:
+      $ref: "#/channels/~1v1~1stt~1slng~1openai~1whisper:large-v3"
+    summary: Send audio frames to Whisper Large v3
+    messages:
+      - $ref: "#/channels/~1v1~1stt~1slng~1openai~1whisper:large-v3/messages/request"
+    description: Send audio frames to Whisper Large v3
+  sttWhisperLargeV3Receive:
+    action: receive
+    channel:
+      $ref: "#/channels/~1v1~1stt~1slng~1openai~1whisper:large-v3"
+    summary: Receive transcripts from Whisper Large v3
+    messages:
+      - $ref: "#/channels/~1v1~1stt~1slng~1openai~1whisper:large-v3/messages/response"
+    description: Receive transcripts from Whisper Large v3
+  sttWhisperLargeV3CompressedSend:
+    action: send
+    channel:
+      $ref: "#/channels/~1v1~1stt~1slng~1openai~1whisper:large-v3-compressed"
+    summary: Send audio frames to Whisper Large v3 (Compressed)
+    messages:
+      - $ref: "#/channels/~1v1~1stt~1slng~1openai~1whisper:large-v3-compressed/messages/request"
+    description: Send audio frames to Whisper Large v3 (Compressed)
+  sttWhisperLargeV3CompressedReceive:
+    action: receive
+    channel:
+      $ref: "#/channels/~1v1~1stt~1slng~1openai~1whisper:large-v3-compressed"
+    summary: Receive transcripts from Whisper Large v3 (Compressed)
+    messages:
+      - $ref: "#/channels/~1v1~1stt~1slng~1openai~1whisper:large-v3-compressed/messages/response"
+    description: Receive transcripts from Whisper Large v3 (Compressed)
+  sttSpeechmaticsEnSend:
+    action: send
+    channel:
+      $ref: "#/channels/~1v1~1stt~1slng~1speechmatics:en"
+    summary: Send audio frames to Speechmatics EN
+    messages:
+      - $ref: "#/channels/~1v1~1stt~1slng~1speechmatics:en/messages/request"
+    description: Send audio frames to Speechmatics EN
+  sttSpeechmaticsEnReceive:
+    action: receive
+    channel:
+      $ref: "#/channels/~1v1~1stt~1slng~1speechmatics:en"
+    summary: Receive transcripts from Speechmatics EN
+    messages:
+      - $ref: "#/channels/~1v1~1stt~1slng~1speechmatics:en/messages/response"
+    description: Receive transcripts from Speechmatics EN
+  sttSpeechmaticsEsSend:
+    action: send
+    channel:
+      $ref: "#/channels/~1v1~1stt~1slng~1speechmatics:es"
+    summary: Send audio frames to Speechmatics ES
+    messages:
+      - $ref: "#/channels/~1v1~1stt~1slng~1speechmatics:es/messages/request"
+    description: Send audio frames to Speechmatics ES
+  sttSpeechmaticsEsReceive:
+    action: receive
+    channel:
+      $ref: "#/channels/~1v1~1stt~1slng~1speechmatics:es"
+    summary: Receive transcripts from Speechmatics ES
+    messages:
+      - $ref: "#/channels/~1v1~1stt~1slng~1speechmatics:es/messages/response"
+    description: Receive transcripts from Speechmatics ES
+  sttSlngDeepgramNova3EnSend:
+    action: send
+    channel:
+      $ref: "#/channels/~1v1~1stt~1slng~1deepgram~1nova:3-en"
+    summary: Send audio frames to SLNG Deepgram Nova 3 EN
+    messages:
+      - $ref: "#/channels/~1v1~1stt~1slng~1deepgram~1nova:3-en/messages/request"
+    description: Send audio frames to SLNG Deepgram Nova 3 EN
+  sttSlngDeepgramNova3EnReceive:
+    action: receive
+    channel:
+      $ref: "#/channels/~1v1~1stt~1slng~1deepgram~1nova:3-en"
+    summary: Receive transcripts from SLNG Deepgram Nova 3 EN
+    messages:
+      - $ref: "#/channels/~1v1~1stt~1slng~1deepgram~1nova:3-en/messages/response"
+    description: Receive transcripts from SLNG Deepgram Nova 3 EN
+  sttSlngDeepgramNova3EsSend:
+    action: send
+    channel:
+      $ref: "#/channels/~1v1~1stt~1slng~1deepgram~1nova:3-es"
+    summary: Send audio frames to SLNG Deepgram Nova 3 ES
+    messages:
+      - $ref: "#/channels/~1v1~1stt~1slng~1deepgram~1nova:3-es/messages/request"
+    description: Send audio frames to SLNG Deepgram Nova 3 ES
+  sttSlngDeepgramNova3EsReceive:
+    action: receive
+    channel:
+      $ref: "#/channels/~1v1~1stt~1slng~1deepgram~1nova:3-es"
+    summary: Receive transcripts from SLNG Deepgram Nova 3 ES
+    messages:
+      - $ref: "#/channels/~1v1~1stt~1slng~1deepgram~1nova:3-es/messages/response"
+    description: Receive transcripts from SLNG Deepgram Nova 3 ES
+  sttSlngDeepgramNova3HiSend:
+    action: send
+    channel:
+      $ref: "#/channels/~1v1~1stt~1slng~1deepgram~1nova:3-hi"
+    summary: Send audio frames to SLNG Deepgram Nova 3 HI
+    messages:
+      - $ref: "#/channels/~1v1~1stt~1slng~1deepgram~1nova:3-hi/messages/request"
+    description: Send audio frames to SLNG Deepgram Nova 3 HI
+  sttSlngDeepgramNova3HiReceive:
+    action: receive
+    channel:
+      $ref: "#/channels/~1v1~1stt~1slng~1deepgram~1nova:3-hi"
+    summary: Receive transcripts from SLNG Deepgram Nova 3 HI
+    messages:
+      - $ref: "#/channels/~1v1~1stt~1slng~1deepgram~1nova:3-hi/messages/response"
+    description: Receive transcripts from SLNG Deepgram Nova 3 HI
+  sttSlngDeepgramNova3MultiSend:
+    action: send
+    channel:
+      $ref: "#/channels/~1v1~1stt~1slng~1deepgram~1nova:3-multi"
+    summary: Send audio frames to SLNG Deepgram Nova 3 Multi
+    messages:
+      - $ref: "#/channels/~1v1~1stt~1slng~1deepgram~1nova:3-multi/messages/request"
+    description: Send audio frames to SLNG Deepgram Nova 3 Multi
+  sttSlngDeepgramNova3MultiReceive:
+    action: receive
+    channel:
+      $ref: "#/channels/~1v1~1stt~1slng~1deepgram~1nova:3-multi"
+    summary: Receive transcripts from SLNG Deepgram Nova 3 Multi
+    messages:
+      - $ref: "#/channels/~1v1~1stt~1slng~1deepgram~1nova:3-multi/messages/response"
+    description: Receive transcripts from SLNG Deepgram Nova 3 Multi
+  ttsDeepgramAura2Send:
+    action: send
+    channel:
+      $ref: "#/channels/~1v1~1tts~1deepgram~1aura:2"
+    summary: Send synthesis requests to Deepgram Aura 2
+    messages:
+      - $ref: "#/channels/~1v1~1tts~1deepgram~1aura:2/messages/request"
+    description: Send synthesis requests to Deepgram Aura 2
+  ttsDeepgramAura2Receive:
+    action: receive
+    channel:
+      $ref: "#/channels/~1v1~1tts~1deepgram~1aura:2"
+    summary: Receive audio chunks from Deepgram Aura 2
+    messages:
+      - $ref: "#/channels/~1v1~1tts~1deepgram~1aura:2/messages/response"
+    description: Receive audio chunks from Deepgram Aura 2
+  ttsElevenFlash2Send:
+    action: send
+    channel:
+      $ref: "#/channels/~1v1~1tts~1elevenlabs~1eleven-flash:2"
+    summary: Send synthesis requests to Eleven Flash v2
+    messages:
+      - $ref: "#/channels/~1v1~1tts~1elevenlabs~1eleven-flash:2/messages/request"
+    description: Send synthesis requests to Eleven Flash v2
+  ttsElevenFlash2Receive:
+    action: receive
+    channel:
+      $ref: "#/channels/~1v1~1tts~1elevenlabs~1eleven-flash:2"
+    summary: Receive audio chunks from Eleven Flash v2
+    messages:
+      - $ref: "#/channels/~1v1~1tts~1elevenlabs~1eleven-flash:2/messages/response"
+    description: Receive audio chunks from Eleven Flash v2
+  ttsElevenFlash25Send:
+    action: send
+    channel:
+      $ref: "#/channels/~1v1~1tts~1elevenlabs~1eleven-flash:2.5"
+    summary: Send synthesis requests to Eleven Flash v2.5
+    messages:
+      - $ref: "#/channels/~1v1~1tts~1elevenlabs~1eleven-flash:2.5/messages/request"
+    description: Send synthesis requests to Eleven Flash v2.5
+  ttsElevenFlash25Receive:
+    action: receive
+    channel:
+      $ref: "#/channels/~1v1~1tts~1elevenlabs~1eleven-flash:2.5"
+    summary: Receive audio chunks from Eleven Flash v2.5
+    messages:
+      - $ref: "#/channels/~1v1~1tts~1elevenlabs~1eleven-flash:2.5/messages/response"
+    description: Receive audio chunks from Eleven Flash v2.5
+  ttsElevenMultilingual2Send:
+    action: send
+    channel:
+      $ref: "#/channels/~1v1~1tts~1elevenlabs~1eleven-multilingual:2"
+    summary: Send synthesis requests to Eleven Multilingual v2
+    messages:
+      - $ref: "#/channels/~1v1~1tts~1elevenlabs~1eleven-multilingual:2/messages/request"
+    description: Send synthesis requests to Eleven Multilingual v2
+  ttsElevenMultilingual2Receive:
+    action: receive
+    channel:
+      $ref: "#/channels/~1v1~1tts~1elevenlabs~1eleven-multilingual:2"
+    summary: Receive audio chunks from Eleven Multilingual v2
+    messages:
+      - $ref: "#/channels/~1v1~1tts~1elevenlabs~1eleven-multilingual:2/messages/response"
+    description: Receive audio chunks from Eleven Multilingual v2
+  ttsOrpheusEnSend:
+    action: send
+    channel:
+      $ref: "#/channels/~1v1~1tts~1slng~1canopylabs~1orpheus:en"
+    summary: Send synthesis requests to Orpheus English
+    messages:
+      - $ref: "#/channels/~1v1~1tts~1slng~1canopylabs~1orpheus:en/messages/request"
+    description: Send synthesis requests to Orpheus English
+  ttsOrpheusEnReceive:
+    action: receive
+    channel:
+      $ref: "#/channels/~1v1~1tts~1slng~1canopylabs~1orpheus:en"
+    summary: Receive audio chunks from Orpheus English
+    messages:
+      - $ref: "#/channels/~1v1~1tts~1slng~1canopylabs~1orpheus:en/messages/response"
+    description: Receive audio chunks from Orpheus English
+  ttsEleven3Send:
+    action: send
+    channel:
+      $ref: "#/channels/~1v1~1tts~1elevenlabs~1eleven:3"
+    summary: Send synthesis requests to ElevenLabs eleven:3
+    messages:
+      - $ref: "#/channels/~1v1~1tts~1elevenlabs~1eleven:3/messages/request"
+    description: Send synthesis requests to ElevenLabs eleven:3
+  ttsEleven3Receive:
+    action: receive
+    channel:
+      $ref: "#/channels/~1v1~1tts~1elevenlabs~1eleven:3"
+    summary: Receive audio chunks from ElevenLabs eleven:3
+    messages:
+      - $ref: "#/channels/~1v1~1tts~1elevenlabs~1eleven:3/messages/response"
+    description: Receive audio chunks from ElevenLabs eleven:3
+  ttsMeloV1Send:
+    action: send
+    channel:
+      $ref: "#/channels/~1v1~1tts~1slng~1myshell~1melo:v1"
+    summary: Send synthesis requests to Melo v1
+    messages:
+      - $ref: "#/channels/~1v1~1tts~1slng~1myshell~1melo:v1/messages/request"
+    description: Send synthesis requests to Melo v1
+  ttsMeloV1Receive:
+    action: receive
+    channel:
+      $ref: "#/channels/~1v1~1tts~1slng~1myshell~1melo:v1"
+    summary: Receive audio chunks from Melo v1
+    messages:
+      - $ref: "#/channels/~1v1~1tts~1slng~1myshell~1melo:v1/messages/response"
+    description: Receive audio chunks from Melo v1
+  ttsCosyVoiceV1Send:
+    action: send
+    channel:
+      $ref: "#/channels/~1v1~1tts~1slng~1funaudiollm~1cosyvoice:v1"
+    summary: Send synthesis requests to CosyVoice v1
+    messages:
+      - $ref: "#/channels/~1v1~1tts~1slng~1funaudiollm~1cosyvoice:v1/messages/request"
+    description: Send synthesis requests to CosyVoice v1
+  ttsCosyVoiceV1Receive:
+    action: receive
+    channel:
+      $ref: "#/channels/~1v1~1tts~1slng~1funaudiollm~1cosyvoice:v1"
+    summary: Receive audio chunks from CosyVoice v1
+    messages:
+      - $ref: "#/channels/~1v1~1tts~1slng~1funaudiollm~1cosyvoice:v1/messages/response"
+    description: Receive audio chunks from CosyVoice v1
+  ttsKokoroV1Send:
+    action: send
+    channel:
+      $ref: "#/channels/~1v1~1tts~1slng~1geneing~1kokoro:v1"
+    summary: Send synthesis requests to Kokoro v1
+    messages:
+      - $ref: "#/channels/~1v1~1tts~1slng~1geneing~1kokoro:v1/messages/request"
+    description: Send synthesis requests to Kokoro v1
+  ttsKokoroV1Receive:
+    action: receive
+    channel:
+      $ref: "#/channels/~1v1~1tts~1slng~1geneing~1kokoro:v1"
+    summary: Receive audio chunks from Kokoro v1
+    messages:
+      - $ref: "#/channels/~1v1~1tts~1slng~1geneing~1kokoro:v1/messages/response"
+    description: Receive audio chunks from Kokoro v1
+  ttsChatterboxV2Send:
+    action: send
+    channel:
+      $ref: "#/channels/~1v1~1tts~1slng~1resemble~1chatterbox:v2"
+    summary: Send synthesis requests to Chatterbox v2
+    messages:
+      - $ref: "#/channels/~1v1~1tts~1slng~1resemble~1chatterbox:v2/messages/request"
+    description: Send synthesis requests to Chatterbox v2
+  ttsChatterboxV2Receive:
+    action: receive
+    channel:
+      $ref: "#/channels/~1v1~1tts~1slng~1resemble~1chatterbox:v2"
+    summary: Receive audio chunks from Chatterbox v2
+    messages:
+      - $ref: "#/channels/~1v1~1tts~1slng~1resemble~1chatterbox:v2/messages/response"
+    description: Receive audio chunks from Chatterbox v2
+  ttsRimeArcanaLangSend:
+    action: send
+    channel:
+      $ref: "#/channels/~1v1~1tts~1slng~1rime~1arcana~1%7Blang%7D"
+    summary: Send synthesis requests to Rime Arcana
+    messages:
+      - $ref: "#/channels/~1v1~1tts~1slng~1rime~1arcana~1%7Blang%7D/messages/request"
+    description: Send synthesis requests to Rime Arcana
+  ttsRimeArcanaLangReceive:
+    action: receive
+    channel:
+      $ref: "#/channels/~1v1~1tts~1slng~1rime~1arcana~1%7Blang%7D"
+    summary: Receive audio chunks from Rime Arcana
+    messages:
+      - $ref: "#/channels/~1v1~1tts~1slng~1rime~1arcana~1%7Blang%7D/messages/response"
+    description: Receive audio chunks from Rime Arcana
+  ttsRimeArcanaArSend:
+    action: send
+    channel:
+      $ref: "#/channels/~1v1~1tts~1slng~1rime~1arcana:ar"
+    summary: Send synthesis requests to Rime Arcana Arabic
+    messages:
+      - $ref: "#/channels/~1v1~1tts~1slng~1rime~1arcana:ar/messages/request"
+    description: Send synthesis requests to Rime Arcana Arabic
+  ttsRimeArcanaArReceive:
+    action: receive
+    channel:
+      $ref: "#/channels/~1v1~1tts~1slng~1rime~1arcana:ar"
+    summary: Receive audio chunks from Rime Arcana Arabic
+    messages:
+      - $ref: "#/channels/~1v1~1tts~1slng~1rime~1arcana:ar/messages/response"
+    description: Receive audio chunks from Rime Arcana Arabic
+  ttsRimeArcanaDeSend:
+    action: send
+    channel:
+      $ref: "#/channels/~1v1~1tts~1slng~1rime~1arcana:de"
+    summary: Send synthesis requests to Rime Arcana German
+    messages:
+      - $ref: "#/channels/~1v1~1tts~1slng~1rime~1arcana:de/messages/request"
+    description: Send synthesis requests to Rime Arcana German
+  ttsRimeArcanaDeReceive:
+    action: receive
+    channel:
+      $ref: "#/channels/~1v1~1tts~1slng~1rime~1arcana:de"
+    summary: Receive audio chunks from Rime Arcana German
+    messages:
+      - $ref: "#/channels/~1v1~1tts~1slng~1rime~1arcana:de/messages/response"
+    description: Receive audio chunks from Rime Arcana German
+  ttsRimeArcanaEnSend:
+    action: send
+    channel:
+      $ref: "#/channels/~1v1~1tts~1slng~1rime~1arcana:en"
+    summary: Send synthesis requests to Rime Arcana English
+    messages:
+      - $ref: "#/channels/~1v1~1tts~1slng~1rime~1arcana:en/messages/request"
+    description: Send synthesis requests to Rime Arcana English
+  ttsRimeArcanaEnReceive:
+    action: receive
+    channel:
+      $ref: "#/channels/~1v1~1tts~1slng~1rime~1arcana:en"
+    summary: Receive audio chunks from Rime Arcana English
+    messages:
+      - $ref: "#/channels/~1v1~1tts~1slng~1rime~1arcana:en/messages/response"
+    description: Receive audio chunks from Rime Arcana English
+  ttsRimeArcanaEsSend:
+    action: send
+    channel:
+      $ref: "#/channels/~1v1~1tts~1slng~1rime~1arcana:es"
+    summary: Send synthesis requests to Rime Arcana Spanish
+    messages:
+      - $ref: "#/channels/~1v1~1tts~1slng~1rime~1arcana:es/messages/request"
+    description: Send synthesis requests to Rime Arcana Spanish
+  ttsRimeArcanaEsReceive:
+    action: receive
+    channel:
+      $ref: "#/channels/~1v1~1tts~1slng~1rime~1arcana:es"
+    summary: Receive audio chunks from Rime Arcana Spanish
+    messages:
+      - $ref: "#/channels/~1v1~1tts~1slng~1rime~1arcana:es/messages/response"
+    description: Receive audio chunks from Rime Arcana Spanish
+  ttsRimeArcanaFrSend:
+    action: send
+    channel:
+      $ref: "#/channels/~1v1~1tts~1slng~1rime~1arcana:fr"
+    summary: Send synthesis requests to Rime Arcana French
+    messages:
+      - $ref: "#/channels/~1v1~1tts~1slng~1rime~1arcana:fr/messages/request"
+    description: Send synthesis requests to Rime Arcana French
+  ttsRimeArcanaFrReceive:
+    action: receive
+    channel:
+      $ref: "#/channels/~1v1~1tts~1slng~1rime~1arcana:fr"
+    summary: Receive audio chunks from Rime Arcana French
+    messages:
+      - $ref: "#/channels/~1v1~1tts~1slng~1rime~1arcana:fr/messages/response"
+    description: Receive audio chunks from Rime Arcana French
+  ttsSlngDeepgramAura2Send:
+    action: send
+    channel:
+      $ref: "#/channels/~1v1~1tts~1slng~1deepgram~1aura:2"
+    summary: Send synthesis requests to SLNG Deepgram Aura 2
+    messages:
+      - $ref: "#/channels/~1v1~1tts~1slng~1deepgram~1aura:2/messages/request"
+    description: Send synthesis requests to SLNG Deepgram Aura 2
+  ttsSlngDeepgramAura2Receive:
+    action: receive
+    channel:
+      $ref: "#/channels/~1v1~1tts~1slng~1deepgram~1aura:2"
+    summary: Receive audio chunks from SLNG Deepgram Aura 2
+    messages:
+      - $ref: "#/channels/~1v1~1tts~1slng~1deepgram~1aura:2/messages/response"
+    description: Receive audio chunks from SLNG Deepgram Aura 2
+  ttsSlngDeepgramAura2EnSend:
+    action: send
+    channel:
+      $ref: "#/channels/~1v1~1tts~1slng~1deepgram~1aura:2-en"
+    summary: Send synthesis requests to SLNG Deepgram Aura 2 English
+    messages:
+      - $ref: "#/channels/~1v1~1tts~1slng~1deepgram~1aura:2-en/messages/request"
+    description: Send synthesis requests to SLNG Deepgram Aura 2 English
+  ttsSlngDeepgramAura2EnReceive:
+    action: receive
+    channel:
+      $ref: "#/channels/~1v1~1tts~1slng~1deepgram~1aura:2-en"
+    summary: Receive audio chunks from SLNG Deepgram Aura 2 English
+    messages:
+      - $ref: "#/channels/~1v1~1tts~1slng~1deepgram~1aura:2-en/messages/response"
+    description: Receive audio chunks from SLNG Deepgram Aura 2 English
+  ttsSlngDeepgramAura2EsSend:
+    action: send
+    channel:
+      $ref: "#/channels/~1v1~1tts~1slng~1deepgram~1aura:2-es"
+    summary: Send synthesis requests to SLNG Deepgram Aura 2 Spanish
+    messages:
+      - $ref: "#/channels/~1v1~1tts~1slng~1deepgram~1aura:2-es/messages/request"
+    description: Send synthesis requests to SLNG Deepgram Aura 2 Spanish
+  ttsSlngDeepgramAura2EsReceive:
+    action: receive
+    channel:
+      $ref: "#/channels/~1v1~1tts~1slng~1deepgram~1aura:2-es"
+    summary: Receive audio chunks from SLNG Deepgram Aura 2 Spanish
+    messages:
+      - $ref: "#/channels/~1v1~1tts~1slng~1deepgram~1aura:2-es/messages/response"
+    description: Receive audio chunks from SLNG Deepgram Aura 2 Spanish
+  sttChatterboxV2Send:
+    action: send
+    channel:
+      $ref: "#/channels/~1v1~1tts~1slng~1resemble~1chatterbox:v2"
+    summary: Send synthesis requests to Chatterbox v2
+    messages:
+      - $ref: "#/channels/~1v1~1tts~1slng~1resemble~1chatterbox:v2/messages/request"
+    description: Send synthesis requests to Chatterbox v2
+  sttChatterboxV2Receive:
+    action: receive
+    channel:
+      $ref: "#/channels/~1v1~1tts~1slng~1resemble~1chatterbox:v2"
+    summary: Receive audio chunks from Chatterbox v2
+    messages:
+      - $ref: "#/channels/~1v1~1tts~1slng~1resemble~1chatterbox:v2/messages/response"
+    description: Receive audio chunks from Chatterbox v2
+  llmGptOss20bSend:
+    action: send
+    channel:
+      $ref: "#/channels/~1v1~1llm~1slng~1openai~1gpt-oss:20b"
+    summary: Send messages to GPT-OSS 20B
+    messages:
+      - $ref: "#/channels/~1v1~1llm~1slng~1openai~1gpt-oss:20b/messages/request"
+    description: Send messages to GPT-OSS 20B
+  llmGptOss20bReceive:
+    action: receive
+    channel:
+      $ref: "#/channels/~1v1~1llm~1slng~1openai~1gpt-oss:20b"
+    summary: Receive responses from GPT-OSS 20B
+    messages:
+      - $ref: "#/channels/~1v1~1llm~1slng~1openai~1gpt-oss:20b/messages/response"
+    description: Receive responses from GPT-OSS 20B
+  llmUltravoxV0_6Llama3_1_8bSend:
+    action: send
+    channel:
+      $ref: "#/channels/~1v1~1llm~1slng~1fixie-ai~1ultravox:v0_6-llama-3_1-8b"
+    summary: Send messages to Ultravox v0.6 Llama 3.1 8B
+    messages:
+      - $ref: "#/channels/~1v1~1llm~1slng~1fixie-ai~1ultravox:v0_6-llama-3_1-8b/messages/request"
+    description: Send messages to Ultravox v0.6 Llama 3.1 8B
+  llmUltravoxV0_6Llama3_1_8bReceive:
+    action: receive
+    channel:
+      $ref: "#/channels/~1v1~1llm~1slng~1fixie-ai~1ultravox:v0_6-llama-3_1-8b"
+    summary: Receive responses from Ultravox v0.6 Llama 3.1 8B
+    messages:
+      - $ref: "#/channels/~1v1~1llm~1slng~1fixie-ai~1ultravox:v0_6-llama-3_1-8b/messages/response"
+    description: Receive responses from Ultravox v0.6 Llama 3.1 8B
+  cognigySttBridgeSend:
+    action: send
+    channel:
+      $ref: "#/channels/~1v1~1bridges~1cognigy~1stt~1%7Bmodel_variant%7D"
+    summary: Send audio to Cognigy STT Bridge
+    messages:
+      - $ref: "#/channels/~1v1~1bridges~1cognigy~1stt~1%7Bmodel_variant%7D/messages/request"
+    description: Send start/stop messages and audio frames to Cognigy STT Bridge
+  cognigySttBridgeReceive:
+    action: receive
+    channel:
+      $ref: "#/channels/~1v1~1bridges~1cognigy~1stt~1%7Bmodel_variant%7D"
+    summary: Receive transcriptions from Cognigy STT Bridge
+    messages:
+      - $ref: "#/channels/~1v1~1bridges~1cognigy~1stt~1%7Bmodel_variant%7D/messages/response"
+    description: Receive transcription events from Cognigy STT Bridge
+  cognigyTtsBridgeSend:
+    action: send
+    channel:
+      $ref: "#/channels/~1v1~1bridges~1cognigy~1tts~1%7Bmodel_variant%7D"
+    summary: Send text to Cognigy TTS Bridge
+    messages:
+      - $ref: "#/channels/~1v1~1bridges~1cognigy~1tts~1%7Bmodel_variant%7D/messages/request"
+    description: Send stream/flush/stop messages to Cognigy TTS Bridge
+  cognigyTtsBridgeReceive:
+    action: receive
+    channel:
+      $ref: "#/channels/~1v1~1bridges~1cognigy~1tts~1%7Bmodel_variant%7D"
+    summary: Receive audio from Cognigy TTS Bridge
+    messages:
+      - $ref: "#/channels/~1v1~1bridges~1cognigy~1tts~1%7Bmodel_variant%7D/messages/response"
+    description: Receive connect events and audio chunks from Cognigy TTS Bridge
+components:
+  schemas:
+    WebsocketHeaders:
+      type: object
+      properties:
+        X-Region-Override:
+          type: string
+          description: Optional. Specify a target region for this model. If not provided,
+            the system will automatically select an appropriate region.
+        Upgrade:
+          type: string
+          enum:
+            - websocket
+        Connection:
+          type: string
+          enum:
+            - Upgrade
+    SttWebsocketRequestMessage:
+      oneOf:
+        - title: Init Message
+          type: object
+          description: Initialize a session with recognition configuration before
+            streaming audio.
+          required:
+            - type
+          properties:
+            type:
+              const: init
+            config:
+              type: object
+              properties:
+                language:
+                  type: string
+                sample_rate:
+                  type: number
+                encoding:
+                  type: string
+                  enum:
+                    - linear16
+                    - mp3
+                    - opus
+                enable_vad:
+                  type: boolean
+                enable_diarization:
+                  type: boolean
+                enable_word_timestamps:
+                  type: boolean
+                enable_partials:
+                  type: boolean
+        - title: Audio Message
+          type: object
+          description: Stream an audio frame to be transcribed.
+          required:
+            - type
+            - data
+          properties:
+            type:
+              const: audio
+            data:
+              type: string
+              format: byte
+        - title: Finalize Message
+          type: object
+          description: Signal that no more audio frames will be sent.
+          required:
+            - type
+          properties:
+            type:
+              const: finalize
+    TtsWebsocketRequestMessage:
+      oneOf:
+        - title: Init Message
+          type: object
+          description: Initialize a session with model and voice configuration before
+            sending text.
+          required:
+            - type
+            - model
+          properties:
+            type:
+              const: init
+            model:
+              type: string
+            voice:
+              type: string
+            config:
+              type: object
+              properties:
+                sample_rate:
+                  type: number
+                encoding:
+                  type: string
+                  enum:
+                    - linear16
+                    - mp3
+                    - opus
+                language:
+                  type: string
+                speed:
+                  type: number
+        - title: Text Message
+          type: object
+          description: Send text to synthesize into audio output.
+          required:
+            - type
+            - text
+          properties:
+            type:
+              const: text
+            text:
+              type: string
+            flush:
+              type: boolean
+        - title: Flush Message
+          type: object
+          description: Force any buffered text/audio to be finalized and delivered.
+          required:
+            - type
+          properties:
+            type:
+              const: flush
+        - title: Clear Message
+          type: object
+          description: Clear any queued text/audio from the current session.
+          required:
+            - type
+          properties:
+            type:
+              const: clear
+        - title: Cancel Message
+          type: object
+          description: Cancel the current generation and stop any further audio.
+          required:
+            - type
+          properties:
+            type:
+              const: cancel
+    SttWebsocketMessage:
+      oneOf:
+        - title: Ready Message
+          type: object
+          description: Indicates the session is ready to receive audio.
+          required:
+            - type
+            - session_id
+          properties:
+            type:
+              const: ready
+            session_id:
+              type: string
+        - title: Partial Transcript
+          type: object
+          description: Interim transcription result.
+          required:
+            - type
+            - transcript
+          properties:
+            type:
+              const: partial_transcript
+            transcript:
+              type: string
+            confidence:
+              type: number
+        - title: Final Transcript
+          type: object
+          description: Final transcription result with optional metadata.
+          required:
+            - type
+            - transcript
+          properties:
+            type:
+              const: final_transcript
+            transcript:
+              type: string
+            confidence:
+              type: number
+            language:
+              type: string
+            duration:
+              type: number
+        - title: Error Message
+          type: object
+          description: Indicates an error occurred during recognition.
+          required:
+            - type
+            - code
+            - message
+          properties:
+            type:
+              const: error
+            code:
+              type: string
+            message:
+              type: string
+    TtsWebsocketMessage:
+      oneOf:
+        - title: Ready Message
+          type: object
+          description: Indicates the session is ready to receive messages.
+          required:
+            - type
+            - session_id
+          properties:
+            type:
+              const: ready
+            session_id:
+              type: string
+        - title: Audio Chunk
+          type: object
+          description: Chunk of base64-encoded audio data.
+          required:
+            - type
+            - data
+          properties:
+            type:
+              const: audio_chunk
+            data:
+              type: string
+              format: byte
+            sequence:
+              type: integer
+        - title: Segment Start
+          type: object
+          description: Signals the start of a synthesized segment.
+          required:
+            - type
+            - segment_id
+          properties:
+            type:
+              const: segment_start
+            segment_id:
+              type: string
+        - title: Segment End
+          type: object
+          description: Signals the end of a synthesized segment.
+          required:
+            - type
+            - segment_id
+          properties:
+            type:
+              const: segment_end
+            segment_id:
+              type: string
+        - title: Flushed
+          type: object
+          description: Acknowledges that buffered output was flushed.
+          required:
+            - type
+          properties:
+            type:
+              const: flushed
+        - title: Cleared
+          type: object
+          description: Acknowledges that queued output was cleared.
+          required:
+            - type
+          properties:
+            type:
+              const: cleared
+        - title: Audio End
+          type: object
+          description: Signals the end of audio generation.
+          required:
+            - type
+          properties:
+            type:
+              const: audio_end
+            duration:
+              type: number
+        - title: Error Message
+          type: object
+          description: Indicates an error occurred during synthesis.
+          required:
+            - type
+            - code
+            - message
+          properties:
+            type:
+              const: error
+            code:
+              type: string
+            message:
+              type: string
+    SpeechmaticsSttWebsocketRequestMessage:
+      type: object
+      description: SpeechmaticsSttWebsocketRequestMessage payload schema
+    ChatterboxTtsWebsocketRequestMessage:
+      type: object
+      description: ChatterboxTtsWebsocketRequestMessage payload schema
+    LlmWebsocketRequestMessage:
+      type: object
+      description: LlmWebsocketRequestMessage payload schema
+    CognigySTTWebsocketClientMessage:
+      oneOf:
+        - title: Start Message
+          type: object
+          description: Initialize STT session
+          required:
+            - type
+          properties:
+            type:
+              const: start
+            language:
+              type: string
+            sample_rate:
+              type: number
+        - title: Stop Message
+          type: object
+          description: End STT session
+          required:
+            - type
+          properties:
+            type:
+              const: stop
+    CognigySTTWebsocketServerMessage:
+      oneOf:
+        - title: Transcription Message
+          type: object
+          required:
+            - type
+            - is_final
+            - alternatives
+          properties:
+            type:
+              const: transcription
+            is_final:
+              type: boolean
+            alternatives:
+              type: array
+              items:
+                type: object
+                properties:
+                  confidence:
+                    type: number
+                  transcript:
+                    type: string
+            channel:
+              type: integer
+            language:
+              type: string
+        - title: Error Message
+          type: object
+          required:
+            - type
+            - error
+            - message
+          properties:
+            type:
+              const: error
+            error:
+              type: string
+            message:
+              type: string
+    CognigyTTSWebsocketClientMessage:
+      oneOf:
+        - title: Stream Message
+          type: object
+          description: Send text to synthesize
+          required:
+            - type
+            - text
+          properties:
+            type:
+              const: stream
+            text:
+              type: string
+        - title: Flush Message
+          type: object
+          description: Flush buffered audio
+          required:
+            - type
+          properties:
+            type:
+              const: flush
+        - title: Stop Message
+          type: object
+          description: Stop synthesis
+          required:
+            - type
+          properties:
+            type:
+              const: stop
+    CognigyTTSWebsocketServerMessage:
+      oneOf:
+        - title: Connect Message
+          type: object
+          description: Connection established
+          required:
+            - type
+            - data
+          properties:
+            type:
+              const: connect
+            data:
+              type: object
+              properties:
+                sample_rate:
+                  type: number
+                base64_encoding:
+                  type: boolean
+        - title: Error Message
+          type: object
+          required:
+            - type
+            - error
+            - message
+          properties:
+            type:
+              const: error
+            error:
+              type: string
+            message:
+              type: string
+  messages:
+    SttWebsocketRequest:
+      name: SttWebsocketRequest
+      title: STT WebSocket Request
+      payload:
+        $ref: "#/components/schemas/SttWebsocketRequestMessage"
+    SttWebsocketResponse:
+      name: SttWebsocketResponse
+      title: STT WebSocket Response
+      payload:
+        $ref: "#/components/schemas/SttWebsocketMessage"
+    TtsWebsocketRequest:
+      name: TtsWebsocketRequest
+      title: TTS WebSocket Request
+      payload:
+        $ref: "#/components/schemas/TtsWebsocketRequestMessage"
+    TtsWebsocketResponse:
+      name: TtsWebsocketResponse
+      title: TTS WebSocket Response
+      payload:
+        $ref: "#/components/schemas/TtsWebsocketMessage"
+    SpeechmaticsSttWebsocketRequestMessage:
+      payload:
+        oneOf:
+          - title: Init Message
+            type: object
+            description: Initialize a session with recognition configuration before
+              streaming audio.
+            required:
+              - type
+            properties:
+              type:
+                const: init
+              config:
+                type: object
+                properties:
+                  language:
+                    type: string
+                  sample_rate:
+                    type: number
+                  encoding:
+                    type: string
+                    enum:
+                      - linear16
+                      - mp3
+                      - opus
+                  enable_vad:
+                    type: boolean
+                  enable_word_timestamps:
+                    type: boolean
+          - title: Audio Message
+            type: object
+            description: Stream an audio frame to be transcribed.
+            required:
+              - type
+              - data
+            properties:
+              type:
+                const: audio
+              data:
+                type: string
+                format: byte
+          - title: Finalize Message
+            type: object
+            description: Signal that no more audio frames will be sent.
+            required:
+              - type
+            properties:
+              type:
+                const: finalize
+    ChatterboxTtsWebsocketRequestMessage:
+      payload:
+        oneOf:
+          - title: Init Message
+            type: object
+            description: Initialize a session with model and voice configuration before
+              sending text.
+            required:
+              - type
+              - model
+            properties:
+              type:
+                const: init
+              model:
+                type: string
+              voice:
+                type: string
+              config:
+                type: object
+                properties:
+                  sample_rate:
+                    type: number
+                  encoding:
+                    type: string
+                    enum:
+                      - linear16
+                      - mp3
+                      - opus
+                  language:
+                    type: string
+          - title: Text Message
+            type: object
+            description: Send text to synthesize into audio output.
+            required:
+              - type
+              - text
+            properties:
+              type:
+                const: text
+              text:
+                type: string
+              flush:
+                type: boolean
+          - title: Flush Message
+            type: object
+            description: Force any buffered text/audio to be finalized and delivered.
+            required:
+              - type
+            properties:
+              type:
+                const: flush
+          - title: Clear Message
+            type: object
+            description: Clear any queued text/audio from the current session.
+            required:
+              - type
+            properties:
+              type:
+                const: clear
+          - title: Cancel Message
+            type: object
+            description: Cancel the current generation and stop any further audio.
+            required:
+              - type
+            properties:
+              type:
+                const: cancel
+    LlmWebsocketRequestMessage:
+      payload:
+        oneOf:
+          - title: Init Message
+            type: object
+            description: Initialize a session with model configuration before sending
+              messages.
+            required:
+              - type
+              - model
+            properties:
+              type:
+                const: init
+              model:
+                type: string
+              max_tokens:
+                type: integer
+                minimum: 1
+                default: 1000
+              temperature:
+                type: number
+                minimum: 0
+                maximum: 2
+                default: 1
+              top_p:
+                type: number
+                minimum: 0
+                maximum: 1
+                default: 1
+          - title: Message Message
+            type: object
+            description: Send a message to the LLM.
+            required:
+              - type
+              - messages
+            properties:
+              type:
+                const: message
+              messages:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    role:
+                      type: string
+                      enum:
+                        - system
+                        - user
+                        - assistant
+                    content:
+                      type: string
+          - title: Stream Message
+            type: object
+            description: Send a streaming message to the LLM.
+            required:
+              - type
+              - messages
+            properties:
+              type:
+                const: stream
+              messages:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    role:
+                      type: string
+                      enum:
+                        - system
+                        - user
+                        - assistant
+                    content:
+                      type: string
+              chunk_size:
+                type: integer
+                minimum: 1
+                default: 100
+    SpeechmaticsSttWebsocketRequest:
+      name: SpeechmaticsSttWebsocketRequest
+      title: Speechmatics STT WebSocket Request
+      payload:
+        $ref: "#/components/schemas/SpeechmaticsSttWebsocketRequestMessage"
+    SpeechmaticsSttWebsocketResponse:
+      name: SpeechmaticsSttWebsocketResponse
+      title: Speechmatics STT WebSocket Response
+      payload:
+        $ref: "#/components/schemas/SttWebsocketMessage"
+    ChatterboxTtsWebsocketRequest:
+      name: ChatterboxTtsWebsocketRequest
+      title: Chatterbox TTS WebSocket Request
+      payload:
+        $ref: "#/components/schemas/ChatterboxTtsWebsocketRequestMessage"
+    ChatterboxTtsWebsocketResponse:
+      name: ChatterboxTtsWebsocketResponse
+      title: Chatterbox TTS WebSocket Response
+      payload:
+        $ref: "#/components/schemas/TtsWebsocketMessage"
+    LlmWebsocketRequest:
+      name: LlmWebsocketRequest
+      title: LLM WebSocket Request
+      payload:
+        $ref: "#/components/schemas/LlmWebsocketRequestMessage"
+    LlmWebsocketResponse:
+      name: LlmWebsocketResponse
+      title: LLM WebSocket Response
+      payload:
+        $ref: "#/components/schemas/TtsWebsocketMessage"
+    CognigySTTWebsocketRequest:
+      name: CognigySTTWebsocketRequest
+      title: Cognigy STT WebSocket Request
+      payload:
+        $ref: "#/components/schemas/CognigySTTWebsocketClientMessage"
+    CognigySTTWebsocketResponse:
+      name: CognigySTTWebsocketResponse
+      title: Cognigy STT WebSocket Response
+      payload:
+        $ref: "#/components/schemas/CognigySTTWebsocketServerMessage"
+    CognigyTTSWebsocketRequest:
+      name: CognigyTTSWebsocketRequest
+      title: Cognigy TTS WebSocket Request
+      payload:
+        $ref: "#/components/schemas/CognigyTTSWebsocketClientMessage"
+    CognigyTTSWebsocketResponse:
+      name: CognigyTTSWebsocketResponse
+      title: Cognigy TTS WebSocket Response
+      payload:
+        $ref: "#/components/schemas/CognigyTTSWebsocketServerMessage"
