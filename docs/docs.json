@@ -59,7 +59,8 @@
             "pages": [
               "/index",
               "/quickstart",
-              "/development"
+              "/development",
+              "/agents"
             ]
           },
           {
