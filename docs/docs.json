@@ -93,9 +93,7 @@
         "groups": [
           {
             "group": "API documentation",
-            "pages": [
-              "/api-reference/post-v1"
-            ]
+            "asyncapi":"gatway.yaml"
           }
         ]
       }
