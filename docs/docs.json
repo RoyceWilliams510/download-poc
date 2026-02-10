@@ -87,15 +87,6 @@
             "openapi": "boolean.yaml"
           }
         ]
-      },
-      {
-        "tab": "API Sven",
-        "groups": [
-          {
-            "group": "API documentation",
-            "asyncapi":"gatway.yaml"
-          }
-        ]
       }
     ],
     "global": {
