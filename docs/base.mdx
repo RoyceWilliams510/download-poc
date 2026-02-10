@@ -2,719 +2,430 @@
 title: "base"
 description: "Welcome to the new home for your documentation"
 ---
+> ## Documentation Index
+> Fetch the complete documentation index at: https://ngrok.com/docs/llms.txt
+> Use this file to discover all available pages before exploring further.
 
-<Card title="View on GitHub" icon="github" horizontal href="https://github.com/basetenlabs/truss/tree/main/baseten-performance-client" />
+# ngrok Agent
 
-Built in Rust and integrated with Python, Node.js, and native Rust, the *Performance Client* handles concurrent POST requests efficiently. It releases the Python GIL while executing requests, enabling simultaneous sync and async usage.
+> The ngrok agent is a lightweight command-line program that forwards traffic from endpoints it creates on the ngrok cloud service to your upstream application services.
 
-[Benchmarks](https://www.baseten.co/blog/your-client-code-matters-10x-higher-embedding-throughput-with-python-and-rust/) show the Performance Client reaches 1200+ requests per second per client.
+## Overview
 
-Use it with **Baseten deployments** or **third-party providers** like OpenAI.
+The ngrok agent is a lightweight command-line program that forwards traffic
+from endpoints it creates on the ngrok cloud service to your upstream application
+services.
 
-<img src="https://mintcdn.com/baseten-preview/W3NbEem9OZkF5rdB/images/performance-client-diagram.png?fit=max&auto=format&n=W3NbEem9OZkF5rdB&q=85&s=8b1df45b528b98df2154736919de105c" alt="benchmarks" data-og-width="1200" width="1200" data-og-height="565" height="565" data-path="images/performance-client-diagram.png" data-optimize="true" data-opv="3" srcset="https://mintcdn.com/baseten-preview/W3NbEem9OZkF5rdB/images/performance-client-diagram.png?w=280&fit=max&auto=format&n=W3NbEem9OZkF5rdB&q=85&s=7974921583e72f195778a892e0fa9af1 280w, https://mintcdn.com/baseten-preview/W3NbEem9OZkF5rdB/images/performance-client-diagram.png?w=560&fit=max&auto=format&n=W3NbEem9OZkF5rdB&q=85&s=6c97fe1f29ba0ac098d247965943f2eb 560w, https://mintcdn.com/baseten-preview/W3NbEem9OZkF5rdB/images/performance-client-diagram.png?w=840&fit=max&auto=format&n=W3NbEem9OZkF5rdB&q=85&s=de2c7b3177be0adba10dc5c032523d08 840w, https://mintcdn.com/baseten-preview/W3NbEem9OZkF5rdB/images/performance-client-diagram.png?w=1100&fit=max&auto=format&n=W3NbEem9OZkF5rdB&q=85&s=4545ef1bff98f1877d5c4adb4231d5ad 1100w, https://mintcdn.com/baseten-preview/W3NbEem9OZkF5rdB/images/performance-client-diagram.png?w=1650&fit=max&auto=format&n=W3NbEem9OZkF5rdB&q=85&s=61697cd3af7479fac9e0bf497b538c82 1650w, https://mintcdn.com/baseten-preview/W3NbEem9OZkF5rdB/images/performance-client-diagram.png?w=2500&fit=max&auto=format&n=W3NbEem9OZkF5rdB&q=85&s=5c407d6f55103b325ca7547b3f11902b 2500w" />
+The ngrok agent is a standalone native executable with zero runtime
+dependencies. It runs on [all major operating systems](#system-requirements)
+and it is packaged for distribution on most popular package managers.
 
-***
+The ngrok agent uses a simple [YAML configuration file](/agent/config),
+can install itself as a native operating system service and also has a built-in
+CLI for calling the [ngrok API](/api/).
 
-## Install the client
+## Install
 
-<View title="Python" icon="python">
-  To install the Performance Client for Python, use pip:
+Follow the [getting started guide](/getting-started/#2-install-the-ngrok-agent-cli) or visit the [download page](https://download.ngrok.com) to install and set up the ngrok agent.
 
-  ```bash  theme={"system"}
-  pip install baseten_performance_client>=0.1.0
-  ```
-</View>
+## Example usage
 
-<View title="JavaScript" icon="js">
-  To install the Performance Client for JavaScript, use npm:
+### HTTP endpoint
 
-  ```bash  theme={"system"}
-  npm install baseten-performance-client
-  ```
-</View>
+Serve your web app listening at port 8080 on a random public URL
 
-***
 
-## Get started
+### Pre-defined Domain
 
-<View title="Python" icon="python">
-  To initialize the Performance Client in Python, import the class and provide your base URL and API key:
+Serve a web app on example.ngrok.app
 
-  ```python  theme={"system"}
-  from baseten_performance_client import PerformanceClient
 
-  client = PerformanceClient(
-      base_url="https://model-YOUR_MODEL_ID.api.baseten.co/environments/production/sync",
-      api_key="YOUR_API_KEY"
-  )
-  ```
-</View>
+### Basic Auth
 
-<View title="JavaScript" icon="js">
-  To initialize the Performance Client with JavaScript, require the package and create a new instance:
+Secure your web app with a username + password
 
-  ```javascript  theme={"system"}
-  const { PerformanceClient } = require("baseten-performance-client");
 
-  const client = new PerformanceClient(
-    "https://model-YOUR_MODEL_ID.api.baseten.co/environments/production/sync",
-    process.env.BASETEN_API_KEY
-  );
-  ```
-</View>
+##### `traffic-policy.yml`
 
-The client also works with third-party providers like OpenAI by replacing the `base_url`.
 
-### Advanced setup
+### Forward to non-local
 
-Configure HTTP version selection and *connection pooling* for optimal performance.
+Forward to a service not listening on localhost
 
-<View title="Python" icon="python">
-  To configure HTTP version and connection pooling in Python, use the `http_version` parameter and `HttpClientWrapper`:
+### Local HTTPS Server
 
-  ```python  theme={"system"}
-  from baseten_performance_client import PerformanceClient, HttpClientWrapper
+Forward to an upstream service listening for `https`
 
-  # HTTP/1.1 (default, better for high concurrency)
-  client_http1 = PerformanceClient(BASE_URL, API_KEY, http_version=1)
 
-  # HTTP/2 (not recommended on Baseten)
-  client_http2 = PerformanceClient(BASE_URL, API_KEY, http_version=2)
+### Forwarding to IPv6 Address
 
-  # Connection pooling for multiple clients
-  wrapper = HttpClientWrapper(http_version=1)
-  client1 = PerformanceClient(base_url="https://api1.example.com", client_wrapper=wrapper)
-  client2 = PerformanceClient(base_url="https://api2.example.com", client_wrapper=wrapper)
-  ```
-</View>
+The ngrok agent can also forward to IPv6 addresses
 
-<View title="JavaScript" icon="js">
-  To configure HTTP version and connection pooling with JavaScript, pass the version as the third argument and use `HttpClientWrapper`:
 
-  ```javascript  theme={"system"}
-  const { PerformanceClient, HttpClientWrapper } = require('baseten-performance-client');
+### TCP Endpoint
 
-  // HTTP/1.1 (default, better for high concurrency)
-  const clientHttp1 = new PerformanceClient(BASE_URL, API_KEY, 1);
+Accept traffic to a non-HTTP service.
 
-  // HTTP/2
-  const clientHttp2 = new PerformanceClient(BASE_URL, API_KEY, 2);
+### TLS Endpoint
 
-  // Connection pooling for multiple clients
-  const wrapper = new HttpClientWrapper(1);
-  const pooledClient1 = new PerformanceClient(BASE_URL_1, API_KEY, 1, wrapper);
-  const pooledClient2 = new PerformanceClient(BASE_URL_2, API_KEY, 1, wrapper);
-  ```
-</View>
+Listen on `your-name.ngrok.app` for TLS traffic. It could be HTTPS, but any
+protocol wrapped in TLS is accepted.
 
-***
-
-## Core features
-
-### Embeddings
-
-The client provides efficient embedding requests with configurable *batching*, concurrency, and latency optimizations. Compatible with [BEI](/engines/bei/overview).
-
-<View title="Python" icon="python">
-  To generate embeddings with Python, configure a `RequestProcessingPreference` and call `client.embed()`:
-
-  ```python  theme={"system"}
-  from baseten_performance_client import PerformanceClient, RequestProcessingPreference
-
-  client = PerformanceClient(base_url=BASE_URL, api_key=API_KEY)
-  texts = ["Hello world", "Example text", "Another sample"] * 10
-
-  preference = RequestProcessingPreference(
-      batch_size=16,
-      max_concurrent_requests=256,
-      max_chars_per_request=10000,
-      hedge_delay=0.5,
-      timeout_s=360,
-      total_timeout_s=600
-  )
 
-  response = client.embed(
-      input=texts,
-      model="my_model",
-      preference=preference
-  )
 
-  print(f"Model used: {response.model}")
-  print(f"Total tokens used: {response.usage.total_tokens}")
-  print(f"Total time: {response.total_time:.4f}s")
-
-  # Convert to numpy array (requires numpy)
-  numpy_array = response.numpy()
-  print(f"Embeddings shape: {numpy_array.shape}")
-  ```
-
-  For async usage, call `await client.async_embed(input=texts, model="my_model", preference=preference)`.
-</View>
+##### `traffic-policy.yml`
 
-<View title="JavaScript" icon="js">
-  To generate embeddings with JavaScript, configure a `RequestProcessingPreference` and call `client.embed()`:
 
-  ```javascript  theme={"system"}
-  const { PerformanceClient, RequestProcessingPreference } = require('baseten-performance-client');
+### Multiple Endpoints
 
-  const client = new PerformanceClient(BASE_URL, API_KEY);
-  const texts = ["Hello world", "Example text", "Another sample"];
+Start multiple endpoints defined in the [configuration file](/agent/config/).
 
-  const preference = new RequestProcessingPreference(
-      32,        // maxConcurrentRequests
-      4,         // batchSize
-      10000,     // maxCharsPerRequest
-      360.0,     // timeoutS
-      0.5        // hedgeDelay
-  );
+## Tab completion
 
-  const response = await client.embed(
-      texts,                      // input
-      "my_model",                 // model
-      null,                       // encodingFormat
-      null,                       // dimensions
-      null,                       // user
-      preference                  // preference parameter
-  );
-
-  console.log(`Model used: ${response.model}`);
-  console.log(`Total tokens used: ${response.usage.total_tokens}`);
-  console.log(`Total time: ${response.total_time.toFixed(4)}s`);
-  ```
-</View>
-
-### Generic batch POST
-
-Send HTTP requests to any URL with any JSON payload. Compatible with [Engine-Builder-LLM](/engines/engine-builder-llm/overview) and other models. Set `stream=False` for SSE endpoints.
+The ngrok agent has built-in tab completion which makes it easy to navigate its
+command and flags by hitting tab in your terminal when using a `bash` or `zsh`
+shell. Add tab-completion to your shell session with:
 
-<View title="Python" icon="python">
-  To send batch POST requests with Python, define your payloads and call `client.batch_post()`:
 
-  ```python  theme={"system"}
-  from baseten_performance_client import PerformanceClient, RequestProcessingPreference
+Install it permanently by following the documentation for the [`ngrok completion` command](/agent/cli/#ngrok-completion).
 
-  client = PerformanceClient(base_url=BASE_URL, api_key=API_KEY)
+## Authtokens
 
-  payloads = [
-      {"model": "my_model", "prompt": "Batch request 1", "stream": False},
-      {"model": "my_model", "prompt": "Batch request 2", "stream": False}
-  ] * 10
+The ngrok agent authenticates with an authtoken.
+[Your authtoken is available on the ngrok dashboard](https://dashboard.ngrok.com/get-started/your-authtoken).
+Add your authtoken to the ngrok agent with the following command:
 
-  preference = RequestProcessingPreference(
-      max_concurrent_requests=96,
-      timeout_s=720,
-      hedge_delay=0.5
-  )
 
-  response = client.batch_post(
-      url_path="/v1/completions",
-      payloads=payloads,
-      custom_headers={"x-custom-header": "value"},
-      preference=preference,
-      method="POST"
-  )
+This command updates the `authtoken` property in your [ngrok configuration file](/agent/config).
 
-  print(f"Total time: {response.total_time:.4f}s")
-  ```
+Use a separate authtoken for each agent you configure. You can [provision additional authtokens on your ngrok dashboard](https://dashboard.ngrok.com/authtokens) or [via API](/agent/config/v3/#authtoken). Separate authtokens isolate the security risk
+if an authtoken is compromised. It also allows you to configure
+[ACLs](#authtoken-acls) on a per agent basis.
 
-  Supported methods: `GET`, `POST`, `PUT`, `PATCH`, `DELETE`, `HEAD`, `OPTIONS`.
+When you provision a new authtoken, the full token is only displayed once. As a security
+feature, ngrok does not store a recoverable representation of the token.
 
-  For async usage, call `await client.async_batch_post(url_path, payloads, preference, custom_headers, method)`.
-</View>
+## Authtoken ACLs
 
-<View title="JavaScript" icon="js">
-  To send batch POST requests with JavaScript, define your payloads and call `client.batchPost()`:
+Authtoken ACLs restrict what actions an ngrok agent connecting with that
+authtoken is allowed to take. You may define multiple ACLs. Authtokens with no
+ACLs may take all actions. The following ACLs are supported:
 
-  ```javascript  theme={"system"}
-  const { PerformanceClient, RequestProcessingPreference } = require('baseten-performance-client');
+| Example              | Description                                                                |
+| -------------------- | -------------------------------------------------------------------------- |
+| `bind:foo.ngrok.app` | The agent may only create an endpoint on `foo.ngrok.app`                   |
+| `bind:*.example.com` | The agent may only create endpoints on subdomains of `example.com`         |
+| `bind:foo=bar`       | The agent may create a labeled endpoint with the label `foo=bar`           |
+| `bind:app=*`         | The agent may create labeled endpoints with labels like `app=x` or `app=y` |
+| `bind:*`             | The agent may listen on all endpoints                                      |
 
-  const client = new PerformanceClient(BASE_URL, API_KEY);
+## API keys
 
-  const payloads = [
-      { model: "my_model", prompt: "Batch request 1", stream: false },
-      { model: "my_model", prompt: "Batch request 2", stream: false }
-  ];
+The ngrok agent contains a [complete CLI for the ngrok API](/agent/cli-api/).
 
-  const preference = new RequestProcessingPreference(32, undefined, undefined, 360.0, 0.5);
-  const response = await client.batchPost(
-      "/v1/completions",
-      payloads,
-      preference,
-      {"x-custom-header": "value"},
-      "POST"
-  );
+To use it, [create an API Key on your ngrok dashboard](https://dashboard.ngrok.com/api) and then run:
 
-  console.log(`Total time: ${response.total_time.toFixed(4)}s`);
-  ```
-</View>
 
-### Reranking
 
-Rerank documents by relevance to a query. Compatible with [BEI](/engines/bei/overview), [BEI-Bert](/engines/bei/overview), and text-embeddings-inference reranking endpoints.
+After you've installed the API Key, try querying your list of domains or online endpoints:
 
-<View title="Python" icon="python">
-  To rerank documents with Python, provide a query and list of documents to `client.rerank()`:
 
-  ```python  theme={"system"}
-  from baseten_performance_client import PerformanceClient, RequestProcessingPreference
+## Configuration file
 
-  client = PerformanceClient(base_url=BASE_URL, api_key=API_KEY)
+The ngrok agent uses a [YAML configuration file](/agent/config) to customize
+its behavior. The config file is useful if your configuration is too complex
+for the command line and if you want the agent to run multiple endpoints
+simultaneously.
 
-  query = "What is the best framework?"
-  documents = ["Doc 1 text", "Doc 2 text", "Doc 3 text"]
+Consult the [ngrok agent configuration file reference](/agent/config/)
+for a full list of configuration file options.
 
-  preference = RequestProcessingPreference(
-      batch_size=16,
-      max_concurrent_requests=32,
-      timeout_s=360,
-      max_chars_per_request=256000,
-      hedge_delay=0.5
-  )
+## Environment variables
 
-  response = client.rerank(
-      query=query,
-      texts=documents,
-      model="rerank-model",
-      return_text=True,
-      preference=preference
-  )
+The ngrok agent supports environment variables for some configuration.
+Environment variables take precedence over the corresponding values specified
+in the configuration file.
 
-  for res in response.data:
-      print(f"Index: {res.index} Score: {res.score}")
-  ```
+| Name              | Configuration Property                     |
+| ----------------- | ------------------------------------------ |
+| `NGROK_AUTHTOKEN` | [`authtoken`](/agent/config/v3/#authtoken) |
+| `NGROK_API_KEY`   | [`api_key`](/agent/config/v3/#api-key)     |
 
-  For async usage, call `await client.async_rerank(query, texts, model, return_text, preference)`.
-</View>
+## Running ngrok in the background
 
-<View title="JavaScript" icon="js">
-  To rerank documents with JavaScript, provide a query and list of documents to `client.rerank()`:
+ngrok includes commands to run itself in the background as a native operating
+system service, that is, as a daemon. When it runs as an operating system service it:
 
-  ```javascript  theme={"system"}
-  const { PerformanceClient, RequestProcessingPreference } = require('baseten-performance-client');
+* Starts when the machine boots
+* Automatically restarts after crashes
+* Can be managed via native OS service tooling
+* Sends logs to the OS's native logging service
+* Starts all endpoints defined in the configuration file, the equivalent of running `ngrok start --all`
 
-  const client = new PerformanceClient(BASE_URL, API_KEY);
+<Tip>
+  In most cases, installing ngrok as a service requires administrator privileges.
+</Tip>
 
-  const query = "What is the best framework?";
-  const documents = ["Doc 1 text", "Doc 2 text", "Doc 3 text"];
+| OS      | Notes                                                                                                                                                  |
+| ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Linux   | The ngrok agent creates a `systemd` unit file. Errors and warnings are logged to `syslog`.                                                             |
+| Windows | The ngrok agent installs itself as a Windows service. It can be managed via Windows Services. Errors and warnings are logged to the Windows event log. |
+| MacOS   | The ngrok agent creates a plist file and configures itself to run via `launchd`. Errors and warnings are logged to `syslog`.                           |
 
-  const preference = new RequestProcessingPreference(32, 16, undefined, 360.0, 0.5);
-  const response = await client.rerank(query, documents, "rerank-model", true, preference);
+#### Try it out
 
-  response.data.forEach(res => console.log(`Index: ${res.index} Score: ${res.score}`));
-  ```
-</View>
+Create an ngrok [configuration file](#configuration-file). For this example,
+assume it's `C:\ngrok\ngrok.yml`. In your configuration file, make sure
+you include the [`authtoken`](/agent/config/v3/#authtoken) property and define all
+of the endpoints you want to start. Then run:
 
-### Classification
 
-Classify text inputs into categories. Compatible with [BEI](/engines/bei/overview) and text-embeddings-inference classification endpoints.
+This will validate that the configuration file is valid, and if so, install
+ngrok as a service using the given configuration file. The service installation
+includes the location of the ngrok executable and the configuration file, so
+don't move or delete either after you've installed the service.
 
-<View title="Python" icon="python">
-  To classify text with Python, provide a list of inputs to `client.classify()`:
+You can then start the ngrok agent service with:
 
-  ```python  theme={"system"}
-  from baseten_performance_client import PerformanceClient, RequestProcessingPreference
 
-  client = PerformanceClient(base_url=BASE_URL, api_key=API_KEY)
+You can manage the agent with your OS's normal service tooling, but the agent
+also includes the [`ngrok service` commands](/agent/cli/#ngrok-service) to
+manage the installed service:
 
-  texts_to_classify = [
-      "This is great!",
-      "I did not like it.",
-      "Neutral experience."
-  ]
+* `ngrok service start`
+* `ngrok service stop`
+* `ngrok service restart`
+* `ngrok service uninstall`
 
-  preference = RequestProcessingPreference(
-      batch_size=16,
-      max_concurrent_requests=32,
-      timeout_s=360.0,
-      max_chars_per_request=256000,
-      hedge_delay=0.5
-  )
+<Tip>
+  If you see an exit code `5` or `Input/output error`, it usually indicates that ngrok is not able to find the config file and/or does not have permissions to do so. Make sure you have installed the ngrok service with a valid config file and that when the service is run (either as you or an administrator) it has access to that same config file.
+</Tip>
 
-  response = client.classify(
-      inputs=texts_to_classify,
-      model="classification-model",
-      preference=preference
-  )
+## Remote management
 
-  for group in response.data:
-      for result in group:
-          print(f"Label: {result.label}, Score: {result.score}")
-  ```
+The ngrok agent can be stopped, restarted, or upgraded remotely using the
+[Tunnel Sessions](/api-reference/tunnelsessions/restart) API. You
+can also perform these actions from the ngrok Dashboard.
 
-  For async usage, call `await client.async_classify(inputs, model, preference)`.
-</View>
+<Warning>
+  Use this with caution if you have made changes to the config file. If
+  for some reason ngrok cannot restart, you may lose access to the agent
+  completely.
+</Warning>
 
-<View title="JavaScript" icon="js">
-  To classify text with JavaScript, provide a list of inputs to `client.classify()`:
+## Connectivity
 
-  ```javascript  theme={"system"}
-  const { PerformanceClient, RequestProcessingPreference } = require('baseten-performance-client');
+When the ngrok agent and Agent SDKs start, they establish long-lived TLS
+connections to the ngrok service through which they create new endpoints and
+receive connections from ngrok's cloud service that are intended for your upstream
+services.
 
-  const client = new PerformanceClient(BASE_URL, API_KEY);
+### Address
 
-  const texts = ["This is great!", "I did not like it.", "Neutral experience."];
+By default, the latest ngrok agent dials the following Connect URL when it
+connects to the ngrok service. This address resolves to a [dynamic set of IP Addresses](/universal-gateway/ip-addresses/).
 
-  const preference = new RequestProcessingPreference(32, 16, undefined, 360.0, 0.5);
-  const response = await client.classify(texts, "classification-model", preference);
+<Note>
+  All connections to ngrok servers are made on port 443.
+</Note>
 
-  response.data.forEach(group => {
-      group.forEach(result => console.log(`Label: ${result.label}, Score: ${result.score}`));
-  });
-  ```
-</View>
+You can [customize the Connect URL](/agent/connect-url/) to brand it with
+your own domain.
 
-***
+The agent by default only connects to a single region. However connections to multiple regions can be created with traffic load balanced across these connections. If you are interested in this capability, please [contact Sales](https://ngrok.com/enterprise/contact).
 
-## Advanced features
+The complete list of addresses and IP addresses available for the agent to connect to ngrok can be found in the [ngrok DNS tunnel.json file](https://s3.amazonaws.com/dns.ngrok.com/tunnel.json).
 
-### Configure RequestProcessingPreference
+<Note>
+  Prior to ngrok agent version 3.3.0, the ngrok agent connected to `tunnel.*.ngrok.com` domains. The latest agent uses `connect.*.ngrok-agent.com` domains.
+</Note>
 
-The `RequestProcessingPreference` class provides unified configuration for all request processing parameters.
+### Additional URLs
 
-<View title="Python" icon="python">
-  To configure request processing in Python, create a `RequestProcessingPreference` instance:
+In addition to the addresses used for connecting to the ngrok server, the ngrok agent may reach out to the following URLs.
 
-  ```python  theme={"system"}
-  from baseten_performance_client import RequestProcessingPreference
+#### Certificate revocation list (CRL) check
 
-  preference = RequestProcessingPreference(
-      max_concurrent_requests=64,
-      batch_size=32,
-      timeout_s=30.0,
-      hedge_delay=0.5,
-      hedge_budget_pct=0.15,
-      retry_budget_pct=0.08,
-      total_timeout_s=300.0
-  )
-  ```
-</View>
+The ngrok agent reaches out to the following domains to check for revoked certificates. This check can be disabled by adding `crl_noverify: true` to your ngrok agent config.
 
-<View title="JavaScript" icon="js">
-  To configure request processing with JavaScript, create a `RequestProcessingPreference` instance:
+* Prior to ngrok agent version 3.10.0: `http://crl.ngrok.com/ngrok.crl`
+* Latest versions: `http://crl.ngrok-agent.com/ngrok.crl`
 
-  ```javascript  theme={"system"}
-  const { RequestProcessingPreference } = require('baseten-performance-client');
+<Note>
+  These connections use HTTP and port 80.
+</Note>
 
-  const preference = new RequestProcessingPreference(
-      64,        // maxConcurrentRequests
-      32,        // batchSize
-      undefined, // maxCharsPerRequest
-      30.0,      // timeoutS
-      0.5,       // hedgeDelay
-      undefined, // totalTimeoutS
-      0.15,      // hedgeBudgetPct
-      0.08       // retryBudgetPct
-  );
-  ```
-</View>
+You can download and decode the CRL using OpenSSL: `openssl crl -inform PEM -text -noout -in ngrok.crl`
 
-#### Parameter reference
+#### ngrok Agent update check
 
-| Parameter                 | Type  | Default | Range       | Description                                |
-| ------------------------- | ----- | ------- | ----------- | ------------------------------------------ |
-| `max_concurrent_requests` | int   | 128     | 1-1024      | Maximum parallel requests                  |
-| `batch_size`              | int   | 128     | 1-1024      | Items per batch                            |
-| `timeout_s`               | float | 3600.0  | 1.0-7200.0  | Per-request timeout in seconds             |
-| `hedge_delay`             | float | None    | 0.2-30.0    | *Hedge delay* in seconds (see below)       |
-| `hedge_budget_pct`        | float | 0.10    | 0.0-3.0     | Percentage of requests allowed for hedging |
-| `retry_budget_pct`        | float | 0.05    | 0.0-3.0     | Percentage of requests allowed for retries |
-| `total_timeout_s`         | float | None    | ≥timeout\_s | Total operation timeout                    |
+The ngrok agent will automatically look for updates when it starts up. This check can be disabled by adding `update_check: false` to your ngrok agent config.
 
-*Hedge delay* sends duplicate requests after a specified delay to reduce p99 latency. After the delay, the request is cloned and raced against the original. The 429 and 5xx errors are always retried automatically.
+* `https://update.equinox.io`
 
-### Select HTTP version
+<Note>
+  Even though the Equinox service was [shut down in 2021](https://equinox.io/blog/shutting-down), it is wholly owned and operated by ngrok, and as such, continues to be used for building and distributing our binaries.
+</Note>
 
-Choose between HTTP/1.1 and HTTP/2 for optimal performance. HTTP/1.1 is recommended for high concurrency workloads.
+### DNS resolution
 
-<View title="Python" icon="python">
-  To select the HTTP version in Python, use the `http_version` parameter:
+When the ngrok agent dials the ngrok service to establish its TLS connections,
+it resolves DNS for the [connection address](/agent/connect-url/) which is defined
+by the [`connect_url`](/agent/config/v3/#connect-url) configuration property.
+ngrok attempts to resolve DNS using multiple mechanisms so that it can
+establish connectivity even in network environments where DNS service is
+failing. ngrok attempts to resolve the IPs of its service using the following
+mechanisms:
 
-  ```python  theme={"system"}
-  from baseten_performance_client import PerformanceClient
+* Via the system's default DNS resolvers
+* Via Google's DNS servers (`8.8.8.8` and `8.8.4.4`)
+* Via Google's DNS-over-HTTPS service ([https://developers.google.com/speed/public-dns/docs/doh](https://developers.google.com/speed/public-dns/docs/doh))
+* Via a [file hosted on an ngrok-controlled S3 bucket](https://s3.amazonaws.com/dns.ngrok.com/tunnel.json)
 
-  # HTTP/1.1 (default, better for high concurrency)
-  client_http1 = PerformanceClient(BASE_URL, API_KEY, http_version=1)
+Instead of using the system's default DNS resolvers, you can configure
+the DNS servers the ngrok agent uses for resolution with the
+[`dns_resolver_ips`](/agent/config/v3/#dns-resolver-ips) configuration option.
 
-  # HTTP/2 (better for single requests)
-  client_http2 = PerformanceClient(BASE_URL, API_KEY, http_version=2)
-  ```
-</View>
+### TLS verification
 
-<View title="JavaScript" icon="js">
-  To select the HTTP version with JavaScript, pass the version as the third argument:
+The ngrok agent connects to the ngrok service over TLS connections. The agent
+verifies the TLS Certificate returned by the ngrok service. The certificates
+returned by the ngrok service are signed by ngrok's own root certificate
+authority. The ngrok agent verifies the returned certificate against
+certificate authorities bundled into the agent itself.
 
-  ```javascript  theme={"system"}
-  const { PerformanceClient } = require('baseten-performance-client');
+Lastly, the ngrok agent makes a request to `crl.ngrok-agent.com` to verify that the
+certificate returned by the ngrok service has not been revoked. It is possible to skip this step by setting `crl_noverify: true` in your configuration file.
 
-  // HTTP/1.1 (default, better for high concurrency)
-  const clientHttp1 = new PerformanceClient(BASE_URL, API_KEY, 1);
+### Heartbeats
 
-  // HTTP/2 (better for single requests)
-  const clientHttp2 = new PerformanceClient(BASE_URL, API_KEY, 2);
-  ```
-</View>
+Once the ngrok agent has established connectivity to the ngrok service, it
+periodically sends application-level heartbeat messages to validate the
+liveness of the connection. You may customize this behavior via the
+[`heartbeat_interval`](/agent/config/v3/#heartbeat-interval) and
+[`heartbeat_tolerance`](/agent/config/v3/#heartbeat-tolerance) configuration
+parameters.
 
-### Share connection pools
+If the ngrok agent does not receive a response to its heartbeat within the
+tolerance window, it terminates the connection and begins reconnecting.
 
-Share connection pools across multiple client instances to reduce overhead when connecting to multiple endpoints.
+ngrok's heartbeat mechanism allows it to recover from any type of network
+outage, even those caused by packet loss, dynamic IP changes, interface changes
+(for example, Wi-Fi to LTE) or complete network outages.
 
-<View title="Python" icon="python">
-  To share a connection pool in Python, create an `HttpClientWrapper` and pass it to each client:
+The ngrok service also sends its own heartbeats to the agent which it uses to detect
+liveness and terminate dead connections.
 
-  ```python  theme={"system"}
-  from baseten_performance_client import PerformanceClient, HttpClientWrapper
-
-  wrapper = HttpClientWrapper(http_version=1)
+### Reconnection
 
-  client1 = PerformanceClient(base_url="https://api1.example.com", client_wrapper=wrapper)
-  client2 = PerformanceClient(base_url="https://api2.example.com", client_wrapper=wrapper)
-  ```
-</View>
+If the ngrok agent is disconnected for any reason, it will automatically begin
+reconnecting. Reconnecting begins the entire connection process over again,
+beginning with DNS resolution. The ngrok agent attempts to recover quickly and
+slowly backs off its reconnection attempts but always attempts to re-establish
+connectivity unless the ngrok service explicitly instructs it to stop
+reconnecting.
 
-<View title="JavaScript" icon="js">
-  To share a connection pool with JavaScript, create an `HttpClientWrapper` and pass it to each client:
+### Troubleshooting
 
-  ```javascript  theme={"system"}
-  const { PerformanceClient, HttpClientWrapper } = require('baseten-performance-client');
+If the ngrok agent can't connect to the ngrok service, it is often difficult to
+understand why.
 
-  const wrapper = new HttpClientWrapper(1);
+The ngrok agent includes the `ngrok diagnose` command to help you troubleshoot connection failures. It runs a series of tests
+to diagnose potential issues when connecting to the ngrok service. Consult the
+[`ngrok diagnose` documentation](/agent/cli/#ngrok-diagnose) or [Diagnose](/agent/diagnose) page for additional
+details.
 
-  const client1 = new PerformanceClient(BASE_URL_1, API_KEY, 1, wrapper);
-  const client2 = new PerformanceClient(BASE_URL_2, API_KEY, 1, wrapper);
-  ```
-</View>
+## System requirements
 
-### Cancel operations
+#### Supported platforms
 
-Cancel long-running operations using `CancellationToken`. The token provides immediate cancellation, resource cleanup, Ctrl+C support, token sharing across operations, and status checking with `is_cancelled()`.
+The ngrok agent runs on all major platforms including Linux, MacOS, Windows, and most CPU architectures.
+See the [ngrok agent download](https://download.ngrok.com) page for details.
+It's also distributed as a Docker container.
 
-<View title="Python" icon="python">
-  To cancel operations in Python, create a `CancellationToken` and pass it to your preference:
+| OS      | Supported Architectures                                                                              |
+| ------- | ---------------------------------------------------------------------------------------------------- |
+| Windows | 64-bit, 32-bit (`x86-64`, `x86`)                                                                     |
+| MacOS   | Intel, Apple Silicon (`x86-64`, `arm64`)                                                             |
+| Linux   | `x86-64`, `x86`, `arm`, `arm64`, `mips`, `mips64`, `mips64le`, `mipsle`, `ppc64`, `ppc64le`, `s390x` |
+| FreeBSD | `x86-64`, `x86`, `arm`                                                                               |
 
-  ```python  theme={"system"}
-  from baseten_performance_client import (
-      PerformanceClient,
-      CancellationToken,
-      RequestProcessingPreference
-  )
-  import threading
-  import time
+If the agent does not run on your target platform, you can still use ngrok via
+the [Agent SDKs](/agent-sdks/) or the [SSH Reverse Tunnel Agent](/agent/ssh-reverse-tunnel-agent).
 
-  client = PerformanceClient(base_url=BASE_URL, api_key=API_KEY)
+#### Resource requirements
 
-  cancel_token = CancellationToken()
-  preference = RequestProcessingPreference(
-      max_concurrent_requests=32,
-      batch_size=16,
-      timeout_s=360.0,
-      cancel_token=cancel_token
-  )
+The ngrok agent is lightweight enough to run most everywhere, even on many
+embedded platforms. Keep in mind that the ngrok agent's resource usage depends
+on how much concurrent traffic you drive through it. If your resource
+requirements are more stringent, you can still use ngrok via the [Agent SDKs](/agent-sdks) or the [SSH Reverse Tunnel Agent](/agent/ssh-reverse-tunnel-agent).
 
-  def long_operation():
-      try:
-          response = client.embed(
-              input=["large batch"] * 1000,
-              model="embedding-model",
-              preference=preference
-          )
-          print("Operation completed")
-      except ValueError as e:
-          if "cancelled" in str(e):
-              print("Operation was cancelled")
-
-  threading.Thread(target=long_operation).start()
-  time.sleep(2)
-  cancel_token.cancel()
-  ```
-</View>
-
-<View title="JavaScript" icon="js">
-  To cancel operations with JavaScript, create a `CancellationToken` and pass it to your preference:
+| Resource | Value                           |
+| -------- | ------------------------------- |
+| Memory   | 64MB minimum, 128MB recommended |
+| Disk     | 25MB                            |
+| CPU      | No requirement                  |
 
-  ```javascript  theme={"system"}
-  const { PerformanceClient, CancellationToken, RequestProcessingPreference } = require('baseten-performance-client');
+<Tip>
+  You can reduce memory usage in the ngrok agent by disabling
+  [inspection in the configuration file](/agent/config/v3/#inspect-db-size).
+</Tip>
 
-  const client = new PerformanceClient(BASE_URL, API_KEY);
+## Updates
 
-  const cancelToken = new CancellationToken();
-  const preference = new RequestProcessingPreference(
-      32, 16, undefined, 360.0, undefined, undefined,
-      undefined, undefined, undefined, undefined, cancelToken
-  );
+The ngrok agent can update itself even if you didn't install it with a package
+manager. Update the ngrok agent with the [`ngrok update`](/agent/cli/#ngrok-update) command.
 
-  const operation = client.embed(
-      ["large batch"].concat(Array(1000).fill("sample")),
-      "model",
-      undefined,
-      undefined,
-      undefined,
-      preference
-  );
 
-  setTimeout(() => cancelToken.cancel(), 2000);
 
-  try {
-      const response = await operation;
-      console.log("Operation completed");
-  } catch (error) {
-      if (error.message.includes("cancelled")) {
-          console.log("Operation was cancelled");
-      }
-  }
-  ```
-</View>
+By default, the ngrok agent automatically checks for available updates when it
+runs. If an update is available, it will prompt you to update by pressing
+`Ctrl+U`. You can configure whether the agent checks for updates via the
+[`update_check` config parameter](/agent/config/v3/#update-check).
 
-***
+You can configure which release channel (for example, `stable`, `beta`) the agent uses
+for updates via the [`update_channel` config parameter](/agent/config/v3/#update-channel).
 
-## Handle errors
+## IP restrictions
 
-The client raises standard exceptions for error conditions:
+All agents must use an authtoken to authenticate with ngrok, but you may also
+further restrict with IP Policies that specify which IPs and CIDRs agents may
+connect to your ngrok account from.
 
-* **`HTTPError`**: Authentication failures (403), server errors (5xx), endpoint not found (404).
-* **`Timeout`**: Request or total operation timeout based on `timeout_s` or `total_timeout_s`.
-* **`ValueError`**: Invalid input parameters (empty input list, invalid batch size, inconsistent embedding dimensions).
+* [IP Restrictions on your ngrok dashboard](https://dashboard.ngrok.com/security/ip-restrictions)
+* [IP Restrictions API Resource](/api-reference/iprestrictions/list/)
 
-<View title="Python" icon="python">
-  To handle errors in Python, catch the appropriate exception types:
+## API
 
-  ```python  theme={"system"}
-  import requests
-  from baseten_performance_client import PerformanceClient, RequestProcessingPreference
+The ngrok agent has its own HTTP API that can be used to dynamically inspect, start, and stop endpoints on the agent while it is running.
+Consult the [ngrok agent API reference documentation](/agent/api/) for more details.
 
-  client = PerformanceClient(base_url=BASE_URL, api_key=API_KEY)
-  preference = RequestProcessingPreference(timeout_s=30.0)
+<Tip>
+  If you want to programmatically control the ngrok agent, the [Agent SDKs](/agent-sdks/) are usually a more flexible and powerful choice.
+</Tip>
 
-  try:
-      response = client.embed(input=["text"], model="model", preference=preference)
-      print(f"Model used: {response.model}")
-  except requests.exceptions.HTTPError as e:
-      print(f"HTTP error: {e}, status code: {e.response.status_code}")
-  except requests.exceptions.Timeout as e:
-      print(f"Timeout error: {e}")
-  except ValueError as e:
-      print(f"Input error: {e}")
-  ```
-</View>
-
-<View title="JavaScript" icon="js">
-  To handle errors with JavaScript, use a try-catch block and inspect the error object:
+## Using ngrok without the Agent
 
-  ```javascript  theme={"system"}
-  const { PerformanceClient, RequestProcessingPreference } = require('baseten-performance-client');
+There are three ways to use ngrok without the agent:
 
-  const client = new PerformanceClient(BASE_URL, API_KEY);
-  const preference = new RequestProcessingPreference(32, 16, undefined, 30.0);
-
-  try {
-      const response = await client.embed(texts, "model", undefined, undefined, undefined, preference);
-      console.log("Success:", response.model);
-  } catch (error) {
-      if (error.response) {
-          console.log(`HTTP error: ${error.response.status}`);
-      } else if (error.code === 'TIMEOUT') {
-          console.log("Timeout error");
-      } else {
-          console.log(`Error: ${error.message}`);
-      }
-  }
-  ```
-</View>
+* [Agent SDKs](/agent-sdks/)
+* [Kubernetes Operator](/k8s/)
+* [SSH Reverse Tunnel](/agent/ssh-reverse-tunnel-agent/)
 
-***
+You may want to use ngrok with one of the alternatives above if:
 
-## Configure the client
+* You don't want to manage the lifetime of a separate agent process
+* You don't want to bundle and distribute the ngrok agent
+* The ngrok agent doesn't run on your target platform
+* The ngrok agent's resource requirements are too high for your target platform
+* You want fine-grained programmatic control over the agent's functionality
 
-### Environment variables
+## Changelog
 
-* **`BASETEN_API_KEY`**: Your Baseten API key. Also checks `OPENAI_API_KEY` as fallback.
-* **`PERFORMANCE_CLIENT_LOG_LEVEL`**: Logging level. Overrides `RUST_LOG`. Valid values: `trace`, `debug`, `info`, `warn`, `error`. Default: `warn`.
-* **`PERFORMANCE_CLIENT_REQUEST_ID_PREFIX`**: Custom prefix for request IDs. Default: `perfclient`.
+The [ngrok agent changelog](/agent/changelog) is published with details on
+each release of the ngrok agent.
 
-### Configure logging
+## Pricing
 
-To set the logging level, use the `PERFORMANCE_CLIENT_LOG_LEVEL` environment variable:
-
-```bash  theme={"system"}
-PERFORMANCE_CLIENT_LOG_LEVEL=info python script.py
-PERFORMANCE_CLIENT_LOG_LEVEL=debug cargo run
-```
-
-The `PERFORMANCE_CLIENT_LOG_LEVEL` variable takes precedence over `RUST_LOG`.
-
-***
-
-## Use with Rust
-
-The Performance Client is also available as a native Rust library.
-
-To use the Performance Client in Rust, add the dependencies and create a `PerformanceClientCore` instance:
-
-```rust  theme={"system"}
-use baseten_performance_client_core::{PerformanceClientCore, ClientError};
-use tokio;
-
-#[tokio::main]
-async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let api_key = std::env::var("BASETEN_API_KEY").expect("BASETEN_API_KEY not set");
-    let base_url = "https://model-YOUR_MODEL_ID.api.baseten.co/environments/production/sync";
-
-    let client = PerformanceClientCore::new(base_url, Some(api_key), None, None);
-
-    // Generate embeddings
-    let texts = vec!["Hello world".to_string(), "Example text".to_string()];
-    let embedding_response = client.embed(
-        texts,
-        "my_model".to_string(),
-        Some(16),
-        Some(32),
-        Some(360.0),
-        Some(256000),
-        Some(0.5),
-        Some(360.0),
-    ).await?;
-
-    println!("Model: {}", embedding_response.model);
-    println!("Total tokens: {}", embedding_response.usage.total_tokens);
-
-    // Send batch POST requests
-    let payloads = vec![
-        serde_json::json!({"model": "my_model", "input": ["Rust sample 1"]}),
-        serde_json::json!({"model": "my_model", "input": ["Rust sample 2"]}),
-    ];
-
-    let batch_response = client.batch_post(
-        "/v1/embeddings".to_string(),
-        payloads,
-        Some(32),
-        Some(360.0),
-        Some(0.5),
-        Some(360.0),
-        None,
-    ).await?;
-
-    println!("Batch POST total time: {:.4}s", batch_response.total_time);
-
-    Ok(())
-}
-```
-
-Add these dependencies to your `Cargo.toml`:
-
-```toml  theme={"system"}
-[dependencies]
-baseten_performance_client_core = "0.1.0"
-tokio = { version = "1.0", features = ["full"] }
-serde_json = "1.0"
-```
-
-***
-
-## Further reading
-
-* [GitHub: baseten-performance-client](https://github.com/basetenlabs/truss/tree/main/baseten-performance-client): Complete source code and additional examples.
-* [Performance benchmarks blog](https://www.baseten.co/blog/your-client-code-matters-10x-higher-embedding-throughput-with-python-and-rust/): Detailed performance analysis and comparisons.
-
-
----
-
-> To find navigation and other pages in this documentation, fetch the llms.txt file at: https://docs.baseten.co/llms.txt
+The ngrok agent is available to all ngrok users at no additional charge. You
+only incur costs if the resources provisioned by the agent incur a cost. For more information, see the [ngrok Pricing page](https://ngrok.com/pricing).

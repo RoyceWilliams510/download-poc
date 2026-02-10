@@ -60,7 +60,8 @@
               "/index",
               "/quickstart",
               "/development",
-              "/agents"
+              "/agents",
+              "/base"
             ]
           },
           {
