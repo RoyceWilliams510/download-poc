@@ -11,11 +11,9 @@
     "indexing": "all"
   },
   "styling": {
-    "codeblocks": {
-      "theme": "css-variables"
-    }
+    "latex": false
   },
-"footer": {
+  "footer": {
     "links": [
       {
         "header": " ",
