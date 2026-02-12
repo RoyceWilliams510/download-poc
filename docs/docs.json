@@ -10,9 +10,6 @@
   "seo": {
     "indexing": "all"
   },
-  "styling": {
-    "latex": false
-  },
   "footer": {
     "links": [
       {
@@ -57,17 +54,20 @@
             "pages": [
               "/index",
               "/quickstart",
-              "/development",
-              "/agents",
-              "/base"
+              "/development"
             ]
           },
           {
             "version": "1.0.1",
-            "pages": [
-              "/quickstart",
-              "/index",
-              "/development"
+            "hidden": true,
+            "groups": [
+              {
+                "group": "Web Flow",
+                "pages": [
+                  "/agents",
+                  "/base"
+                ]
+              }
             ]
           }
         ]
@@ -80,10 +80,6 @@
             "pages": [
               "/api-reference/introduction"
             ]
-          },
-          {
-            "group": "API documentation",
-            "openapi": "boolean.yaml"
           }
         ]
       }
