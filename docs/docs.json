@@ -77,8 +77,9 @@
         "groups": [
           {
             "group": "API documentation",
+            "root": "/api-reference/introduction",
             "pages": [
-              "/api-reference/introduction"
+              "/api-reference/endpoint/get"
             ]
           }
         ]
