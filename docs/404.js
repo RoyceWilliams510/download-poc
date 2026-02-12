@@ -4,12 +4,12 @@ const observer = new MutationObserver((mutations) => {
     mutation.addedNodes.forEach((node) => {
       // Check if the added node is the error badge span
       if (node.nodeType === Node.ELEMENT_NODE) {
-        if (node.id === 'error badge') {
+        if (node.id === 'error-badge') {
           console.log('Error badge detected!', node);
         }
 
         // Also check if the error badge is within the added node
-        const errorBadge = node.querySelector && node.querySelector('#error\\ badge');
+        const errorBadge = node.querySelector && node.querySelector('#error-badge');
         if (errorBadge) {
           console.log('Error badge detected!', errorBadge);
         }
