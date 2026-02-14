@@ -47,6 +47,12 @@
   "navigation": {
     "tabs": [
       {
+        "tab": "home",
+        "pages": [
+          "/base"
+        ]
+      },
+      {
         "tab": "Guides",
         "versions": [
           {
@@ -64,8 +70,8 @@
               {
                 "group": "Web Flow",
                 "pages": [
-                  "/agents",
-                  "/base"
+                  "/agents"
+                
                 ]
               }
             ]
@@ -79,7 +85,8 @@
             "group": "API documentation",
             "root": "/api-reference/introduction",
             "pages": [
-              "/api-reference/endpoint/get"
+              "/api-reference/endpoint/get",
+              "/api-reference/create-call"
             ]
           }
         ]

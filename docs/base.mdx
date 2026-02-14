@@ -1,11 +1,108 @@
 ---
-title: "base"
-description: "Welcome to the new home for your documentation"
+mode: "custom"
 ---
 
+export function openSearch() {
+  document.getElementById('search-bar-entry').click();
+}
+
+export function openSearch() {
+  document.getElementById('search-bar-entry').click();
+}
+
+<div id="hero-container" className="relative w-full flex items-center justify-center">
+  <div id="hero-background" className="absolute inset-0 bg-primary dark:bg-primary-light"></div>
+  <div id="hero-content">
+    <div
+      id="hero-title"
+      className="text-gray-900 dark:text-gray-200"
+    >
+      Build better legal software with Smokeball
+    </div>
+    <p
+      id="hero-description"
+      className="prose prose-gray dark:prose-invert text-center justify-center"
+    >
+    Explore our comprehensive documentation to get started with Smokeball's APIs, Webhooks, and the Smokeball Client SDK.
+    </p>
+    <div className="flex items-center justify-center">
+    <button
+      type="button"
+      className="hidden w-full lg:flex items-center justify-center text-sm leading-6 rounded-full py-3 px-8 text-white bg-primary relative"
+      id="home-search-entry"
+      onClick={openSearch}
+    >
+      <svg
+        id="search-icon"
+        className="h-6 w-6 flex-none text-white"
+      />
+      SEARCH OR ASK
+    </button>
+    </div>
+  </div>
+</div>
+<div id="main-content-container">
 
 
+<div id="documentation-section" className="flex flex-col w-full">
+  <h2
+    id="documentation-title"
+    className="text-gray-900 dark:text-gray-200"
+  >
+  Documentation
+  </h2>
 
-**We recommend [reading our upgrade guide](https://stytch.com/docs/api-reference/consumer/frontend-sdks/nextjs/upgrade-guide) when updating to this version**.
+</div>
 
-We recommend [reading our upgrade guide](https://stytch.com/docs/api-reference/consumer/frontend-sdks/nextjs/upgrade-guide) when updating to this version 
+
+<CardGroup cols={2}>
+  <Card
+  title="API Documentation"
+  icon="code"
+  href="/docs/api-docs/1e13a13124aee-introduction"
+  iconType="solid"
+  horizontal
+>
+  Everything you need to know about Smokeball's APIs, including endpoints, parameters, and best practices.
+</Card>
+
+<Card
+  title="Client SDK Documentation"
+  icon="book"
+  href="/docs/sdk-docs/675c9816cdaf6-getting-started"
+  iconType="solid"
+  horizontal
+>
+  Learn how to leverage the Smokeball Client SDK to enhance your integration.
+</Card>
+</CardGroup>
+<div id="partner-section" className="flex flex-col w-full">
+  <h2
+    id="partner-title"
+    className="text-gray-900 dark:text-gray-200"
+  >
+  Become a Smokeball integration partner
+  </h2>
+
+</div>
+
+<p
+    id="partner-description"
+    className="text-gray-700 dark:text-gray-300"
+  >
+  If you've developed a software solution tailored to the Legal Industry, we'd love to hear from you! Collaborate with Smokeball to help our clients "run their best firm."
+  <br/>
+Start your integration journey by submitting your interest today. A member of our Partnerships or Product Team will reach out to discuss next steps.
+</p>
+
+<CardGroup cols={1}>
+  <Card
+  title="Join the Smokeball Partner Program"
+  icon="handshake"
+  href="https://marketplace.smokeball.com/application_forms/join-the-smokeball-partner-program/partner_applications/new"
+  iconType="solid"
+  horizontal
+/>
+</CardGroup>
+
+</div>
