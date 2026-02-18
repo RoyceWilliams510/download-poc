@@ -47,12 +47,6 @@
   "navigation": {
     "tabs": [
       {
-        "tab": "home",
-        "pages": [
-          "/base"
-        ]
-      },
-      {
         "tab": "Guides",
         "versions": [
           {
@@ -62,19 +56,6 @@
               "/quickstart",
               "/development"
             ]
-          },
-          {
-            "version": "1.0.1",
-            "hidden": true,
-            "groups": [
-              {
-                "group": "Web Flow",
-                "pages": [
-                  "/agents"
-                
-                ]
-              }
-            ]
           }
         ]
       },
@@ -83,11 +64,7 @@
         "groups": [
           {
             "group": "API documentation",
-            "root": "/api-reference/introduction",
-            "pages": [
-              "/api-reference/endpoint/get",
-              "/api-reference/create-call"
-            ]
+            "openapi": "boolean.yaml"
           }
         ]
       }
