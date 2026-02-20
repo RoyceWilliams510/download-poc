@@ -32,6 +32,15 @@
             "openapi": "us-account.yaml"
           }
         ]
+      },
+      {
+        "tab": "search reference",
+        "groups": [
+          {
+            "group": "search documentation",
+            "openapi": "search.yml"
+          }
+        ]
       }
     ],
     "global": {
