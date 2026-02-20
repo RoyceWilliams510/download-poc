@@ -38,7 +38,19 @@
         "groups": [
           {
             "group": "search documentation",
-            "openapi": "search.yml"
+            "openapi":{
+              "source": "search.yml",
+              "directory": "v0"
+            }
+          }
+        ]
+      },
+      {
+        "tab": "search 2.0 reference",
+        "groups": [
+          {
+            "group": "search documentation",
+            "openapi": "oneOfSearch.yml"
           }
         ]
       }

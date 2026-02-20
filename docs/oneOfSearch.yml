@@ -259,7 +259,7 @@ tags:
     description: |
       <SchemaDefinition schemaRef="#/components/schemas/indexSettings" />.
 paths:
-  /1/indexes/*/queries/1.0:
+  /1/indexes/*/queries:
     post:
       tags:
         - Search
@@ -330,8 +330,8 @@ components:
   schemas:
     SearchQuery:
       oneOf:
-        - $ref: '#/components/schemas/SearchForHits'
-        - $ref: '#/components/schemas/SearchForFacets'
+        - $ref: '#/components/schemas/SearchQueryAsString'
+        - $ref: '#/components/schemas/SearchQueryAsObject'
     searchStrategy:
       type: string
       enum:
@@ -349,17 +349,16 @@ components:
       oneOf:
         - $ref: '#/components/schemas/searchResponse'
         - $ref: '#/components/schemas/searchForFacetValuesResponse'
-    SearchForHits:
+    SearchQueryAsString:
+      title: Search parameters as query string
       allOf:
-        - $ref: '#/components/schemas/searchParams'
-        - $ref: '#/components/schemas/searchForHitsOptions'
-    SearchForFacets:
+        - $ref: '#/components/schemas/searchParamsString'
+        - $ref: '#/components/schemas/searchQueryOptions'
+    SearchQueryAsObject:
+      title: Search parameters as object
       allOf:
-        - $ref: '#/components/schemas/searchParams'
-        - $ref: '#/components/schemas/searchForFacetsOptions'
-      x-discriminator-fields:
-        - facet
-        - type
+        - $ref: '#/components/schemas/searchParamsObject'
+        - $ref: '#/components/schemas/searchQueryOptions'
     searchResponse:
       additionalProperties: true
       allOf:
@@ -416,38 +415,22 @@ components:
         message:
           type: string
           example: Invalid Application-Id or API-Key
-    searchParams:
-      oneOf:
-        - $ref: '#/components/schemas/searchParamsString'
-        - $ref: '#/components/schemas/searchParamsObject'
-    searchForHitsOptions:
-      x-is-SearchForHitsOptions: true
+    searchQueryOptions:
       type: object
       properties:
         indexName:
           $ref: '#/components/schemas/indexName'
         type:
-          $ref: '#/components/schemas/searchTypeDefault'
-      required:
-        - indexName
-    searchForFacetsOptions:
-      type: object
-      properties:
+          $ref: '#/components/schemas/searchType'
         facet:
           type: string
           description: Facet name.
-        indexName:
-          $ref: '#/components/schemas/indexName'
         facetQuery:
           $ref: '#/components/schemas/facetQuery'
         maxFacetHits:
           $ref: '#/components/schemas/maxFacetHits'
-        type:
-          $ref: '#/components/schemas/searchTypeFacet'
       required:
         - indexName
-        - type
-        - facet
     baseSearchResponse:
       type: object
       additionalProperties: true
@@ -710,10 +693,11 @@ components:
       type: string
       example: products
       description: Index name (case-sensitive).
-    searchTypeDefault:
+    searchType:
       type: string
       enum:
         - default
+        - facet
       default: default
       description: >
         - `default`: perform a search query
@@ -734,16 +718,6 @@ components:
       default: 10
       x-categories:
         - Advanced
-    searchTypeFacet:
-      type: string
-      enum:
-        - facet
-      default: facet
-      description: >
-        - `default`: perform a search query
-
-        - `facet` [searches for facet
-        values](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/#search-for-facet-values).
     RedirectRuleIndexMetadata:
       type: object
       properties:
