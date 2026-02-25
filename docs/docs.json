@@ -19,7 +19,8 @@
           {
             "version": "1.0.0",
             "pages": [
-              "/quickstart"
+              "/quickstart",
+              "/index"
             ]
           }
         ]
