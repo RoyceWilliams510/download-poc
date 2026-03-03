@@ -267,7 +267,7 @@ paths:
       responses:
         "204":
           description: The connection was successfully revoked. No response body is returned.
-        "400":
+        "4XX":
           description: Returned when the request is missing a required parameter or is otherwise invalid.
           content:
             application/json:
@@ -283,7 +283,7 @@ paths:
               example:
                 error: "invalid_request"
                 error_description: "The request is missing a required parameter."
-        "500":
+        "5XX":
           description: Returned when an unhandled error occurred on the server.
           content:
             application/json:
@@ -1726,7 +1726,7 @@ paths:
                             surrenderValue:
                               type: number
                               description: Surrender value.
-        "400":
+        "4XX":
           description: Returned when the request contains invalid data or authentication fails.
           content:
             application/json:
@@ -1742,7 +1742,7 @@ paths:
                   debugMessage:
                     type: string
                     description: Provider custom developer-level error details for troubleshooting.
-        "500":
+        "5XX":
           description: Returned when an internal server error occurred.
           content:
             application/json:
@@ -1877,7 +1877,7 @@ paths:
                         relationship:
                           type: string
                           description: Customer's relationship to the account.
-        "400":
+        "4XX":
           description: Returned when the request contains invalid data or authentication fails.
           content:
             application/json:
@@ -1893,7 +1893,7 @@ paths:
                   debugMessage:
                     type: string
                     description: Provider custom developer-level error details for troubleshooting.
-        "500":
+        "5XX":
           description: Returned when an internal server error occurred.
           content:
             application/json:
@@ -1989,7 +1989,7 @@ paths:
                         transferOut:
                           type: boolean
                           description: Indicates if transfers out of this account are allowed.
-        "400":
+        "4XX":
           description: Returned when the request contains invalid data or authentication fails.
           content:
             application/json:
@@ -2005,7 +2005,7 @@ paths:
                   debugMessage:
                     type: string
                     description: Provider custom developer-level error details for troubleshooting.
-        "500":
+        "5XX":
           description: Returned when an internal server error occurred.
           content:
             application/json:
@@ -2458,7 +2458,7 @@ paths:
                             transferAction:
                               type: string
                               description: Transfer action (e.g., IN).
-        "400":
+        "4XX":
           description: Returned when the request contains invalid data or authentication fails.
           content:
             application/json:
@@ -2474,7 +2474,7 @@ paths:
                   debugMessage:
                     type: string
                     description: Provider custom developer-level error details for troubleshooting.
-        "500":
+        "5XX":
           description: Returned when an internal server error occurred.
           content:
             application/json:
