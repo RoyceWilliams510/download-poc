@@ -1,0 +1,14 @@
+---
+title: "Get Data Provider Details"
+public: true
+openapi: "/openapi-outbound.yaml GET /api/v1/providers/{provider_id}"
+---
+
+Use the `/api/v1/providers` endpoint to retrieve information about a particular `Data Provider` such as their country, their data scopes, the FDX fields they support, and more.
+
+To successfully call this endpoint, you must first call the [/Token](/api/outbound/endpoints/authorize/token) endpoint to obtain a valid `access_token` using the following settings:
+
+- grant_type: `client_credentials`
+- client_id: `{partner client_id}`
+- client_secret: `{partner client_secret}`
+- scope: `client:admin`

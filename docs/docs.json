@@ -36,6 +36,15 @@
               "/api-reference/outbound/get-supported-data-providers",
               "/api-reference/outbound/get-all-data-provider-details"
             ]
+          },
+          {
+            "group": "API nox",
+            "pages": [
+              "/api-reference/outbound-nox/get-all-data-recipients",
+              "/api-reference/outbound-nox/get-data-recipient-details",
+              "/api-reference/outbound-nox/get-all-data-provider-details",
+              "/api-reference/outbound-nox/get-supported-data-providers"
+            ]
           }
         ]
       },

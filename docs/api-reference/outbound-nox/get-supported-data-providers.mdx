@@ -1,0 +1,16 @@
+---
+title: "Get Supported Data Providers"
+public: true
+openapi: "/openapi-noxx.yaml GET /api/v1/providers"
+---
+
+Use the `/api/v1/providers` endpoint to retrieve a list of all supported Data Providers in the Outbound ecosystem.
+
+You may need this information for marketing purposes, or to show your customers who we support.
+
+To successfully call this endpoint, you must first call the [/Token](/api/outbound/endpoints/authorize/token) endpoint to obtain a valid `access_token` using the following settings:
+
+- grant_type: `client_credentials`
+- client_id: `{partner client_id}`
+- client_secret: `{partner client_secret}`
+- scope: `client:admin`
