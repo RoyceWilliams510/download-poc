@@ -1,0 +1,2502 @@
+openapi: 3.0.3
+info:
+  title: Flinks API
+  description: |
+    Flinks API provides financial data connectivity, enrichment, and payment solutions.
+
+    ## Authentication
+    Endpoints require authentication using `flinks-auth-key` header (Bearer token).
+
+    For more information, visit: https://docs.flinks.com
+  version: 3.0.0
+  contact:
+    name: Flinks Support
+    url: https://www.flinks.com/contact/sales
+  termsOfService: https://www.flinks.com
+
+tags:
+  - name: Authorization
+    description: Endpoints for generating authorization tokens and authenticating requests
+
+servers:
+  - url: https://ob.flinksapp.com
+    description: Flinks Outbound Production
+
+paths:
+  /api/v1/providers:
+    get:
+      tags:
+        - Outbound
+      summary: Get Supported Data Providers
+      description: Use the /api/v1/providers endpoint to retrieve a list of all supported Data Providers in the Outbound ecosystem.
+      operationId: listSupportedDataProviders
+      responses:
+        "200":
+          description: Result
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    provider_id:
+                      type: integer
+                      description: Unique identifier for the data provider.
+                    name:
+                      type: string
+                      description: Name of the data provider.
+                    country:
+                      type: string
+                      description: Country code of the data provider (e.g., CA, US).
+                    scopes:
+                      type: array
+                      items:
+                        type: string
+                      description: List of data scopes supported by the data provider (e.g., ACCOUNT_BASIC, ACCOUNT_DETAILED, TRANSACTIONS, STATEMENTS, CUSTOMER_CONTACT, CUSTOMER_PERSONAL, INVESTMENTS, ACCOUNT_PAYMENTS).
+              example:
+                - provider_id: 1000
+                  name: "Flinks Capital"
+                  country: "CA"
+                  scopes:
+                    - "ACCOUNT_BASIC"
+                    - "ACCOUNT_DETAILED"
+                    - "ACCOUNT_PAYMENTS"
+                    - "INVESTMENTS"
+                    - "TRANSACTIONS"
+                    - "STATEMENTS"
+                    - "CUSTOMER_CONTACT"
+                    - "CUSTOMER_PERSONAL"
+        "401":
+          description: Unauthorized - Expired or invalid token.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: "Invalid Bearer Token"
+        "400":
+          description: Client Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: "Invalid request parameters"
+        "500":
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: "Internal Server Error"
+
+  /api/v1/providers/{provider_id}:
+    get:
+      tags:
+        - Outbound
+      summary: Get Data Provider Details
+      description: Use the /api/v1/providers endpoint to retrieve information about a particular Data Provider such as their country, their data scopes, the FDX fields they support, and more.
+      operationId: getDataProviderDetails
+      parameters:
+        - name: provider_id
+          in: path
+          required: true
+          description: The ID of the Data Provider who you want to retrieve information about.
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Result
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  provider_id:
+                    type: integer
+                    description: Unique identifier for the data provider.
+                  name:
+                    type: string
+                    description: Name of the data provider.
+                  country:
+                    type: string
+                    description: Country code of the data provider (e.g., CA, US).
+                  provider_url:
+                    type: string
+                    description: URL of the data provider's website.
+                  scopes:
+                    type: array
+                    items:
+                      type: string
+                    description: List of data scopes supported by the data provider.
+                  data_inventory:
+                    type: object
+                    description: Detailed inventory of FDX fields supported by the data provider.
+                    properties:
+                      account:
+                        type: array
+                        items:
+                          type: string
+                      customers:
+                        type: array
+                        items:
+                          type: string
+                      detailed_accounts:
+                        type: array
+                        items:
+                          type: string
+                      lightweight_accounts:
+                        type: array
+                        items:
+                          type: string
+                      payments:
+                        type: array
+                        items:
+                          type: string
+                      transactions:
+                        type: array
+                        items:
+                          type: string
+              example:
+                provider_id: 4013
+                name: "1st United CU"
+                country: "US"
+                provider_url: "https://accounts.1stunitedcu.org/"
+                scopes:
+                  - "ACCOUNT_BASIC"
+                  - "ACCOUNT_DETAILED"
+                  - "ACCOUNT_PAYMENTS"
+                  - "INVESTMENTS"
+                  - "TRANSACTIONS"
+                  - "STATEMENTS"
+                  - "CUSTOMER_CONTACT"
+                  - "CUSTOMER_PERSONAL"
+                data_inventory:
+                  account: []
+                  customers:
+                    - "customerId"
+                    - "name.first"
+                    - "name.last"
+                    - "emails"
+                    - "email"
+                    - "addresses.line1"
+                    - "addresses.city"
+                    - "addresses.region"
+                    - "addresses.postalCode"
+                    - "telephones.number"
+                    - "name.middle"
+                  detailed_accounts:
+                    - "accounts.depositAccount.currentBalance"
+                    - "accounts.depositAccount.accountId"
+                    - "accounts.depositAccount.accountType"
+                    - "accounts.depositAccount.accountNumberDisplay"
+                    - "accounts.depositAccount.productName"
+                    - "accounts.depositAccount.currency.currencyCode"
+                    - "accounts.depositAccount.availableBalance"
+                  lightweight_accounts: []
+                  payments:
+                    - "paymentNetworks.bankId"
+                    - "paymentNetworks.identifier"
+                    - "paymentNetworks.identifierType"
+                    - "paymentNetworks.type"
+                    - "paymentNetworks.transferIn"
+                    - "paymentNetworks.transferOut"
+                  transactions:
+                    - "page.nextOffset"
+                    - "links.next.href"
+                    - "transactions.depositTransaction.accountId"
+                    - "transactions.depositTransaction.transactionId"
+                    - "transactions.depositTransaction.postedTimestamp"
+                    - "transactions.depositTransaction.transactionTimestamp"
+                    - "transactions.depositTransaction.description"
+                    - "transactions.depositTransaction.amount"
+                    - "transactions.depositTransaction.transactionType"
+                    - "transactions.depositTransaction.status"
+        "401":
+          description: Unauthorized - Expired or invalid token.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: "Invalid Bearer Token"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: "Provider not found"
+        "500":
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: "Internal Server Error"
+
+  /api/v1/revoke:
+    delete:
+      tags:
+        - Outbound
+      summary: Revoke Connection
+      description: Use the /api/v1/revoke endpoint to revoke access to the Open Banking API for an individual connection.
+      operationId: revokeConnection
+      responses:
+        "204":
+          description: The connection was successfully revoked. No response body is returned.
+        "4XX":
+          description: Returned when the request is missing a required parameter or is otherwise invalid.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: The error code.
+                  error_description:
+                    type: string
+                    description: A description of the error.
+              example:
+                error: "invalid_request"
+                error_description: "The request is missing a required parameter."
+        "5XX":
+          description: Returned when an unhandled error occurred on the server.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: The error code.
+                  error_description:
+                    type: string
+                    description: A description of the error.
+              example:
+                error: "server_error"
+                error_description: "An unhandled error occurred on the server."
+
+  /api/v1/recipients:
+    get:
+      tags:
+        - Outbound
+      summary: Get All Data Recipients
+      description: Use the /api/v1/recipients endpoint to get a list of all registered Data Recipients.
+      operationId: getAllDataRecipients
+      responses:
+        "200":
+          description: Result
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    client_id:
+                      type: string
+                      description: Unique identifier for the data recipient.
+                    name:
+                      type: string
+                      description: Name of the data recipient.
+                    logo_uri:
+                      type: string
+                      description: URL to the data recipient's logo.
+                    description:
+                      type: string
+                      description: Description of the data recipient.
+                    terms_uri:
+                      type: string
+                      description: URL to the data recipient's terms of service.
+                    client_uri:
+                      type: string
+                      description: URL to the data recipient's website.
+                    country:
+                      type: string
+                      description: Country code of the data recipient (e.g., CA, US).
+                    contacts:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          email:
+                            type: string
+                            description: Email address of the contact.
+                      description: Contact information for the data recipient.
+              example:
+                - client_id: "dc-xxxxxxxxxxxxxxxxxxxxxxxxx"
+                  name: "Flinks Fake"
+                  logo_uri: "https://flinks.fake.com/logo.png"
+                  description: "Description of Flinks Fake"
+                  terms_uri: "https://flinks.fake.com/callback/terms.html"
+                  client_uri: "https://flinks.fake.com/"
+                  country: "CA"
+                  contacts:
+                    - email: "john.doe@flinks.fake.com"
+        "401":
+          description: Unauthorized - Expired or invalid token.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: "Invalid Bearer Token"
+        "400":
+          description: Client Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: "Invalid request parameters"
+        "500":
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: "Internal Server Error"
+    post:
+      tags:
+        - Outbound
+      summary: Create a Data Recipient
+      description: Use the /api/v1/recipients endpoint to add a new Data Recipient to the Open Banking API.
+      operationId: createDataRecipient
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: "The name of the new Data Recipient. Enter it exactly as you want customers to see it, using a maximum length of 256 characters."
+                  maxLength: 256
+                scope:
+                  type: array
+                  items:
+                    type: string
+                  default: [ACCOUNT_BASIC]
+                  description: |
+                    The scope of data that the Data Recipient collects from the customer, and is populated on the consent screen. To work with this Data Recipient, the customer must provide consent to share the scope of data they require. Possible values include the following:
+
+                    ACCOUNT_BASIC = Basic account information (required)
+                    ACCOUNT_DETAILED = Detailed account information
+                    ACCOUNT_PAYMENTS = Payment information linked to the account
+                    INVESTMENTS = Investment information linked to the account
+                    TRANSACTIONS = Payment information linked to the account
+                    STATEMENTS = PDF statements for the account
+                    CUSTOMER_CONTACT = Contact information for the account
+                    CUSTOMER_PERSONAL = Information about the customer who owns the account
+                    The scopes needs to be delimited by a space and they must include ACCOUNT_BASIC at a minimum
+                redirect_uris:
+                  type: string
+                  description: "URL redirects for the Data Recipient, using an HTTPS scheme."
+                logo_uri:
+                  type: string
+                  description: "A hyperlink to the Data Recipient's logo, using the HTTPS scheme."
+                country:
+                  type: string
+                  description: "Countries that the Data Recipient is registered in. Possible values include: - `CA` - Canada - `US` - United States"
+                description:
+                  type: string
+                  description: "The description of the Data Recipient, using a maximum length of 512 characters."
+                  maxLength: 512
+                terms_uri:
+                  type: string
+                  description: "A hyperlink to the terms of service between the customer and the Data Recipient, using an HTTPS scheme. Must be human-readable."
+                client_uri:
+                  type: string
+                  description: "A hyperlink to the Data Recipient's corporate website, using an HTTPS scheme."
+                contacts:
+                  type: array
+                  items:
+                    type: object
+                  description: Point of contacts for the Data Recipient.
+              example: {}
+      responses:
+        "201":
+          description: Result
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  client_id:
+                    type: string
+                  client_secret:
+                    type: string
+                  name:
+                    type: string
+                  logo_uri:
+                    type: string
+                  description:
+                    type: string
+                  terms_uri:
+                    type: string
+                  client_uri:
+                    type: string
+                  country:
+                    type: string
+                  redirect_uris:
+                    type: array
+                    items:
+                      type: string
+                  scope:
+                    type: string
+                  contacts:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        email:
+                          type: array
+                          items:
+                            type: string
+              example:
+                client_id: "dc-xxxxxxxxxxxxxxxxxxxxxxxxx"
+                client_secret: "xxxxxxxxxxxxxxxxxxxxxx"
+                name: "Flinks Fake"
+                logo_uri: "https://flinks.fake.com/logo.png"
+                description: "Description of Flinks Fake"
+                terms_uri: "https://flinks.fake.com/callback/terms.html"
+                client_uri: "https://flinks.fake.com"
+                country: "CA"
+                redirect_uris:
+                  - "https://flinks.fake.com/callback"
+                scope: "ACCOUNT_BASIC ACCOUNT_DETAILED ACCOUNT_PAYMENTS INVESTMENTS TRANSACTIONS STATEMENTS CUSTOMER_CONTACT CUSTOMER_PERSONAL"
+                contacts:
+                  - email: "john.doe@flinks.fake.com"
+        "401":
+          description: Unauthorized - Expired or invalid token.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: "Invalid Bearer Token"
+        "400":
+          description: Client Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: "Invalid request parameters"
+        "500":
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: "Internal Server Error"
+
+  /api/v1/recipients/providers/requests:
+    get:
+      tags:
+        - Outbound
+      summary: Get the Registration Status for All Data Recipients
+      description: Use the /api/v1/recipients/providers/requests endpoint to check the registrations status of all Data Recipients.
+      operationId: getSupportedDataProvidersStatus
+      responses:
+        "200":
+          description: Result
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    client_id:
+                      type: string
+                      description: Unique identifier for the data recipient.
+                    client_name:
+                      type: string
+                      description: Name of the data recipient.
+                    provider_id:
+                      type: integer
+                      description: Unique identifier for the data provider.
+                    provider_name:
+                      type: string
+                      description: Name of the data provider.
+                    country:
+                      type: string
+                      description: Country code of the data provider (e.g., CA, US).
+                    registration_status:
+                      type: string
+                      description: Current registration status (PENDING_APPROVAL, PENDING_ACTIVATION, or ACTIVE).
+                    requested_on:
+                      type: string
+                      description: Timestamp of when the registration was requested (ISO 8601 format).
+              example:
+                - client_id: "dc-xxxxxxxxxxxxxxxxxxxxxxxxx"
+                  client_name: "Flinks Fake"
+                  provider_id: 2000
+                  provider_name: "NBC"
+                  country: "CA"
+                  registration_status: "PENDING_APPROVAL"
+                  requested_on: "2024-02-29T14:24:42.6055680Z"
+                - client_id: "dc-xxxxxxxxxxxxxxxxxxxxxxxxx"
+                  client_name: "Flinks Fake"
+                  provider_id: 1000
+                  provider_name: "Flinks Capital"
+                  country: "CA"
+                  registration_status: "PENDING_APPROVAL"
+                  requested_on: "2024-02-29T14:24:42.6009460Z"
+        "401":
+          description: Unauthorized - Expired or invalid token.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: "Invalid Bearer Token"
+        "400":
+          description: Client Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: "Invalid request parameters"
+        "500":
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: "Internal Server Error"
+
+  /api/v1/recipients/providers/requests/{recipient_ids}/{provider_ids}:
+    post:
+      tags:
+        - Outbound
+      summary: Request Data Provider Registrations
+      description: Use the POST /api/v1/recipients/providers/requests/{recipient_ids}/{provider_ids} endpoint to submit a request to Flinks to connect Data Recipients with Data Providers. Flinks will evaluate the request and approve the registrations.
+      operationId: requestDataProviderRegistrations
+      parameters:
+        - name: recipient_ids
+          in: path
+          required: true
+          description: The IDs of Data Recipients who you want to request registration for.
+          schema:
+            type: array
+            items:
+              type: string
+        - name: provider_ids
+          in: path
+          required: true
+          description: The IDs of Data Providers who you want to include in the registration.
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        "401":
+          description: Unauthorized - Expired or invalid token.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: "Invalid Bearer Token"
+        "400":
+          description: Client Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: "Invalid request parameters"
+        "500":
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: "Internal Server Error"
+
+  /api/v1/recipients/{client_id}/providers/requests:
+    get:
+      tags:
+        - Outbound
+      summary: Get the Registration Status for a Data Recipient
+      description: Use the /api/v1/recipients/{client_id}/providers/requests endpoint to check the registrations status of a Data Recipient.
+      operationId: getRegistrationStatus
+      parameters:
+        - name: client_id
+          in: path
+          required: true
+          description: The ID of Data Recipient who you want to check the registrations status for.
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Result
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    client_id:
+                      type: string
+                      description: Unique identifier for the data recipient.
+                    client_name:
+                      type: string
+                      description: Name of the data recipient.
+                    provider_id:
+                      type: integer
+                      description: Unique identifier for the data provider.
+                    provider_name:
+                      type: string
+                      description: Name of the data provider.
+                    country:
+                      type: string
+                      description: Country code of the data provider (e.g., CA, US).
+                    registration_status:
+                      type: string
+                      description: Current registration status (PENDING_APPROVAL, PENDING_ACTIVATION, or ACTIVE).
+                    requested_on:
+                      type: string
+                      description: Timestamp of when the registration was requested (ISO 8601 format).
+              example:
+                - client_id: "dc-xxxxxxxxxxxxxxxxxxxxxxxxx"
+                  client_name: "Flinks Fake"
+                  provider_id: 1000
+                  provider_name: "Flinks Capital"
+                  country: "CA"
+                  registration_status: "PENDING_APPROVAL"
+                  requested_on: "2024-02-29T14:24:42.6009460Z"
+                - client_id: "dc-xxxxxxxxxxxxxxxxxxxxxxxxx"
+                  client_name: "Flinks Fake"
+                  provider_id: 2000
+                  provider_name: "NBC"
+                  country: "CA"
+                  registration_status: "PENDING_APPROVAL"
+                  requested_on: "2024-02-29T14:24:42.6055680Z"
+        "401":
+          description: Unauthorized - Expired or invalid token.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: "Invalid Bearer Token"
+        "400":
+          description: Client Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: "Invalid request parameters"
+        "500":
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: "Internal Server Error"
+
+  /api/v1/recipients/{client_id}/secret:
+    post:
+      tags:
+        - Outbound
+      summary: Regenerate a Data Recipient Secret
+      description: Use the /api/v1/recipients/{client_id}/secret endpoint to regenerate a new client secret for a particular Data Recipient.
+      operationId: regenerateDataRecipientSecret
+      parameters:
+        - name: client_id
+          in: path
+          required: true
+          description: The Data Recipient that you want to generate a secret for.
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Result
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  client_id:
+                    type: string
+                  client_secret:
+                    type: string
+              example:
+                client_id: "dc-xxxxxxxxxxxxxxxxxxxxxxxxx"
+                client_secret: "xxxxxxxxxxxxxxxxxxxxxx"
+        "401":
+          description: Unauthorized - Expired or invalid token.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: "Invalid Bearer Token"
+        "400":
+          description: Client Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: "Invalid request parameters"
+        "500":
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: "Internal Server Error"
+
+  /api/v1/recipients/{client_id}:
+    get:
+      tags:
+        - Outbound
+      summary: Get Data Recipient Details
+      description: Use the /api/v1/recipients/{client_id} endpoint to get additional details for a particular Data Recipient, including the scopes and redirect URLs.
+      operationId: getDataRecipientDetails
+      parameters:
+        - name: client_id
+          in: path
+          required: true
+          description: The id for the Data Recipient you want to retrieve details for.
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Result
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  scope:
+                    type: string
+                    description: Space-separated list of scopes the data recipient has access to (e.g., ACCOUNT_BASIC ACCOUNT_DETAILED TRANSACTIONS STATEMENTS).
+                  redirect_uris:
+                    type: array
+                    items:
+                      type: string
+                    description: List of authorized redirect URIs for the data recipient.
+                  client_id:
+                    type: string
+                    description: Unique identifier for the data recipient.
+                  name:
+                    type: string
+                    description: Name of the data recipient.
+                  logo_uri:
+                    type: string
+                    description: URL to the data recipient's logo.
+                  description:
+                    type: string
+                    description: Description of the data recipient.
+                  terms_uri:
+                    type: string
+                    description: URL to the data recipient's terms of service.
+                  client_uri:
+                    type: string
+                    description: URL to the data recipient's website.
+                  country:
+                    type: string
+                    description: Country code of the data recipient (e.g., CA, US).
+                  contacts:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        email:
+                          type: string
+                          description: Email address of the contact.
+                    description: Contact information for the data recipient.
+              example:
+                scope: "ACCOUNT_BASIC ACCOUNT_DETAILED ACCOUNT_PAYMENTS INVESTMENTS TRANSACTIONS STATEMENTS CUSTOMER_CONTACT CUSTOMER_PERSONAL"
+                redirect_uris:
+                  - "https://flinks.fake.com/callback"
+                  - "https://flinks.fake.com/callback2"
+                client_id: "dc-xxxxxxxxxxxxxxxxxxxxxxxxx"
+                name: "Flinks Fake"
+                logo_uri: "https://flinks.fake.com/logo.png"
+                description: "Description of Flinks Fake"
+                terms_uri: "https://flinks.fake.com/callback/terms.html"
+                client_uri: "https://flinks.fake.com/"
+                country: "CA"
+                contacts:
+                  - email: "john.doe@flinks.fake.com"
+        "401":
+          description: Unauthorized - Expired or invalid token.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: "Invalid Bearer Token"
+        "400":
+          description: Client Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: "The recipient \"dc-xyz\" doesn't exists"
+        "500":
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: "Internal Server Error"
+    put:
+      tags:
+        - Outbound
+      summary: Update a Data Recipient
+      description: Use the /api/v1/recipients/{client_id} endpoint to update the redirect URLs for a particular Data Recipient.
+      operationId: updateDataRecipient
+      parameters:
+        - name: client_id
+          in: path
+          required: true
+          description: The id for the Data Recipient you want to update.
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                redirect_uris:
+                  type: string
+                  description: "The new redirect URLs that you want to use. We will replace the existing redirect URLs with the new ones that you pass."
+              example: {}
+      responses:
+        "200":
+          description: Result
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  scope:
+                    type: string
+                  redirect_uris:
+                    type: array
+                    items:
+                      type: string
+                  client_id:
+                    type: string
+                  name:
+                    type: string
+                  logo_uri:
+                    type: string
+                  description:
+                    type: string
+                  terms_uri:
+                    type: string
+                  client_uri:
+                    type: string
+                  country:
+                    type: string
+                  contacts:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        email:
+                          type: array
+                          items:
+                            type: string
+              example:
+                scope: "ACCOUNT_BASIC ACCOUNT_DETAILED ACCOUNT_PAYMENTS INVESTMENTS TRANSACTIONS STATEMENTS CUSTOMER_CONTACT CUSTOMER_PERSONAL"
+                redirect_uris:
+                  - "https://flinks.fake.com/callback"
+                  - "https://flinks.fake.com/callback2"
+                client_id: "dc-xxxxxxxxxxxxxxxxxxxxxxxxx"
+                name: "Flinks Fake"
+                logo_uri: "https://flinks.fake.com/logo.png"
+                description: "Description of Flinks Fake"
+                terms_uri: "https://flinks.fake.com/callback/terms.html"
+                client_uri: "https://flinks.fake.com/"
+                country: "CA"
+                contacts:
+                  - email: "john.doe@flinks.fake.com"
+        "401":
+          description: Unauthorized - Expired or invalid token.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: "Invalid Bearer Token"
+        "400":
+          description: Client Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: "The recipient \"dc-xyz\" doesn't exists"
+        "500":
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: "Internal Server Error"
+
+  /api/fdx/5/accounts/{account_id}:
+    get:
+      tags:
+        - FDX
+      summary: Get Account Details
+      description: Use the /api/fdx/v1/accounts/{accountId} endpoint to get information about a particular customer account in FDX format.
+      operationId: fdxGetAccountDetails
+      parameters:
+        - name: account_id
+          in: path
+          required: true
+          description: The ID of the customer account that you want to retrieve.
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Returned when the account details are successfully retrieved.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  depositAccount:
+                    type: object
+                    description: Deposit account details, returned for checking/savings accounts.
+                    properties:
+                      accountId:
+                        type: string
+                        description: Unique identifier for the account.
+                      accountCategory:
+                        type: string
+                        description: Category of the account (e.g., DEPOSIT_ACCOUNT, LOAN_ACCOUNT).
+                      accountType:
+                        type: string
+                        description: Type of the account (e.g., CHECKING, SAVINGS).
+                      accountNumber:
+                        type: string
+                        description: Full account number.
+                      accountNumberDisplay:
+                        type: string
+                        description: Masked account number for display purposes.
+                      productName:
+                        type: string
+                        description: Name of the product.
+                      nickname:
+                        type: string
+                        description: User-assigned nickname for the account.
+                      status:
+                        type: string
+                        description: Status of the account (e.g., OPEN, CLOSED).
+                      description:
+                        type: string
+                        description: Description of the account.
+                      currency:
+                        type: object
+                        description: Currency information for the account.
+                      fiAttributes:
+                        type: array
+                        items:
+                          type: object
+                        description: Financial institution-specific attributes.
+                      parentAccountId:
+                        type: string
+                        description: ID of the parent account, if applicable.
+                      lineOfBusiness:
+                        type: string
+                        description: Line of business for the account.
+                      routingTransitNumber:
+                        type: string
+                        description: Routing/transit number for the account.
+                      balanceType:
+                        type: string
+                        description: Type of balance (ASSET or LIABILITY).
+                      interestRate:
+                        type: number
+                        description: Interest rate for the account.
+                      interestRateType:
+                        type: string
+                        description: Type of interest rate (FIXED or VARIABLE).
+                      interestRateAsOf:
+                        type: string
+                        description: Date when the interest rate was last set.
+                      priorInterestRate:
+                        type: number
+                        description: Previous interest rate.
+                      transferIn:
+                        type: boolean
+                        description: Indicates if transfers into this account are allowed.
+                      transferOut:
+                        type: boolean
+                        description: Indicates if transfers out of this account are allowed.
+                      micrNumber:
+                        type: string
+                        description: MICR number for the account.
+                      lastActivityDate:
+                        type: string
+                        description: Date of last activity on the account.
+                      transactionsIncluded:
+                        type: boolean
+                        description: Indicates if transactions are included in the response.
+                      balanceAsOf:
+                        type: string
+                        description: Date and time of the balance.
+                      currentBalance:
+                        type: number
+                        description: Current balance of the account.
+                      openingDayBalance:
+                        type: number
+                        description: Opening day balance.
+                      availableBalance:
+                        type: number
+                        description: Available balance for use.
+                      annualPercentageYield:
+                        type: number
+                        description: Annual percentage yield.
+                      interestYtd:
+                        type: number
+                        description: Year-to-date interest earned.
+                      term:
+                        type: number
+                        description: Term of the account.
+                      maturityDate:
+                        type: string
+                        description: Maturity date for term accounts.
+                      transactions:
+                        type: array
+                        items:
+                          type: object
+                        description: List of transactions for the account.
+                  loanAccount:
+                    type: object
+                    description: Loan account details, returned for loan accounts.
+                    properties:
+                      accountId:
+                        type: string
+                        description: Unique identifier for the account.
+                      accountCategory:
+                        type: string
+                        description: Category of the account.
+                      accountType:
+                        type: string
+                        description: Type of the account.
+                      principalBalance:
+                        type: number
+                        description: Principal balance of the loan.
+                      escrowBalance:
+                        type: number
+                        description: Escrow balance.
+                      originalPrincipal:
+                        type: number
+                        description: Original principal amount.
+                      originatingDate:
+                        type: string
+                        description: Date the loan originated.
+                      loanTerm:
+                        type: integer
+                        description: Term of the loan in months.
+                      totalNumberOfPayments:
+                        type: number
+                        description: Total number of payments.
+                      nextPaymentAmount:
+                        type: number
+                        description: Amount of the next payment.
+                      nextPaymentDate:
+                        type: string
+                        description: Date of the next payment.
+                      paymentFrequency:
+                        type: string
+                        description: Frequency of payments (MONTHLY, ANNUALLY, etc.).
+                      compoundingPeriod:
+                        type: string
+                        description: Compounding period.
+                      payOffAmount:
+                        type: number
+                        description: Payoff amount.
+                      lastPaymentAmount:
+                        type: number
+                        description: Amount of the last payment.
+                      lastPaymentDate:
+                        type: string
+                        description: Date of the last payment.
+                      maturityDate:
+                        type: string
+                        description: Maturity date of the loan.
+                      interestPaidYearToDate:
+                        type: number
+                        description: Interest paid year to date.
+                      transactions:
+                        type: array
+                        items:
+                          type: object
+                        description: List of transactions for the account.
+                  locAccount:
+                    type: object
+                    description: Line of credit account details.
+                    properties:
+                      creditLine:
+                        type: number
+                        description: Total credit line.
+                      availableCredit:
+                        type: number
+                        description: Available credit.
+                      principalBalance:
+                        type: number
+                        description: Principal balance.
+                      currentBalance:
+                        type: number
+                        description: Current balance.
+                      nextPaymentAmount:
+                        type: number
+                        description: Amount of the next payment.
+                      nextPaymentDate:
+                        type: string
+                        description: Date of the next payment.
+                      minimumPaymentAmount:
+                        type: number
+                        description: Minimum payment amount.
+                      lastStmtBalance:
+                        type: number
+                        description: Last statement balance.
+                      lastStmtDate:
+                        type: string
+                        description: Date of the last statement.
+                  investmentAccount:
+                    type: object
+                    description: Investment account details.
+                    properties:
+                      currentValue:
+                        type: number
+                        description: Current value of the account.
+                      availableCashBalance:
+                        type: number
+                        description: Available cash balance.
+                      margin:
+                        type: boolean
+                        description: Indicates if margin trading is enabled.
+                      marginBalance:
+                        type: number
+                        description: Margin balance.
+                      shortBalance:
+                        type: number
+                        description: Short balance.
+                      rolloverAmount:
+                        type: number
+                        description: Rollover amount.
+                      employerName:
+                        type: string
+                        description: Employer name (for retirement accounts).
+                      holdings:
+                        type: array
+                        items:
+                          type: object
+                        description: List of holdings in the account.
+                      transactions:
+                        type: array
+                        items:
+                          type: object
+                        description: List of transactions.
+                      openOrders:
+                        type: array
+                        items:
+                          type: object
+                        description: List of open orders.
+                  annuityAccount:
+                    type: object
+                    description: Annuity account details.
+                    properties:
+                      payoutType:
+                        type: string
+                        description: Type of payout (DEFERRED, IMMEDIATE).
+                      policyProductType:
+                        type: string
+                        description: Product type (FIXED, VARIABLE).
+                      payoutMode:
+                        type: string
+                        description: Payout mode (ANNUALLY, MONTHLY, etc.).
+                      payoutAmount:
+                        type: number
+                        description: Payout amount.
+                      payoutStartDate:
+                        type: string
+                        description: Payout start date.
+                      payoutEndDate:
+                        type: string
+                        description: Payout end date.
+                      surrenderValue:
+                        type: number
+                        description: Surrender value.
+        "401":
+          description: Unauthorized - Expired or invalid token.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: "Invalid Bearer Token"
+        "400":
+          description: Returned when the request contains invalid data or authentication fails.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: Error code.
+                  message:
+                    type: string
+                    description: A description of the error.
+                  debugMessage:
+                    type: string
+                    description: Provider custom developer-level error details for troubleshooting.
+        "500":
+          description: Returned when an internal server error occurred.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: Error code.
+                  message:
+                    type: string
+                    description: A description of the error.
+                  debugMessage:
+                    type: string
+                    description: Provider custom developer-level error details for troubleshooting.
+
+  /api/fdx/5/accounts:
+    get:
+      tags:
+        - FDX
+      summary: Get Accounts
+      description: Use the /api/fdx/v1/accounts endpoint to get a list of customer accounts in FDX format.
+      operationId: fdxGetAccounts
+      parameters:
+        - name: accountIds
+          in: query
+          required: false
+          description: "The ID of the customer account that you want to retrieve. If you are requesting more than one account, separate each accountId with a comma."
+          schema:
+            type: string
+        - name: resultType
+          in: query
+          required: false
+          description: "Specify the type of results you want to see. Possible values include the following: - `lightweight` = Return the metadata fields only - `details` = Return a full list of details The default value of this parameter is `lightweight`."
+          schema:
+            type: string
+        - name: offset
+          in: query
+          required: false
+          description: "An opaque cursor returned by the provider and used to retrieve the next page of results. Clients should pass this value unchanged to continue fetching data. The format of the string is internal and should not be interpreted or modified."
+          schema:
+            type: string
+        - name: limit
+          in: query
+          required: false
+          description: "The maximum number of accounts that you want to return with this request. Use this field to set a limit on the amount of data you receive."
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Returned when the accounts are successfully retrieved.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  page:
+                    type: object
+                    description: Pagination information for the response.
+                    properties:
+                      nextOffset:
+                        type: string
+                        description: Opaque cursor for retrieving the next page of results.
+                      totalElements:
+                        type: integer
+                        description: Total number of elements available.
+                  links:
+                    type: object
+                    description: Links for pagination.
+                    properties:
+                      next:
+                        type: object
+                        description: Link to the next page of results.
+                        properties:
+                          href:
+                            type: string
+                            description: URL for the next page.
+                          action:
+                            type: string
+                            description: Action type for the link.
+                          description:
+                            type: string
+                            description: Description of the link.
+                  accounts:
+                    type: array
+                    description: List of customer accounts.
+                    items:
+                      type: object
+                      properties:
+                        depositAccount:
+                          type: object
+                          description: Deposit account details, returned for checking/savings accounts.
+                          properties:
+                            accountId:
+                              type: string
+                              description: Unique identifier for the account.
+                            accountCategory:
+                              type: string
+                              description: Category of the account (e.g., DEPOSIT_ACCOUNT, LOAN_ACCOUNT).
+                            accountType:
+                              type: string
+                              description: Type of the account (e.g., CHECKING, SAVINGS).
+                            accountNumber:
+                              type: string
+                              description: Full account number.
+                            accountNumberDisplay:
+                              type: string
+                              description: Masked account number for display purposes.
+                            productName:
+                              type: string
+                              description: Name of the product.
+                            nickname:
+                              type: string
+                              description: User-assigned nickname for the account.
+                            status:
+                              type: string
+                              description: Status of the account (e.g., OPEN, CLOSED).
+                            description:
+                              type: string
+                              description: Description of the account.
+                            currency:
+                              type: object
+                              description: Currency information for the account.
+                            fiAttributes:
+                              type: array
+                              items:
+                                type: object
+                              description: Financial institution-specific attributes.
+                            parentAccountId:
+                              type: string
+                              description: ID of the parent account, if applicable.
+                            lineOfBusiness:
+                              type: string
+                              description: Line of business for the account.
+                            routingTransitNumber:
+                              type: string
+                              description: Routing/transit number for the account.
+                            balanceType:
+                              type: string
+                              description: Type of balance (ASSET or LIABILITY).
+                            interestRate:
+                              type: number
+                              description: Interest rate for the account.
+                            interestRateType:
+                              type: string
+                              description: Type of interest rate (FIXED or VARIABLE).
+                            interestRateAsOf:
+                              type: string
+                              description: Date when the interest rate was last set.
+                            priorInterestRate:
+                              type: number
+                              description: Previous interest rate.
+                            transferIn:
+                              type: boolean
+                              description: Indicates if transfers into this account are allowed.
+                            transferOut:
+                              type: boolean
+                              description: Indicates if transfers out of this account are allowed.
+                            micrNumber:
+                              type: string
+                              description: MICR number for the account.
+                            lastActivityDate:
+                              type: string
+                              description: Date of last activity on the account.
+                            transactionsIncluded:
+                              type: boolean
+                              description: Indicates if transactions are included in the response.
+                            balanceAsOf:
+                              type: string
+                              description: Date and time of the balance.
+                            currentBalance:
+                              type: number
+                              description: Current balance of the account.
+                            openingDayBalance:
+                              type: number
+                              description: Opening day balance.
+                            availableBalance:
+                              type: number
+                              description: Available balance for use.
+                            annualPercentageYield:
+                              type: number
+                              description: Annual percentage yield.
+                            interestYtd:
+                              type: number
+                              description: Year-to-date interest earned.
+                            term:
+                              type: number
+                              description: Term of the account.
+                            maturityDate:
+                              type: string
+                              description: Maturity date for term accounts.
+                            transactions:
+                              type: array
+                              items:
+                                type: object
+                              description: List of transactions for the account.
+                        loanAccount:
+                          type: object
+                          description: Loan account details, returned for loan accounts.
+                          properties:
+                            accountId:
+                              type: string
+                              description: Unique identifier for the account.
+                            accountCategory:
+                              type: string
+                              description: Category of the account.
+                            accountType:
+                              type: string
+                              description: Type of the account.
+                            principalBalance:
+                              type: number
+                              description: Principal balance of the loan.
+                            escrowBalance:
+                              type: number
+                              description: Escrow balance.
+                            originalPrincipal:
+                              type: number
+                              description: Original principal amount.
+                            originatingDate:
+                              type: string
+                              description: Date the loan originated.
+                            loanTerm:
+                              type: integer
+                              description: Term of the loan in months.
+                            totalNumberOfPayments:
+                              type: number
+                              description: Total number of payments.
+                            nextPaymentAmount:
+                              type: number
+                              description: Amount of the next payment.
+                            nextPaymentDate:
+                              type: string
+                              description: Date of the next payment.
+                            paymentFrequency:
+                              type: string
+                              description: Frequency of payments (MONTHLY, ANNUALLY, etc.).
+                            compoundingPeriod:
+                              type: string
+                              description: Compounding period.
+                            payOffAmount:
+                              type: number
+                              description: Payoff amount.
+                            lastPaymentAmount:
+                              type: number
+                              description: Amount of the last payment.
+                            lastPaymentDate:
+                              type: string
+                              description: Date of the last payment.
+                            maturityDate:
+                              type: string
+                              description: Maturity date of the loan.
+                            interestPaidYearToDate:
+                              type: number
+                              description: Interest paid year to date.
+                            transactions:
+                              type: array
+                              items:
+                                type: object
+                              description: List of transactions for the account.
+                        locAccount:
+                          type: object
+                          description: Line of credit account details.
+                          properties:
+                            creditLine:
+                              type: number
+                              description: Total credit line.
+                            availableCredit:
+                              type: number
+                              description: Available credit.
+                            principalBalance:
+                              type: number
+                              description: Principal balance.
+                            currentBalance:
+                              type: number
+                              description: Current balance.
+                            nextPaymentAmount:
+                              type: number
+                              description: Amount of the next payment.
+                            nextPaymentDate:
+                              type: string
+                              description: Date of the next payment.
+                            minimumPaymentAmount:
+                              type: number
+                              description: Minimum payment amount.
+                            lastStmtBalance:
+                              type: number
+                              description: Last statement balance.
+                            lastStmtDate:
+                              type: string
+                              description: Date of the last statement.
+                        investmentAccount:
+                          type: object
+                          description: Investment account details.
+                          properties:
+                            currentValue:
+                              type: number
+                              description: Current value of the account.
+                            availableCashBalance:
+                              type: number
+                              description: Available cash balance.
+                            margin:
+                              type: boolean
+                              description: Indicates if margin trading is enabled.
+                            marginBalance:
+                              type: number
+                              description: Margin balance.
+                            shortBalance:
+                              type: number
+                              description: Short balance.
+                            rolloverAmount:
+                              type: number
+                              description: Rollover amount.
+                            employerName:
+                              type: string
+                              description: Employer name (for retirement accounts).
+                            holdings:
+                              type: array
+                              items:
+                                type: object
+                              description: List of holdings in the account.
+                            transactions:
+                              type: array
+                              items:
+                                type: object
+                              description: List of transactions.
+                            openOrders:
+                              type: array
+                              items:
+                                type: object
+                              description: List of open orders.
+                        annuityAccount:
+                          type: object
+                          description: Annuity account details.
+                          properties:
+                            payoutType:
+                              type: string
+                              description: Type of payout (DEFERRED, IMMEDIATE).
+                            policyProductType:
+                              type: string
+                              description: Product type (FIXED, VARIABLE).
+                            payoutMode:
+                              type: string
+                              description: Payout mode (ANNUALLY, MONTHLY, etc.).
+                            payoutAmount:
+                              type: number
+                              description: Payout amount.
+                            payoutStartDate:
+                              type: string
+                              description: Payout start date.
+                            payoutEndDate:
+                              type: string
+                              description: Payout end date.
+                            surrenderValue:
+                              type: number
+                              description: Surrender value.
+        "4XX":
+          description: Returned when the request contains invalid data or authentication fails.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: Error code.
+                  message:
+                    type: string
+                    description: A description of the error.
+                  debugMessage:
+                    type: string
+                    description: Provider custom developer-level error details for troubleshooting.
+        "5XX":
+          description: Returned when an internal server error occurred.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: Error code.
+                  message:
+                    type: string
+                    description: A description of the error.
+                  debugMessage:
+                    type: string
+                    description: Provider custom developer-level error details for troubleshooting.
+
+  /api/fdx/5/customers/current:
+    get:
+      tags:
+        - FDX
+      summary: Get Customers
+      description: Use the /api/fdx/v1/customers/current endpoint to get information about a particular customer in FDX format.
+      operationId: fdxGetCustomers
+      responses:
+        "200":
+          description: Returned when the customer information is successfully retrieved.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  customerId:
+                    type: string
+                    description: Unique identifier for the customer.
+                  name:
+                    type: object
+                    description: Customer's name information.
+                    properties:
+                      first:
+                        type: string
+                        description: Customer's first name.
+                      middle:
+                        type: string
+                        description: Customer's middle name.
+                      last:
+                        type: string
+                        description: Customer's last name.
+                      suffix:
+                        type: string
+                        description: Name suffix (e.g., Jr., Sr.).
+                      prefix:
+                        type: string
+                        description: Name prefix (e.g., Mr., Mrs., Dr.).
+                      company:
+                        type: string
+                        description: Company name if applicable.
+                  dateOfBirth:
+                    type: string
+                    description: Customer's date of birth.
+                  email:
+                    type: array
+                    items:
+                      type: string
+                    description: List of customer's email addresses.
+                  addresses:
+                    type: array
+                    description: List of customer's addresses.
+                    items:
+                      type: object
+                      properties:
+                        line1:
+                          type: string
+                          description: First line of the address.
+                        line2:
+                          type: string
+                          description: Second line of the address.
+                        line3:
+                          type: string
+                          description: Third line of the address.
+                        city:
+                          type: string
+                          description: City name.
+                        region:
+                          type: string
+                          description: State or province.
+                        postalCode:
+                          type: string
+                          description: Postal or ZIP code.
+                        country:
+                          type: string
+                          description: Country name or code.
+                        type:
+                          type: string
+                          description: Type of address (e.g., HOME, BUSINESS).
+                  telephones:
+                    type: array
+                    description: List of customer's telephone numbers.
+                    items:
+                      type: object
+                      properties:
+                        type:
+                          type: string
+                          description: Type of telephone (e.g., HOME, MOBILE, WORK).
+                        number:
+                          type: string
+                          description: Phone number.
+                        country:
+                          type: string
+                          description: Country code for the phone number.
+                  accounts:
+                    type: array
+                    description: List of accounts associated with the customer.
+                    items:
+                      type: object
+                      properties:
+                        accountId:
+                          type: string
+                          description: Unique identifier for the account.
+                        links:
+                          type: object
+                          description: Links related to the account.
+                          properties:
+                            href:
+                              type: string
+                              description: URL for the account resource.
+                            action:
+                              type: string
+                              description: Action type for the link.
+                            description:
+                              type: string
+                              description: Description of the link.
+                        relationship:
+                          type: string
+                          description: Customer's relationship to the account.
+        "4XX":
+          description: Returned when the request contains invalid data or authentication fails.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: Error code.
+                  message:
+                    type: string
+                    description: A description of the error.
+                  debugMessage:
+                    type: string
+                    description: Provider custom developer-level error details for troubleshooting.
+        "5XX":
+          description: Returned when an internal server error occurred.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: Error code.
+                  message:
+                    type: string
+                    description: A description of the error.
+                  debugMessage:
+                    type: string
+                    description: Provider custom developer-level error details for troubleshooting.
+
+  /api/fdx/5/accounts/{account_id}/payment-networks:
+    get:
+      tags:
+        - FDX
+      summary: Get Payment Networks
+      description: Use the /api/fdx/5/accounts/{accountId}/payment-networks endpoint to return a list of payment networks for a particular account.
+      operationId: fdxGetPaymentNetworks
+      parameters:
+        - name: account_id
+          in: path
+          required: true
+          description: The ID of the customer account that you want to retrieve.
+          schema:
+            type: string
+        - name: offset
+          in: query
+          required: false
+          description: Opaque cursor used by the provider to send the next set of records.
+          schema:
+            type: string
+        - name: limit
+          in: query
+          required: false
+          description: "The maximum number of payment networks that you want to return with this request. Use this field to set a limit on the amount of data you receive."
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Returned when the payment networks are successfully retrieved with pagination.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  page:
+                    type: object
+                    description: Pagination information for the response.
+                    properties:
+                      nextOffset:
+                        type: string
+                        description: Opaque cursor for retrieving the next page of results.
+                      totalElements:
+                        type: integer
+                        description: Total number of elements available.
+                  links:
+                    type: object
+                    description: Links for pagination.
+                    properties:
+                      next:
+                        type: object
+                        description: Link to the next page of results.
+                        properties:
+                          href:
+                            type: string
+                            description: URL for the next page.
+                  paymentNetworks:
+                    type: array
+                    description: List of payment networks for the account.
+                    items:
+                      type: object
+                      properties:
+                        bankId:
+                          type: string
+                          description: Bank identifier for the payment network.
+                        identifier:
+                          type: string
+                          description: Account identifier within the payment network.
+                        identifierType:
+                          type: string
+                          description: Type of identifier (e.g., ACCOUNT_NUMBER).
+                        type:
+                          type: string
+                          description: Payment network type (e.g., US_ACH).
+                        transferIn:
+                          type: boolean
+                          description: Indicates if transfers into this account are allowed.
+                        transferOut:
+                          type: boolean
+                          description: Indicates if transfers out of this account are allowed.
+        "4XX":
+          description: Returned when the request contains invalid data or authentication fails.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: Error code.
+                  message:
+                    type: string
+                    description: A description of the error.
+                  debugMessage:
+                    type: string
+                    description: Provider custom developer-level error details for troubleshooting.
+        "5XX":
+          description: Returned when an internal server error occurred.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: Error code.
+                  message:
+                    type: string
+                    description: A description of the error.
+                  debugMessage:
+                    type: string
+                    description: Provider custom developer-level error details for troubleshooting.
+
+  /api/fdx/5/accounts/{account_id}/transactions:
+    get:
+      tags:
+        - FDX
+      summary: Get Transactions
+      description: Use the /api/fdx/v1/accounts/{accountId}/transactions endpoint to get the transaction history for a particular account.
+      operationId: fdxGetTransactions
+      parameters:
+        - name: account_id
+          in: path
+          required: true
+          description: The ID of the customer account that you want to retrieve transactions for.
+          schema:
+            type: string
+        - name: startTime
+          in: query
+          required: false
+          description: "The first date in the date range that you want to retrieve transactions for, in ISO format (YYYY-MM-DD)."
+          schema:
+            type: string
+            format: date
+        - name: endTime
+          in: query
+          required: false
+          description: "The last date in the date range that you want to retrieve transactions for, in ISO format (YYYY-MM-DD)."
+          schema:
+            type: string
+            format: date
+        - name: offset
+          in: query
+          required: false
+          description: Opaque cursor used by the provider to send the next set of records.
+          schema:
+            type: string
+        - name: limit
+          in: query
+          required: false
+          description: "The maximum number of transactions that you want to return with this request. Use this field to set a limit on the amount of data you receive."
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Returned when the transactions are successfully retrieved with pagination.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  page:
+                    type: object
+                    description: Pagination information for the response.
+                    properties:
+                      nextOffset:
+                        type: string
+                        description: Opaque cursor for retrieving the next page of results.
+                      totalElements:
+                        type: integer
+                        description: Total number of elements available.
+                  links:
+                    type: object
+                    description: Links for pagination.
+                    properties:
+                      next:
+                        type: object
+                        description: Link to the next page of results.
+                        properties:
+                          href:
+                            type: string
+                            description: URL for the next page.
+                  transactions:
+                    type: array
+                    description: List of transactions for the account, which may include different transaction types.
+                    items:
+                      type: object
+                      properties:
+                        depositTransaction:
+                          type: object
+                          description: Deposit account transaction details.
+                          properties:
+                            accountId:
+                              type: string
+                              description: The account identifier.
+                            transactionId:
+                              type: string
+                              description: Unique identifier for the transaction.
+                            referenceTransactionId:
+                              type: string
+                              description: Reference transaction identifier.
+                            category:
+                              type: string
+                              description: Transaction category.
+                            subCategory:
+                              type: string
+                              description: Transaction subcategory.
+                            postedTimestamp:
+                              type: string
+                              description: Timestamp when the transaction was posted.
+                            transactionTimestamp:
+                              type: string
+                              description: Timestamp when the transaction occurred.
+                            description:
+                              type: string
+                              description: Description of the transaction.
+                            debitCreditMemo:
+                              type: string
+                              description: Indicates if the transaction is a CREDIT or DEBIT.
+                            amount:
+                              type: number
+                              description: Transaction amount.
+                            foreignAmount:
+                              type: number
+                              description: Foreign currency amount.
+                            foreignCurrency:
+                              type: string
+                              description: Foreign currency code.
+                            status:
+                              type: string
+                              description: Transaction status (e.g., POSTED, AUTHORIZATION).
+                            fiAttributes:
+                              type: array
+                              description: Financial institution custom attributes.
+                              items:
+                                type: object
+                                properties:
+                                  name:
+                                    type: string
+                                    description: Attribute name.
+                                  value:
+                                    type: string
+                                    description: Attribute value.
+                            transactionType:
+                              type: string
+                              description: Type of transaction (e.g., ADJUSTMENT).
+                            payee:
+                              type: string
+                              description: Payee name.
+                        loanTransaction:
+                          type: object
+                          description: Loan account transaction details.
+                          properties:
+                            accountId:
+                              type: string
+                              description: The account identifier.
+                            transactionId:
+                              type: string
+                              description: Unique identifier for the transaction.
+                            referenceTransactionId:
+                              type: string
+                              description: Reference transaction identifier.
+                            category:
+                              type: string
+                              description: Transaction category.
+                            subCategory:
+                              type: string
+                              description: Transaction subcategory.
+                            postedTimestamp:
+                              type: string
+                              description: Timestamp when the transaction was posted.
+                            transactionTimestamp:
+                              type: string
+                              description: Timestamp when the transaction occurred.
+                            description:
+                              type: string
+                              description: Description of the transaction.
+                            debitCreditMemo:
+                              type: string
+                              description: Indicates if the transaction is a CREDIT or DEBIT.
+                            amount:
+                              type: number
+                              description: Transaction amount.
+                            foreignAmount:
+                              type: number
+                              description: Foreign currency amount.
+                            foreignCurrency:
+                              type: string
+                              description: Foreign currency code.
+                            status:
+                              type: string
+                              description: Transaction status (e.g., POSTED, AUTHORIZATION).
+                            fiAttributes:
+                              type: array
+                              description: Financial institution custom attributes.
+                              items:
+                                type: object
+                                properties:
+                                  name:
+                                    type: string
+                                    description: Attribute name.
+                                  value:
+                                    type: string
+                                    description: Attribute value.
+                            transactionType:
+                              type: string
+                              description: Type of transaction (e.g., PAYMENT).
+                        locTransaction:
+                          type: object
+                          description: Line of credit transaction details.
+                          properties:
+                            accountId:
+                              type: string
+                              description: The account identifier.
+                            transactionId:
+                              type: string
+                              description: Unique identifier for the transaction.
+                            referenceTransactionId:
+                              type: string
+                              description: Reference transaction identifier.
+                            category:
+                              type: string
+                              description: Transaction category.
+                            subCategory:
+                              type: string
+                              description: Transaction subcategory.
+                            postedTimestamp:
+                              type: string
+                              description: Timestamp when the transaction was posted.
+                            transactionTimestamp:
+                              type: string
+                              description: Timestamp when the transaction occurred.
+                            description:
+                              type: string
+                              description: Description of the transaction.
+                            debitCreditMemo:
+                              type: string
+                              description: Indicates if the transaction is a CREDIT or DEBIT.
+                            amount:
+                              type: number
+                              description: Transaction amount.
+                            foreignAmount:
+                              type: number
+                              description: Foreign currency amount.
+                            foreignCurrency:
+                              type: string
+                              description: Foreign currency code.
+                            status:
+                              type: string
+                              description: Transaction status (e.g., POSTED, AUTHORIZATION).
+                            fiAttributes:
+                              type: array
+                              description: Financial institution custom attributes.
+                              items:
+                                type: object
+                                properties:
+                                  name:
+                                    type: string
+                                    description: Attribute name.
+                                  value:
+                                    type: string
+                                    description: Attribute value.
+                            transactionType:
+                              type: string
+                              description: Type of transaction (e.g., PAYMENT).
+                        investmentTransaction:
+                          type: object
+                          description: Investment account transaction details.
+                          properties:
+                            accountId:
+                              type: string
+                              description: The account identifier.
+                            transactionId:
+                              type: string
+                              description: Unique identifier for the transaction.
+                            referenceTransactionId:
+                              type: string
+                              description: Reference transaction identifier.
+                            category:
+                              type: string
+                              description: Transaction category.
+                            subCategory:
+                              type: string
+                              description: Transaction subcategory.
+                            postedTimestamp:
+                              type: string
+                              description: Timestamp when the transaction was posted.
+                            transactionTimestamp:
+                              type: string
+                              description: Timestamp when the transaction occurred.
+                            description:
+                              type: string
+                              description: Description of the transaction.
+                            debitCreditMemo:
+                              type: string
+                              description: Indicates if the transaction is a CREDIT or DEBIT.
+                            amount:
+                              type: number
+                              description: Transaction amount.
+                            foreignAmount:
+                              type: number
+                              description: Foreign currency amount.
+                            foreignCurrency:
+                              type: string
+                              description: Foreign currency code.
+                            status:
+                              type: string
+                              description: Transaction status (e.g., POSTED, AUTHORIZATION).
+                            fiAttributes:
+                              type: array
+                              description: Financial institution custom attributes.
+                              items:
+                                type: object
+                                properties:
+                                  name:
+                                    type: string
+                                    description: Attribute name.
+                                  value:
+                                    type: string
+                                    description: Attribute value.
+                            transactionType:
+                              type: string
+                              description: Type of transaction (e.g., PURCHASED).
+                            shares:
+                              type: number
+                              description: Number of shares.
+                            securityIdType:
+                              type: string
+                              description: Type of security identifier (e.g., CUSIP).
+                            orderType:
+                              type: string
+                              description: Order type (e.g., BUY).
+                            securityType:
+                              type: string
+                              description: Type of security (e.g., BOND).
+                            inv401kSource:
+                              type: string
+                              description: 401k source (e.g., AFTERTAX).
+                            incomeType:
+                              type: string
+                              description: Income type (e.g., CGLONG).
+                            subAccountSec:
+                              type: string
+                              description: Sub-account security (e.g., CASH).
+                            subAccountFund:
+                              type: string
+                              description: Sub-account fund (e.g., CASH).
+                            unitType:
+                              type: string
+                              description: Unit type (e.g., CURRENCY).
+                            transactionReason:
+                              type: string
+                              description: Transaction reason (e.g., CALL).
+                            positionType:
+                              type: string
+                              description: Position type (e.g., LONG).
+                            faceValue:
+                              type: number
+                              description: Face value.
+                            price:
+                              type: number
+                              description: Price per unit.
+                            securityId:
+                              type: string
+                              description: Security identifier.
+                            symbol:
+                              type: string
+                              description: Security symbol.
+                            markup:
+                              type: number
+                              description: Markup amount.
+                            commission:
+                              type: number
+                              description: Commission amount.
+                            taxes:
+                              type: number
+                              description: Tax amount.
+                            fees:
+                              type: number
+                              description: Fee amount.
+                            load:
+                              type: number
+                              description: Load amount.
+                            confirmationNumber:
+                              type: string
+                              description: Confirmation number.
+                            fractionalCash:
+                              type: number
+                              description: Fractional cash amount.
+                            oldUnits:
+                              type: number
+                              description: Old units count.
+                            splitRatioNumerator:
+                              type: integer
+                              description: Split ratio numerator.
+                            splitRatioDenominator:
+                              type: integer
+                              description: Split ratio denominator.
+                            newUnits:
+                              type: number
+                              description: New units count.
+                            loanId:
+                              type: string
+                              description: Loan identifier.
+                            loanPrincipal:
+                              type: number
+                              description: Loan principal amount.
+                            loanInterest:
+                              type: number
+                              description: Loan interest amount.
+                            payrollDate:
+                              type: string
+                              description: Payroll date.
+                            priorYearContrib:
+                              type: boolean
+                              description: Prior year contribution flag.
+                            withholding:
+                              type: number
+                              description: Withholding amount.
+                            taxExempt:
+                              type: boolean
+                              description: Tax exempt flag.
+                            gain:
+                              type: number
+                              description: Gain amount.
+                            stateWithholding:
+                              type: number
+                              description: State withholding amount.
+                            penalty:
+                              type: number
+                              description: Penalty amount.
+                            runningBalance:
+                              type: number
+                              description: Running balance.
+                            unitPrice:
+                              type: number
+                              description: Unit price.
+                            units:
+                              type: number
+                              description: Number of units.
+                            accruedInterest:
+                              type: number
+                              description: Accrued interest amount.
+                            digitalUnits:
+                              type: string
+                              description: Digital units.
+                            transferAction:
+                              type: string
+                              description: Transfer action (e.g., IN).
+        "4XX":
+          description: Returned when the request contains invalid data or authentication fails.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: Error code.
+                  message:
+                    type: string
+                    description: A description of the error.
+                  debugMessage:
+                    type: string
+                    description: Provider custom developer-level error details for troubleshooting.
+        "5XX":
+          description: Returned when an internal server error occurred.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: Error code.
+                  message:
+                    type: string
+                    description: A description of the error.
+                  debugMessage:
+                    type: string
+                    description: Provider custom developer-level error details for troubleshooting.
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description: Bearer token obtained from the /Token endpoint.
+
+security:
+  - BearerAuth: []

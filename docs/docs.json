@@ -30,7 +30,12 @@
         "groups": [
           {
             "group": "API documentation",
-            "openapi": "us-account.yaml"
+            "pages": [
+              "/api-reference/outbound/get-all-data-recipients",
+              "/api-reference/outbound/get-data-recipient-details",
+              "/api-reference/outbound/get-supported-data-providers",
+              "/api-reference/outbound/get-all-data-provider-details"
+            ]
           }
         ]
       },
