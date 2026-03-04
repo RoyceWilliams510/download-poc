@@ -26,29 +26,6 @@
         ]
       },
       {
-        "tab": "API reference",
-        "groups": [
-          {
-            "group": "API documentation",
-            "pages": [
-              "/api-reference/outbound/get-all-data-recipients",
-              "/api-reference/outbound/get-data-recipient-details",
-              "/api-reference/outbound/get-supported-data-providers",
-              "/api-reference/outbound/get-all-data-provider-details"
-            ]
-          },
-          {
-            "group": "API nox",
-            "pages": [
-              "/api-reference/outbound-nox/get-all-data-recipients",
-              "/api-reference/outbound-nox/get-data-recipient-details",
-              "/api-reference/outbound-nox/get-all-data-provider-details",
-              "/api-reference/outbound-nox/get-supported-data-providers"
-            ]
-          }
-        ]
-      },
-      {
         "tab": "search reference",
         "groups": [
           {
@@ -113,5 +90,12 @@
       "cursor",
       "vscode"
     ]
-  }
+  },
+  "redirects":[
+    {
+      "source": "/trash/:slug*",
+      "destination": "/:slug*"
+    }
+
+  ]
 }
