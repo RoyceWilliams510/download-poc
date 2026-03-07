@@ -22,6 +22,12 @@
               "/quickstart",
               "/index"
             ]
+          },
+          {
+            "version": "2.0.0",
+            "pages": [
+              "/agents"
+            ]
           }
         ]
       },
